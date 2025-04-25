@@ -20,6 +20,10 @@ spec:
         valuesObject:
           preUpgradeChecker:
             jobEnabled: false
+          ingress:
+            enabled: true
+            host: longhorn.anymus.pro
+            ingressClassName: nginx
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
