@@ -1,25 +1,25 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: immich-cnpg-cluster
-#   namespace: argocd
-# spec:
-#   project: default
-#   destination:
-#     server: "https://kubernetes.default.svc"
-#     namespace: cloud
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#   source:
-#     chart: cluster
-#     repoURL: https://cloudnative-pg.github.io/charts
-#     targetRevision: 0.3.0
-#     helm:
-#       releaseName: immich-cnpg-cluster
-#       valuesObject:
-#         cluster:
-#           instances: 1
-#           storage:
-#             storageClass: "longhorn"
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich-cnpg-cluster
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: cloud
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: cluster
+    repoURL: https://cloudnative-pg.github.io/charts
+    targetRevision: 0.3.0
+    helm:
+      releaseName: immich-cnpg-cluster
+      valuesObject:
+        cluster:
+          instances: 1
+          storage:
+            storageClass: "longhorn"
