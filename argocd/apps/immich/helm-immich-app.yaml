@@ -19,6 +19,8 @@ spec:
     helm:
       releaseName: immich
       valuesObject:
+        redis:
+          enabled: true
         immich:
           library:
             persistence:
