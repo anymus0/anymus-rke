@@ -22,8 +22,8 @@ spec:
         redis:
           enabled: true
         immich:
-          library:
-            persistence:
+          persistence:
+            library:
               existingClaim: nextcloud-nextcloud-data
               readOnly: true
         server:
