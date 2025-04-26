@@ -18,3 +18,8 @@ spec:
     targetRevision: 0.3.0
     helm:
       releaseName: cnpg-cluster
+      valuesObject:
+        cluster:
+          instances: 1
+          storage:
+            storageClass: "longhorn"
