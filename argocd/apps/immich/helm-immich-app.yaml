@@ -32,6 +32,8 @@ spec:
               enabled: true
               hosts:
                 - host: immich.anymus.pro
+                  paths:
+                    - path: "/"
         machine-learning:
           persistence:
             cache:
