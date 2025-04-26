@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cnpg-cluster
+  name: nextcloud-cnpg-cluster
   namespace: argocd
 spec:
   project: default
@@ -17,7 +17,7 @@ spec:
     repoURL: https://cloudnative-pg.github.io/charts
     targetRevision: 0.3.0
     helm:
-      releaseName: cnpg-cluster
+      releaseName: nextcloud-cnpg-cluster
       valuesObject:
         cluster:
           instances: 1
