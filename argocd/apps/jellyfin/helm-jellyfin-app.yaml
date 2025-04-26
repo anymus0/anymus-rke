@@ -19,6 +19,9 @@ spec:
     helm:
       releaseName: argocd
       valuesObject:
+        persistence:
+          media:
+            size: "2Gi"
         ingress: 	{"annotations":{},"className":"nginx","enabled":true,"hosts":[{"host":"jellyfin.anymus.pro","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}],"tls":[]}
         jellyfin:
           enableDLNA: true
