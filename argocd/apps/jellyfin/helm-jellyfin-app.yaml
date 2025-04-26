@@ -17,7 +17,7 @@ spec:
     repoURL: https://jellyfin.github.io/jellyfin-helm
     targetRevision: 2.3.0
     helm:
-      releaseName: argocd
+      releaseName: jellyfin
       valuesObject:
         persistence:
           media:
