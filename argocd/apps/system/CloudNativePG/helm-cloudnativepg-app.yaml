@@ -9,6 +9,8 @@ spec:
     server: "https://kubernetes.default.svc"
     namespace: cloud
   syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
     automated:
       prune: true
       selfHeal: true
