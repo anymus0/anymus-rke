@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: cloud
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: immich
+    repoURL: ghcr.io/immich-app/immich-charts/immich
+    targetRevision: 0.9.2
+    helm:
+      releaseName: immich
+      valuesObject:
+        immich:
+          library:
+            persistence:
+              existingClaim: nextcloud-nextcloud-data
+              readOnly: true
+        server:
+          ingress:
+            main:
+              enabled: true
+              hosts:
+                - host: immich.anymus.pro
+        machine-learning:
+          persistence:
+            cache:
+              size: 20Gi
+              type: pvc
+              storageClass: longhorn
