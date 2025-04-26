@@ -26,10 +26,10 @@ spec:
         jellyfin:
           enableDLNA: true
         volumes:
-          - name: media
+          - name: externalMedia
             nfs:
               server: "192.168.0.212"
               path: "/"
         volumeMounts:
-          - name: media
-            mountPath: "/media"
+          - name: externalMedia
+            mountPath: "/externalMedia"
