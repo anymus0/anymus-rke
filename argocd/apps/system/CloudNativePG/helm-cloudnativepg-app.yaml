@@ -1,25 +1,25 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: cloudnative-pg
-  namespace: argocd
-spec:
-  project: default
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: cloud
-  syncPolicy:
-    syncOptions:
-      - ServerSideApply=true
-    automated:
-      prune: true
-      selfHeal: true
-  source:
-    chart: cloudnative-pg
-    repoURL: https://cloudnative-pg.github.io/charts
-    targetRevision: 0.23.2
-    helm:
-      releaseName: cloudnative-pg
-      valuesObject:
-        crds:
-          create: true
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: cloudnative-pg
+#   namespace: argocd
+# spec:
+#   project: default
+#   destination:
+#     server: "https://kubernetes.default.svc"
+#     namespace: cloud
+#   syncPolicy:
+#     syncOptions:
+#       - ServerSideApply=true
+#     automated:
+#       prune: true
+#       selfHeal: true
+#   source:
+#     chart: cloudnative-pg
+#     repoURL: https://cloudnative-pg.github.io/charts
+#     targetRevision: 0.23.2
+#     helm:
+#       releaseName: cloudnative-pg
+#       valuesObject:
+#         crds:
+#           create: true
