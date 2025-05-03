@@ -1,53 +1,53 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: nextcloud
-  namespace: argocd
-spec:
-  project: default
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: cloud
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-  source:
-    chart: nextcloud
-    repoURL: https://nextcloud.github.io/helm
-    targetRevision: 6.6.10
-    helm:
-      releaseName: nextcloud
-      valuesObject:
-        replicaCount: 1
-        ingress:
-          enabled: true
-          className: nginx
-        nextcloud:
-          host: cloud.anymus.pro
-        redis:
-          enabled: true
-          global:
-            storageClass: longhorn
-        externalDatabase:
-          enabled: true
-          type: postgresql
-          host: nextcloud-cnpg-cluster-rw:5432
-          existingSecret:
-            enabled: true
-            secretName: nextcloud-postgresql-creds
-            usernameKey: username
-            passwordKey: password
-            hostKey: host
-            databaseKey: dbname
-        internalDatabase:
-          enabled: false
-        postgresql:
-          enabled: false
-        persistence:
-          enabled: true
-          storageClass: longhorn
-          nextcloudData:
-            enabled: true
-            storageClass: longhorn
-            size: "2Gi"
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: nextcloud
+#   namespace: argocd
+# spec:
+#   project: default
+#   destination:
+#     server: "https://kubernetes.default.svc"
+#     namespace: cloud
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#   source:
+#     chart: nextcloud
+#     repoURL: https://nextcloud.github.io/helm
+#     targetRevision: 6.6.10
+#     helm:
+#       releaseName: nextcloud
+#       valuesObject:
+#         replicaCount: 1
+#         ingress:
+#           enabled: true
+#           className: nginx
+#         nextcloud:
+#           host: cloud.anymus.pro
+#         redis:
+#           enabled: true
+#           global:
+#             storageClass: longhorn
+#         externalDatabase:
+#           enabled: true
+#           type: postgresql
+#           host: nextcloud-cnpg-cluster-rw:5432
+#           existingSecret:
+#             enabled: true
+#             secretName: nextcloud-postgresql-creds
+#             usernameKey: username
+#             passwordKey: password
+#             hostKey: host
+#             databaseKey: dbname
+#         internalDatabase:
+#           enabled: false
+#         postgresql:
+#           enabled: false
+#         persistence:
+#           enabled: true
+#           storageClass: longhorn
+#           nextcloudData:
+#             enabled: true
+#             storageClass: longhorn
+#             size: "2Gi"
