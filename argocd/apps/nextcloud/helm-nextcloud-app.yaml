@@ -61,4 +61,4 @@ spec:
           nextcloudData:
             enabled: true
             storageClass: longhorn
-            size: "150Gi"
+            size: "2Gi"
