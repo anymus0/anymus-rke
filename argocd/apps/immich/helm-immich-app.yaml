@@ -19,16 +19,34 @@ spec:
     helm:
       releaseName: immich
       valuesObject:
+        env:
+          # Use the secret directly in the environment variables
+          DB_HOSTNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: host
+          DB_USERNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: username
+          DB_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: password
+          DB_DATABASE_NAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: dbname
         postgresql:
           enabled: false
           global:
             postgresql:
               auth:
                 existingSecret: immich-postgresql-creds
-                usernameKey: username
-                passwordKey: password
-                hostKey: host
-                databaseKey: dbname
         redis:
           enabled: true
         immich:
