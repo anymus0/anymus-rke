@@ -20,7 +20,7 @@ spec:
       releaseName: immich-cnpg-cluster
       valuesObject:
         cluster:
-          imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs
+          imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16
           initdb:
             database: immich
             postInitApplicationSQL:
