@@ -28,12 +28,15 @@ spec:
       prune: true
       selfHeal: true
   source:
-    chart: immich
-    repoURL: ghcr.io/immich-app/immich-charts
-    targetRevision: 0.9.2
+    repoURL: https://github.com/anymus0/anymus-rke.git
+    targetRevision: HEAD
+    path: helm-wrappers/immich-custom
     helm:
       releaseName: immich
       valuesObject:
+        customVolume:
+          name: "nextcloud-external-lib"
+          pvcName: "nextcloud-nextcloud-data"
         env:
           # Use the secret directly in the environment variables
           DB_HOSTNAME:

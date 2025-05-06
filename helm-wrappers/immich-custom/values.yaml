@@ -1,0 +1,7 @@
+customVolume:
+  enabled: true
+  name: "external-lib-vol"
+  pvcName: "external-lib-pvc"
+  mountPath: "/external"
+  readOnly: true
+  containerName: "immich-server"

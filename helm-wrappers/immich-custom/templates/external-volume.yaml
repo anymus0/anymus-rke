@@ -1,0 +1,26 @@
+{{- if .Values.customVolume.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-server
+  labels:
+    {{- include "immich-custom.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      volumes:
+        - name: {{ .Values.customVolume.name }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.customVolume.pvcName }}
+          {{- if .Values.customVolume.readOnly }}
+          readOnly: true
+          {{- end }}
+      containers:
+        - name: {{ .Values.customVolume.containerName }}
+          volumeMounts:
+            - name: {{ .Values.customVolume.name }}
+              mountPath: {{ .Values.customVolume.mountPath }}
+              {{- if .Values.customVolume.readOnly }}
+              readOnly: true
+              {{- end }}
+{{- end }}
