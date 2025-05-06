@@ -11,7 +11,7 @@ spec:
   storageClassName: longhorn
   resources:
     requests:
-      storage: 100Mi
+      storage: 120Gi
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -72,13 +72,6 @@ spec:
               existingClaim: immich-default-vol
               readOnly: true
         server:
-          extraVolumes:
-            - name: external-lib-volume
-              persistentVolumeClaim:
-                claimName: nextcloud-nextcloud-data
-          extraVolumeMounts:
-            - name: external-lib-volume
-              mountPath: /external
           ingress:
             main:
               enabled: true
