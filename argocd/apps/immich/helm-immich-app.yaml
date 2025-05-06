@@ -50,10 +50,6 @@ spec:
         redis:
           enabled: true
         immich:
-          persistence:
-            library:
-              existingClaim: nextcloud-nextcloud-data
-              readOnly: true
         server:
           ingress:
             main:
@@ -68,3 +64,38 @@ spec:
               size: 20Gi
               type: pvc
               storageClass: longhorn
+      directory:
+    directory:
+      jsonnet:
+        extVars:
+        - name: patchDeployment
+          value: |
+            {
+              "spec": {
+                "template": {
+                  "spec": {
+                    "volumes": [
+                      {
+                        "name": "nextcloud-external-volume",
+                        "persistentVolumeClaim": {
+                          "claimName": "nextcloud-nextcloud-data"
+                        },
+                        "readOnly": true
+                      }
+                    ],
+                    "containers": [
+                      {
+                        "name": "immich-server",
+                        "volumeMounts": [
+                          {
+                            "name": "nextcloud-external-volume",
+                            "mountPath": "/nextcloudlib",
+                            "readOnly": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
