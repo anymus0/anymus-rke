@@ -67,7 +67,7 @@ spec:
         immich:
           persistence:
             library:
-              existingClaim: nextcloud-nextcloud-data
+              existingClaim: immich-default-vol
               readOnly: true
         server:
           ingress:
