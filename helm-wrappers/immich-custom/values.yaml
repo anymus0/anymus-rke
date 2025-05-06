@@ -1,57 +1,69 @@
+# Custom volume configuration for your wrapper
 customVolume:
   name: "nextcloud-external-lib"
   pvcName: "nextcloud-nextcloud-data"
   enabled: true
   mountPath: "/external"
   readOnly: true
-  containerName: "immich-server"
+  containerName: "server"  # Note: This should be "server" not "immich-server"
 
-env:
-  # Use the secret directly in the environment variables
-  DB_HOSTNAME:
-    valueFrom:
-      secretKeyRef:
-        name: immich-postgresql-creds
-        key: host
-  DB_USERNAME:
-    valueFrom:
-      secretKeyRef:
-        name: immich-postgresql-creds
-        key: username
-  DB_PASSWORD:
-    valueFrom:
-      secretKeyRef:
-        name: immich-postgresql-creds
-        key: password
-  DB_DATABASE_NAME:
-    valueFrom:
-      secretKeyRef:
-        name: immich-postgresql-creds
-        key: dbname
-postgresql:
-  enabled: false
-  global:
-    postgresql:
-      auth:
-        existingSecret: immich-postgresql-creds
-redis:
-  enabled: true
+# Values to pass to the immich chart
 immich:
+  # Environment variables for all components
+  env:
+    DB_HOSTNAME:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgresql-creds
+          key: host
+    DB_USERNAME:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgresql-creds
+          key: username
+    DB_PASSWORD:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgresql-creds
+          key: password
+    DB_DATABASE_NAME:
+      valueFrom:
+        secretKeyRef:
+          name: immich-postgresql-creds
+          key: dbname
+  
+  # Persistence configuration
   persistence:
     library:
       existingClaim: immich-default-vol
       readOnly: true
-server:
-  ingress:
-    main:
-      enabled: true
-      hosts:
-        - host: immich.anymus.pro
-          paths:
-            - path: "/"
-machine-learning:
-  persistence:
-    cache:
-      size: 20Gi
-      type: pvc
-      storageClass: longhorn
+  
+  # PostgreSQL configuration
+  postgresql:
+    enabled: false
+    global:
+      postgresql:
+        auth:
+          existingSecret: immich-postgresql-creds
+  
+  # Redis configuration
+  redis:
+    enabled: true
+  
+  # Server configuration
+  server:
+    ingress:
+      main:
+        enabled: true
+        hosts:
+          - host: immich.anymus.pro
+            paths:
+              - path: "/"
+  
+  # Machine learning configuration
+  machine-learning:
+    persistence:
+      cache:
+        size: 20Gi
+        type: pvc
+        storageClass: longhorn
