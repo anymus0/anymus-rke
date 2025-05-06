@@ -7,13 +7,13 @@ spec:
   template:
     spec:
       volumes:
-        - name: nextcloud-external-lib
-          persistentVolumeClaim:
-            claimName: nextcloud-nextcloud-data	
-          readOnly: true
+      - name: nextcloud-external-lib
+        persistentVolumeClaim:
+          claimName: nextcloud-nextcloud-data
+        readOnly: true
       containers:
-        - name: immich-server
-          volumeMounts:
-            - name: nextcloud-external-lib
-              mountPath: /nextcloudlib
-              readOnly: true
+      - name: immich-server
+        volumeMounts:
+        - name: nextcloud-external-lib
+          mountPath: /nextcloudlib
+          readOnly: true
