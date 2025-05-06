@@ -28,8 +28,45 @@ spec:
       prune: true
       selfHeal: true
   source:
-    repoURL: https://github.com/anymus0/anymus-rke.git
-    targetRevision: HEAD
-    path: helm-wrappers/immich-custom
+    repoURL: ghcr.io/immich-app/immich-charts
+    targetRevision: 0.9.3
+    chart: immich
     helm:
       releaseName: immich
+      valuesObject:
+        externalLib:
+          pvcName: "nextcloud-nextcloud-data"
+        postgresql:
+          enabled: false
+          global:
+            postgresql:
+              auth:
+                existingSecret: immich-postgresql-creds
+        redis:
+          enabled: true
+        immich:
+          persistence:
+            library:
+              existingClaim: immich-default-vol
+              readOnly: true
+        server:
+          extraVolumes:
+            - name: external-lib-volume
+              persistentVolumeClaim:
+                claimName: nextcloud-nextcloud-data
+          extraVolumeMounts:
+            - name: external-lib-volume
+              mountPath: /external
+          ingress:
+            main:
+              enabled: true
+              hosts:
+                - host: immich.anymus.pro
+                  paths:
+                    - path: "/"
+        machine-learning:
+          persistence:
+            cache:
+              size: 20Gi
+              type: pvc
+              storageClass: longhorn
