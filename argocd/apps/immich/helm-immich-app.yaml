@@ -1,94 +1,94 @@
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: immich-default-vol
-#   namespace: cloud
-#   annotations:
-#     volume.beta.kubernetes.io/storage-class: longhorn
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   storageClassName: longhorn
-#   resources:
-#     requests:
-#       storage: 100Mi
-# ---
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: immich
-#   namespace: argocd
-# spec:
-#   project: default
-#   destination:
-#     server: "https://kubernetes.default.svc"
-#     namespace: cloud
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#   source:
-#     repoURL: ghcr.io/immich-app/immich-charts
-#     targetRevision: 0.9.3
-#     chart: immich
-#     helm:
-#       releaseName: immich
-#       valuesObject:
-#         env:
-#           # Use the secret directly in the environment variables
-#           DB_HOSTNAME:
-#             valueFrom:
-#               secretKeyRef:
-#                 name: immich-postgresql-creds
-#                 key: host
-#           DB_USERNAME:
-#             valueFrom:
-#               secretKeyRef:
-#                 name: immich-postgresql-creds
-#                 key: username
-#           DB_PASSWORD:
-#             valueFrom:
-#               secretKeyRef:
-#                 name: immich-postgresql-creds
-#                 key: password
-#           DB_DATABASE_NAME:
-#             valueFrom:
-#               secretKeyRef:
-#                 name: immich-postgresql-creds
-#                 key: dbname
-#         externalLib:
-#           pvcName: "nextcloud-nextcloud-data"
-#         postgresql:
-#           enabled: false
-#           global:
-#             postgresql:
-#               auth:
-#                 existingSecret: immich-postgresql-creds
-#         redis:
-#           enabled: true
-#         immich:
-#           persistence:
-#             library:
-#               existingClaim: immich-default-vol
-#               readOnly: true
-#         server:
-#           extraVolumes:
-#             - name: external-lib-volume
-#               persistentVolumeClaim:
-#                 claimName: nextcloud-nextcloud-data
-#           extraVolumeMounts:
-#             - name: external-lib-volume
-#               mountPath: /external
-#           ingress:
-#             main:
-#               enabled: true
-#               hosts:
-#                 - host: immich.anymus.pro
-#                   paths:
-#                     - path: "/"
-#         machine-learning:
-#           persistence:
-#             cache:
-#               size: 20Gi
-#               type: pvc
-#               storageClass: longhorn
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-default-vol
+  namespace: cloud
+  annotations:
+    volume.beta.kubernetes.io/storage-class: longhorn
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immich
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: cloud
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: ghcr.io/immich-app/immich-charts
+    targetRevision: 0.9.3
+    chart: immich
+    helm:
+      releaseName: immich
+      valuesObject:
+        env:
+          # Use the secret directly in the environment variables
+          DB_HOSTNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: host
+          DB_USERNAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: username
+          DB_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: password
+          DB_DATABASE_NAME:
+            valueFrom:
+              secretKeyRef:
+                name: immich-postgresql-creds
+                key: dbname
+        externalLib:
+          pvcName: "nextcloud-nextcloud-data"
+        postgresql:
+          enabled: false
+          global:
+            postgresql:
+              auth:
+                existingSecret: immich-postgresql-creds
+        redis:
+          enabled: true
+        immich:
+          persistence:
+            library:
+              existingClaim: immich-default-vol
+              readOnly: true
+        server:
+          extraVolumes:
+            - name: external-lib-volume
+              persistentVolumeClaim:
+                claimName: nextcloud-nextcloud-data
+          extraVolumeMounts:
+            - name: external-lib-volume
+              mountPath: /external
+          ingress:
+            main:
+              enabled: true
+              hosts:
+                - host: immich.anymus.pro
+                  paths:
+                    - path: "/"
+        machine-learning:
+          persistence:
+            cache:
+              size: 20Gi
+              type: pvc
+              storageClass: longhorn
