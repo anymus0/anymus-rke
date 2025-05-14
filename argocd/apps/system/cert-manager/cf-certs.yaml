@@ -9,7 +9,6 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "*.anymus.pro"
   dnsZones:
   - "anymus.pro"
 ---
@@ -23,7 +22,6 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "*.hajogepesz.hu"
   dnsZones:
   - "hajogepesz.hu"
 ---
@@ -37,6 +35,5 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "*.hajogepesz.com"
   dnsZones:
   - "hajogepesz.com"
