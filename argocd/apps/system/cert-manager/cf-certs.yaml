@@ -10,8 +10,8 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   commonName: "*.anymus.pro"
-  dnsNames:
-  - "*.anymus.pro"
+  dnsZones:
+  - "anymus.pro"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -24,8 +24,8 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   commonName: "*.hajogepesz.hu"
-  dnsNames:
-  - "*.hajogepesz.hu"
+  dnsZones:
+  - "hajogepesz.hu"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -38,5 +38,5 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   commonName: "*.hajogepesz.com"
-  dnsNames:
-  - "*.hajogepesz.com"
+  dnsZones:
+  - "hajogepesz.com"
