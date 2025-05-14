@@ -30,24 +30,17 @@ spec:
         ingress:
           enabled: true
           ingressClassName: nginx
-          hosts:
-            - host: hajogepesz.com
-              paths:
-                - path: /
-                  pathType: Prefix
-            - host: www.hajogepesz.com
-              paths:
-                - path: /
-                  pathType: Prefix
-            - host: hajogepesz.hu
-              paths:
-                - path: /
-                  pathType: Prefix
-            - host: www.hajogepesz.hu
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
+          hostname: "hajogepesz.com"  # Primary hostname
+          path: /
+          tls: true  # This should be a boolean, not an array
+          extraHosts:  # Add additional hostnames here
+            - name: www.hajogepesz.com
+              path: /
+            - name: hajogepesz.hu
+              path: /
+            - name: www.hajogepesz.hu
+              path: /
+          extraTls:
             - hosts:
                 - hajogepesz.com
                 - www.hajogepesz.com
