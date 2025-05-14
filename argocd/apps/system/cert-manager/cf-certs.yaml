@@ -1,3 +1,4 @@
+---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -11,3 +12,31 @@ spec:
   commonName: "*.anymus.pro"
   dnsNames:
   - "*.anymus.pro"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hajogepesz-hu-cf-cert
+  namespace: cert-manager
+spec:
+  secretName: hajogepesz-hu-cf-cert
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "*.hajogepesz.hu"
+  dnsNames:
+  - "*.hajogepesz.hu"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: hajogepesz-com-cf-cert
+  namespace: cert-manager
+spec:
+  secretName: hajogepesz-com-cf-cert
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "*.hajogepesz.com"
+  dnsNames:
+  - "*.hajogepesz.com"
