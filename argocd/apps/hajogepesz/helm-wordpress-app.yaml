@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hajogepesz-wp
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: hajogepesz
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: wordpress
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 24.2.6
+    helm:
+      releaseName: hajogepesz-wp
+      valuesObject:
+        persistence:
+          enabled: true
+          storageClass: longhorn
+        service:
+          type: ClusterIP
+        wordpressConfigureCache: true
+        memcached:
+          enabled: true
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hostname: "hajogepesz.com"
+          path: /
+          tls: true
+          extraTls:
+          - hosts:
+            - hajogepesz.com
+            - hajogepesz.hu
+            - www.hajogepesz.com
+            - www.hajogepesz.hu
