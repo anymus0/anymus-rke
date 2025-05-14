@@ -33,12 +33,12 @@ spec:
           hostname: "hajogepesz.com"
           path: /
           tls: true
-          secrets:
-            - name: hajogepesz-com-cf-cert
-            - name: hajogepesz-hu-cf-cert
           extraTls:
           - hosts:
             - hajogepesz.com
-            - hajogepesz.hu
             - www.hajogepesz.com
+            secretName: hajogepesz-com-cf-cert
+          - hosts:
+            - hajogepesz.hu
             - www.hajogepesz.hu
+            secretName: hajogepesz-hu-cf-cert
