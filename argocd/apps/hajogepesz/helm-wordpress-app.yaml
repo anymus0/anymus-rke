@@ -30,15 +30,29 @@ spec:
         ingress:
           enabled: true
           ingressClassName: nginx
-          hostname: "hajogepesz.com"
-          path: /
-          tls: true
-          extraTls:
-          - hosts:
-            - hajogepesz.com
-            - www.hajogepesz.com
-            secretName: hajogepesz-com-cf-cert
-          - hosts:
-            - hajogepesz.hu
-            - www.hajogepesz.hu
-            secretName: hajogepesz-hu-cf-cert
+          hosts:
+            - host: hajogepesz.com
+              paths:
+                - path: /
+                  pathType: Prefix
+            - host: www.hajogepesz.com
+              paths:
+                - path: /
+                  pathType: Prefix
+            - host: hajogepesz.hu
+              paths:
+                - path: /
+                  pathType: Prefix
+            - host: www.hajogepesz.hu
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - hajogepesz.com
+                - www.hajogepesz.com
+              secretName: hajogepesz-com-cf-cert
+            - hosts:
+                - hajogepesz.hu
+                - www.hajogepesz.hu
+              secretName: hajogepesz-hu-cf-cert
