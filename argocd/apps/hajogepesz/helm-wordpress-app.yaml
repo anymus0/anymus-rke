@@ -34,10 +34,11 @@ spec:
         ingress:
           enabled: true
           ingressClassName: nginx
-          hostname: "hajogepesz.com"  # Primary hostname
+          hostname: "hajogepesz.com"
           path: /
-          tls: true  # This should be a boolean, not an array
-          extraHosts:  # Add additional hostnames here
+          tls: true
+          secretName: hajogepesz-com-cf-cert
+          extraHosts:
             - name: www.hajogepesz.com
               path: /
             - name: hajogepesz.hu
