@@ -20,9 +20,6 @@ spec:
       releaseName: hajogepesz-wp
       valuesObject:
         existingSecret: hajogepesz-wp-creds
-        mariadb:
-          auth:
-            existingSecret: hajogepesz-wp-creds
         persistence:
           enabled: true
           storageClass: longhorn
