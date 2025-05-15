@@ -1,55 +1,55 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: hajogepesz-wp
-  namespace: argocd
-spec:
-  project: default
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: hajogepesz
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-  source:
-    chart: wordpress
-    repoURL: registry-1.docker.io/bitnamicharts
-    targetRevision: 24.2.6
-    helm:
-      releaseName: hajogepesz-wp
-      valuesObject:
-        existingSecret: hajogepesz-wp-creds
-        mariadb:
-          auth:
-            existingSecret: hajogepesz-wp-mariadb
-        persistence:
-          enabled: true
-          storageClass: longhorn
-        service:
-          type: ClusterIP
-        wordpressConfigureCache: true
-        memcached:
-          enabled: true
-        ingress:
-          enabled: true
-          ingressClassName: nginx
-          hostname: "hajogepesz.com"  # Primary hostname
-          path: /
-          tls: true  # This should be a boolean, not an array
-          extraHosts:  # Add additional hostnames here
-            - name: www.hajogepesz.com
-              path: /
-            - name: hajogepesz.hu
-              path: /
-            - name: www.hajogepesz.hu
-              path: /
-          extraTls:
-            - hosts:
-                - hajogepesz.com
-                - www.hajogepesz.com
-              secretName: hajogepesz-com-cf-cert
-            - hosts:
-                - hajogepesz.hu
-                - www.hajogepesz.hu
-              secretName: hajogepesz-hu-cf-cert
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: hajogepesz-wp
+#   namespace: argocd
+# spec:
+#   project: default
+#   destination:
+#     server: "https://kubernetes.default.svc"
+#     namespace: hajogepesz
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#   source:
+#     chart: wordpress
+#     repoURL: registry-1.docker.io/bitnamicharts
+#     targetRevision: 24.2.6
+#     helm:
+#       releaseName: hajogepesz-wp
+#       valuesObject:
+#         existingSecret: hajogepesz-wp-creds
+#         mariadb:
+#           auth:
+#             existingSecret: hajogepesz-wp-mariadb
+#         persistence:
+#           enabled: true
+#           storageClass: longhorn
+#         service:
+#           type: ClusterIP
+#         wordpressConfigureCache: true
+#         memcached:
+#           enabled: true
+#         ingress:
+#           enabled: true
+#           ingressClassName: nginx
+#           hostname: "hajogepesz.com"  # Primary hostname
+#           path: /
+#           tls: true  # This should be a boolean, not an array
+#           extraHosts:  # Add additional hostnames here
+#             - name: www.hajogepesz.com
+#               path: /
+#             - name: hajogepesz.hu
+#               path: /
+#             - name: www.hajogepesz.hu
+#               path: /
+#           extraTls:
+#             - hosts:
+#                 - hajogepesz.com
+#                 - www.hajogepesz.com
+#               secretName: hajogepesz-com-cf-cert
+#             - hosts:
+#                 - hajogepesz.hu
+#                 - www.hajogepesz.hu
+#               secretName: hajogepesz-hu-cf-cert
