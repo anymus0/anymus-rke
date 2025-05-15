@@ -19,6 +19,7 @@
 #     helm:
 #       releaseName: hajogepesz-wp
 #       valuesObject:
+#         existingSecret: 
 #         persistence:
 #           enabled: true
 #           storageClass: longhorn
