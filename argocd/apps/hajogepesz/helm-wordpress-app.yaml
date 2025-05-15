@@ -36,10 +36,17 @@ spec:
           ingressClassName: nginx
           hostname: "hajogepesz.com"
           path: /
+          annotations:
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
           tls:
             - hosts:
                 - hajogepesz.com
+                - www.hajogepesz.com
               secretName: hajogepesz-com-cf-cert
+            - hosts:
+                - hajogepesz.hu
+                - www.hajogepesz.hu
+              secretName: hajogepesz-hu-cf-cert
           extraHosts:
             - name: www.hajogepesz.com
               path: /
@@ -47,11 +54,3 @@ spec:
               path: /
             - name: www.hajogepesz.hu
               path: /
-          extraTls:
-            - hosts:
-                - www.hajogepesz.com
-              secretName: hajogepesz-com-cf-cert
-            - hosts:
-                - hajogepesz.hu
-                - www.hajogepesz.hu
-              secretName: hajogepesz-hu-cf-cert
