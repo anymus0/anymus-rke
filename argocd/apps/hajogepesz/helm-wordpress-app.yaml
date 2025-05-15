@@ -36,7 +36,8 @@ spec:
           ingressClassName: nginx
           hostname: "hajogepesz.com"
           path: /
-          tls: true  # This must be a boolean
+          tls: true
+          secretName: hajogepesz-com-cf-cert
           extraHosts:
             - name: www.hajogepesz.com
               path: /
