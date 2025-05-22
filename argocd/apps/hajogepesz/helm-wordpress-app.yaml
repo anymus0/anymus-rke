@@ -32,7 +32,7 @@ spec:
         memcached:
           enabled: true
         ingress:
-          enabled: false
+          enabled: true
           ingressClassName: nginx
           hostname: "hajogepesz.com"
           path: /
@@ -51,16 +51,16 @@ spec:
           ingressClassName: nginx
           hostname: "hajogepesz.hu"
           path: /
-          tls: true
+          tls: false
           annotations:
-            nginx.ingress.kubernetes.io/ssl-certificate: "hajogepesz/hajogepesz-hu-tls"
+            nginx.ingress.kubernetes.io/ssl-certificate: "hajogepesz/hajogepesz.hu-tls"
           extraHosts:
             - name: www.hajogepesz.hu
               path: /
           extraTls:
             - hosts:
                 - www.hajogepesz.hu
-              secretName: hajogepesz-hu-tls
+              secretName: hajogepesz.hu-tls
             - hosts:
                 - hajogepesz.hu
-              secretName: hajogepesz-hu-tls
+              secretName: hajogepesz.hu-tls
