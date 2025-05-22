@@ -23,8 +23,9 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "*.hajogepesz.hu"
+  commonName: "hajogepesz.hu"
   dnsNames:
+  - "hajogepesz.hu"
   - "*.hajogepesz.hu"
 ---
 apiVersion: cert-manager.io/v1
@@ -37,6 +38,7 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "*.hajogepesz.com"
+  commonName: "hajogepesz.com"
   dnsNames:
+  - "hajogepesz.com"
   - "*.hajogepesz.com"
