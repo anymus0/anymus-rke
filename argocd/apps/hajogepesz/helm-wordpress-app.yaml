@@ -37,7 +37,6 @@ spec:
           hostname: "hajogepesz.com"
           path: /
           tls: true
-          secretName: hajogepesz-com-cf-cert
           extraHosts:
             - name: www.hajogepesz.com
               path: /
@@ -56,3 +55,6 @@ spec:
                 - hajogepesz.hu
                 - www.hajogepesz.hu
               secretName: hajogepesz-hu-cf-cert
+          secrets:
+            - name: hajogepesz-com-cf-cert
+            - name: hajogepesz-hu-cf-cert
