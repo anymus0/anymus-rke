@@ -42,13 +42,13 @@ spec:
           extraHosts:
             - name: www.hajogepesz.com
               path: /
-          # extraTls:
-          #   - hosts:
-          #       - www.hajogepesz.com
-          #     secretName: hajogepesz-com-tls
-          #   - hosts:
-          #       - hajogepesz.com
-          #     secretName: hajogepesz-com-tls
+          extraTls:
+            - hosts:
+                - www.hajogepesz.com
+              secretName: hajogepesz-com-tls
+            - hosts:
+                - hajogepesz.com
+              secretName: hajogepesz-com-tls
         secondaryIngress:
           enabled: true
           ingressClassName: nginx
