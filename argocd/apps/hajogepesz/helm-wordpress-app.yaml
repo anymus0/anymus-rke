@@ -32,7 +32,7 @@ spec:
         memcached:
           enabled: true
         ingress:
-          enabled: true
+          enabled: false
           ingressClassName: nginx
           hostname: "hajogepesz.com"
           path: /
