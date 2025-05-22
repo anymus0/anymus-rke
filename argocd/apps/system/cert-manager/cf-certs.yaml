@@ -33,7 +33,7 @@ metadata:
   name: hajogepesz-com-cf-cert
   namespace: hajogepesz
 spec:
-  secretName: hajogepesz-com-tls
+  secretName: hajogepesz.com-tls
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

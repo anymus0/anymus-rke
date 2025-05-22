@@ -38,17 +38,14 @@ spec:
           path: /
           tls: true
           annotations:
-            nginx.ingress.kubernetes.io/ssl-certificate: "hajogepesz/hajogepesz-com-tls"
+            nginx.ingress.kubernetes.io/ssl-certificate: "hajogepesz/hajogepesz.com-tls"
           extraHosts:
             - name: www.hajogepesz.com
               path: /
           extraTls:
             - hosts:
                 - www.hajogepesz.com
-              secretName: hajogepesz-com-tls
-            - hosts:
-                - hajogepesz.com
-              secretName: hajogepesz-com-tls
+              secretName: hajogepesz.com-tls
         secondaryIngress:
           enabled: true
           ingressClassName: nginx
