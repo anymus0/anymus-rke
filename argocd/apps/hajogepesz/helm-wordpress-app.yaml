@@ -44,6 +44,8 @@ spec:
               path: /
           extraTls:
             - hosts:
+                - hajogepesz.com
+              secretName: hajogepesz-com-tls
                 - www.hajogepesz.com
               secretName: hajogepesz-com-tls
         secondaryIngress:
@@ -59,5 +61,7 @@ spec:
               path: /
           extraTls:
             - hosts:
+                - hajogepesz.hu
+              secretName: hajogepesz-hu-tls
                 - www.hajogepesz.hu
               secretName: hajogepesz-hu-tls
