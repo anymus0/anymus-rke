@@ -55,6 +55,3 @@ spec:
                 - hajogepesz.hu
                 - www.hajogepesz.hu
               secretName: hajogepesz-hu-cf-cert
-          secrets:
-            - name: hajogepesz-com-cf-cert
-            - name: hajogepesz-hu-cf-cert
