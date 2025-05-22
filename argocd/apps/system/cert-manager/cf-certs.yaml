@@ -19,7 +19,7 @@ metadata:
   name: hajogepesz-hu-cf-cert
   namespace: hajogepesz
 spec:
-  secretName: hajogepesz-hu-tls
+  secretName: hajogepesz.hu-tls
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
