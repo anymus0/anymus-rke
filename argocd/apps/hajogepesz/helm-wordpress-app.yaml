@@ -1,3 +1,32 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wordpress-htaccess-config
+  namespace: hajogepesz
+data:
+  .htaccess: |
+    # Custom PHP settings
+    php_value post_max_size 10240M
+    php_value upload_max_filesize 10240M
+    php_value max_execution_time 400
+    php_value memory_limit 1024M
+    php_value max_input_vars 3000
+    
+    # BEGIN WordPress
+    # The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+    # dynamically generated, and should only be modified via WordPress filters.
+    # Any changes to the directives between these markers will be overwritten.
+    <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+    </IfModule>
+    # END WordPress
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -19,6 +48,15 @@ spec:
     helm:
       releaseName: hajogepesz-wp
       valuesObject:
+        resourcesPreset: medium
+        extraVolumes:
+          - name: htaccess-config
+            configMap:
+              name: wordpress-htaccess-config
+        extraVolumeMounts:
+          - name: htaccess-config
+            mountPath: /bitnami/wordpress/.htaccess
+            subPath: .htaccess
         existingSecret: hajogepesz-wp-creds
         mariadb:
           auth:
@@ -39,6 +77,7 @@ spec:
           tls: false
           annotations:
             nginx.ingress.kubernetes.io/ssl-certificate: "hajogepesz/hajogepesz.com-tls"
+            nginx.ingress.kubernetes.io/proxy-body-size: 10240m
           extraHosts:
             - name: www.hajogepesz.com
               path: /
@@ -57,6 +96,7 @@ spec:
           tls: false
           annotations:
             nginx.ingress.kubernetes.io/ssl-certificate: "hajogepesz/hajogepesz.hu-tls"
+            nginx.ingress.kubernetes.io/proxy-body-size: 10240m
           extraHosts:
             - name: www.hajogepesz.hu
               path: /
