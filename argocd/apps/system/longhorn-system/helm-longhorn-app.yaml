@@ -18,8 +18,10 @@ spec:
       helm:
         releaseName: longhorn
         valuesObject:
+          persistence:
+            defaultClassReplicaCount: 2
           defaultSettings:
-            defaultReplicaCount: 1
+            defaultReplicaCount: 2
           preUpgradeChecker:
             jobEnabled: false
   destination:
