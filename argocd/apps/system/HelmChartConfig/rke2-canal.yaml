@@ -1,10 +1,25 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
-  name: rke2-canal
+  name: rke2-canal-enp16s0
   namespace: kube-system
 spec:
   valuesContent: |-
     flannel:
       iface: "enp16s0"
       backend: "wireguard"
+    nodeSelector:
+      network-interface: "enp16s0"
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-canal-br0
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    flannel:
+      iface: "br0"
+      backend: "wireguard"
+    nodeSelector:
+      network-interface: "br0"
