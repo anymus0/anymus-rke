@@ -11,7 +11,7 @@ spec:
   storageClassName: longhorn
   resources:
     requests:
-      storage: 120Gi
+      storage: 400Gi
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
