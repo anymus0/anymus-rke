@@ -23,3 +23,16 @@ spec:
       backend: "wireguard"
     nodeSelector:
       network-interface: "br0"
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-canal-br0
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    flannel:
+      iface: "enp8s0"
+      backend: "wireguard"
+    nodeSelector:
+      network-interface: "enp8s0"
