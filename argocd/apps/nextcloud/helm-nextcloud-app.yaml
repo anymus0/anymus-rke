@@ -46,8 +46,10 @@ spec:
           enabled: false
         persistence:
           enabled: true
+          accessMode: ReadWriteMany
           storageClass: longhorn
           nextcloudData:
             enabled: true
+            accessMode: ReadWriteMany
             storageClass: longhorn
             size: "200Gi"
