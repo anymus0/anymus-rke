@@ -26,9 +26,17 @@ spec:
             - matchExpressions:
               - key: node-role.kubernetes.io/master
                 operator: Exists
+              - key: network-interface
+                operator: In
+                values:
+                - enp16s0
             - matchExpressions:
               - key: node-role.kubernetes.io/control-plane
                 operator: Exists
+              - key: network-interface
+                operator: In
+                values:
+                - enp16s0
       containers:
       - args:
         - manager
