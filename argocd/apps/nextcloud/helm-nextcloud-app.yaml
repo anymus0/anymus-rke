@@ -25,6 +25,17 @@ spec:
           className: nginx
         nextcloud:
           host: cloud.anymus.pro
+          configs:
+            proxy.config.php: |-
+              <?php
+              $CONFIG = array (
+                'trusted_proxies' => array('10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'),
+                'overwritehost' => 'cloud.anymus.pro',
+                'overwriteprotocol' => 'https',
+                'overwritewebroot' => '/',
+                'overwrite.cli.url' => 'https://cloud.anymus.pro/',
+                'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
+              );
         redis:
           enabled: true
           global:
