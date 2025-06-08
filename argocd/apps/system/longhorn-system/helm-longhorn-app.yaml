@@ -21,11 +21,9 @@ spec:
           longhornManager:
             nodeSelector:
               longhorn.io/exclude-node: "false"
-
           longhornDriver:
             nodeSelector:
               longhorn.io/exclude-node: "false"
-
           longhornUI:
             nodeSelector:
               longhorn.io/exclude-node: "false"
