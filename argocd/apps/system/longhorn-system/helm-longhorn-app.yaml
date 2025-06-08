@@ -20,13 +20,15 @@ spec:
         valuesObject:
           longhornManager:
             nodeSelector:
-              longhorn.io/exclude-node: "false"
+              longhorn.io/storage-node: "true"
           longhornDriver:
             nodeSelector:
-              longhorn.io/exclude-node: "false"
+              longhorn.io/storage-node: "true"
           longhornUI:
             nodeSelector:
-              longhorn.io/exclude-node: "false"
+              longhorn.io/storage-node: "true"
+          defaultSettings:
+            systemManagedComponentsNodeSelector: "longhorn.io/storage-node:true"
           persistence:
             defaultClassReplicaCount: 2
           defaultSettings:
