@@ -18,6 +18,9 @@ spec:
       helm:
         releaseName: longhorn
         valuesObject:
+          global:
+            nodeSelector:
+              longhorn.io/storage-node: "true"
           longhornManager:
             nodeSelector:
               longhorn.io/storage-node: "true"
