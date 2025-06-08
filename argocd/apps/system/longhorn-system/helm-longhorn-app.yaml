@@ -20,13 +20,15 @@ spec:
         valuesObject:
           longhornManager:
             nodeSelector:
-              node-role.kubernetes.io/control-plane: "true"
+              longhorn.io/exclude-node: "false"
+
           longhornDriver:
             nodeSelector:
-              node-role.kubernetes.io/control-plane: "true"
+              longhorn.io/exclude-node: "false"
+
           longhornUI:
             nodeSelector:
-              node-role.kubernetes.io/control-plane: "true"
+              longhorn.io/exclude-node: "false"
           persistence:
             defaultClassReplicaCount: 2
           defaultSettings:
