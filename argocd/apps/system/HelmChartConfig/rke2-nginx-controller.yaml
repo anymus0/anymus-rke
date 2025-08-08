@@ -9,7 +9,6 @@ spec:
       service:
         externalTrafficPolicy: Local
       config:
-        use-forwarded-headers: "true"
         ssl-redirect: "true"
         force-ssl-redirect: "true"
       extraArgs:
