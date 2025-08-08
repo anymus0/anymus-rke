@@ -11,5 +11,6 @@ spec:
       config:
         use-forwarded-headers: "true"
         ssl-redirect: "true"
+        force-ssl-redirect: "true"
       extraArgs:
         default-ssl-certificate: "cert-manager/anymus-cf-cert"
