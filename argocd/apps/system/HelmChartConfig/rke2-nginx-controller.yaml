@@ -6,5 +6,9 @@ metadata:
 spec:
   valuesContent: |-
     controller:
+      service:
+        externalTrafficPolicy: Local
+      config:
+        use-forwarded-headers: "true"
       extraArgs:
         default-ssl-certificate: "cert-manager/anymus-cf-cert"
