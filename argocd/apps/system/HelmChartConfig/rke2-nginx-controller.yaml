@@ -10,5 +10,6 @@ spec:
         externalTrafficPolicy: Local
       config:
         use-forwarded-headers: "true"
+        ssl-redirect: "true"
       extraArgs:
         default-ssl-certificate: "cert-manager/anymus-cf-cert"
