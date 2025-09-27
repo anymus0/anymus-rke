@@ -179,7 +179,7 @@ spec:
               storageClass: "longhorn"
 
         # Security Configuration
-        existingSecretAdminPassword: "harbor-admin-creds"
+        existingSecretAdminPassword: "harbor-admin-secret"
         existingSecretSecretKey: "HARBOR_ADMIN_PASSWORD"
 
         # Additional HA configurations
