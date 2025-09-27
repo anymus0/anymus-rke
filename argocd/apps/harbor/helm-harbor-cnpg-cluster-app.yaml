@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: harbor-cnpg-cluster
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: harbor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: cluster
+    repoURL: https://cloudnative-pg.github.io/charts
+    targetRevision: 0.3.1
+    helm:
+      releaseName: harbor-cnpg-cluster
+      valuesObject:
+        cluster:
+          initdb:
+            database: registry
+            owner: harbor
+            dataChecksums: true
+            encoding: "UTF8"
+          instances: 1
+          storage:
+            storageClass: "longhorn"
