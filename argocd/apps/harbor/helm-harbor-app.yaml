@@ -180,7 +180,9 @@ spec:
 
         # Security Configuration
         existingSecretAdminPassword: "harbor-admin-secret"
-        existingSecretSecretKey: "HARBOR_ADMIN_PASSWORD"
+        existingSecretAdminPasswordKey: "HARBOR_ADMIN_PASSWORD"
+        existingSecretSecretKey: "harbor-admin-secret"
+        existingSecretSecretKeyKey: "secretKey"
 
         # Additional HA configurations
         updateStrategy:
