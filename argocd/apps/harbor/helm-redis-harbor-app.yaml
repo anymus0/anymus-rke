@@ -1,0 +1,129 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-ha-harbor
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: redis
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: "22.0.7"
+    helm:
+      valuesObject:
+        auth:
+          enabled: false
+
+        # Redis architecture - master/replica with Sentinel
+        architecture: replication
+        
+        # Master configuration
+        master:
+          count: 1
+          persistence:
+            enabled: true
+            size: 8Gi
+            storageClass: "longhorn"
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 1024Mi
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: redis
+                      app.kubernetes.io/component: master
+                  topologyKey: kubernetes.io/hostname
+        
+        # Replica configuration for HA
+        replica:
+          replicaCount: 2
+          persistence:
+            enabled: true
+            size: 8Gi
+            storageClass: "longhorn"  # Update with your storage class
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 1024Mi
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: redis
+                      app.kubernetes.io/component: replica
+                  topologyKey: kubernetes.io/hostname
+        
+        # Enable Redis Sentinel for HA
+        sentinel:
+          enabled: true
+          masterSet: "harbor-redis"  # Master set name for Harbor
+          downAfterMilliseconds: 60000
+          failoverTimeout: 18000
+          parallelSyncs: 1
+          quorum: 2  # Minimum Sentinels that need to agree
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+          persistence:
+            enabled: false  # Sentinels don't need persistence
+          service:
+            type: ClusterIP
+            ports:
+              sentinel: 26379
+        
+        # Network policy (optional)
+        networkPolicy:
+          enabled: false
+          # allowExternal: true
+        
+        # Pod disruption budget for HA
+        podDisruptionBudget:
+          create: true
+          minAvailable: 1
+        
+        # Service account
+        serviceAccount:
+          create: true
+          name: "redis-ha-harbor"
+        
+        # Common labels
+        commonLabels:
+          app.kubernetes.io/part-of: harbor
+          component: redis-ha
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: harbor
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
