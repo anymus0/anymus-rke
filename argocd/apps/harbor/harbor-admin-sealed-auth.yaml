@@ -2,13 +2,13 @@ apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
   creationTimestamp: null
-  name: harbor-admin-creds
+  name: harbor-admin-secret
   namespace: harbor
 spec:
   encryptedData:
-    HARBOR_ADMIN_PASSWORD: AgA7SKMF8bDjsaJ0qtGAHydQiN266diI92wL6alB2JnhGR9AahYhp5oLFvd43IgUH3CyqoVUoQLf+maFcBxb4/fWweW9Cf3HrCSFfGYtmC1ErK5cCT/1g21EM/JUq2EBMyWm7UGnyX9DH/l7DVoL4jIsfcoTuivvrw1TtdM9BgzC88ZgAyga4+PgOd+7Iw00plT4+/YTL8EdaQJzU/UmbYIzBH/5AQLhwSBx3loz/tbMSZm8LrMcmslJ1Ov6cbrDpUG9k5hJ4kL0VlLHokGJa/I1EBEBmO1x6YkIVuDwBBQv9p2jjFMZUNrfykNZVXKjrq/yoIjJBHy82YFyjYvuaZ2OT6YOuEqZY92MXuiYtLwns6u+Au+1D1yeklXibWb1PnSySN5NoVcj+Qtngp75IZELnlsLSQWZ5ubU9MNMMyjAd1/gzK3qpwKGI5DfxSwhWSxNGmfg5dD7B0oXXrRdYYObOVhaRYrAWIthSFyV1vkoTAvl6iDoJsp5+Cr3V0RYepqyDCOltlh5fRwQ/jiP7LH0hFpQ8wBN597pSj6pufMmYDvfGi+HCxpB8mZNLlcQvxS1nE+rp4InSzkI9THLOyL7YyDSC5L9PRWMYjrZfi6+VjwJsiUqDpuSwiD8n5y5FsGHxBbFWhv6ysy61xosI68y4uMxJHJuL+ic3nJI8f/HkdXUs0WbyEdwUeU4eKduQ/N/1ZBk2SLHEqVKWjNElYVaRdr3Jgqm/D2qlQ==
+    HARBOR_ADMIN_PASSWORD: AgA6vPB9cod3aF/70Gg5lcJxyP1l7ix3cq6Ftia4R8YWZV/xELQ405NTLSAXRmc3/Vwv+wPpy4fcXTRbHLkeDMdHZ15k8745s0+4L/rNge9mVoqsEwNrUv0VslFMoBxV4zzBvX5cnEtILFz9g1SgOOun5RKoscKugl0jIPlnZ/iLiOVl9XleFy/rNXJHwzV5yPgFhVtXYU2Wd+AGU/udePM/AUt6/7OMUzbElqSm2uqWmtqQFtCLy8tHwNC9dhsx65n79oAEeU5Xm7LLBtrPale/tvhJda6UX50lH2IdPCQhFOTVF7DLctqkSJpk2fOJXRk6LaJ5L5ebuy2aJpoWCbSCL+TfoagZnE7f6BoWmV4rfnAeHg41/TMM0IjgI5HPENWin/ghitWWV6kOu1gzT3ZJf8ZfWxZGRjr2y3WhE4hEXBZ1Pl8oJ0pX6r/Bk1HIMTJJvD9vF1/L9Clz8wELbYNsVfErKlVleRIIaHPtQqbNF+pQtd0qUk3dErWSklTbQptBi0ihKAEeIIizkB8YfiDiSxNMUJJbQ9YrW8kex+ty0HZRGEb6m/h5g22s71hqrnCVYnuJdQP27JAbdGLGLT6o5adZD0/uVKG795OC61a+cqI9f8HnPNzwfSiesUq0GLEBdMyHie/OzX3+bx2jmnXPpDwy0ivj1uR/IM/KGtLPJUn4IVSZlLoFs6xAJwaNo+DkgHMYNL8i1gc7vK22hgBzmOlVMhhCm8pCqg==
   template:
     metadata:
       creationTimestamp: null
-      name: harbor-admin-creds
+      name: harbor-admin-secret
       namespace: harbor
