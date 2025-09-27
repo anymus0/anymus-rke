@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: jenkins
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  source:
+    chart: jenkins
+    repoURL: ghcr.io/jenkinsci/helm-charts
+    targetRevision: 5.8.92
+    helm:
+      releaseName: jenkins
+      valuesObject:
+        controller:
+          jenkinsUrlProtocol: https
+          ingress:
+            enabled: true
+            paths: []
+            apiVersion: "extensions/v1beta1"
+            hostName: ci.anymus.pro
+          JCasC:
+            securityRealm: |-
+              local:
+                allowsSignup: false
+                enableCaptcha: false
+                users:
+                - id: "${chart-admin-username}"
+                  name: "Jenkins Admin"
+                  password: "${chart-admin-password}"
+            authorizationStrategy: |-
+              loggedInUsersCanDoAnything:
+                allowAnonymousRead: false
+        agent:
+          jenkinsTunnel: "jenkinsci-agent:50000"
+          directConnection: true
