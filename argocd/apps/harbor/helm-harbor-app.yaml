@@ -156,7 +156,7 @@ spec:
         redis:
           type: external
           external:
-            addr: "redis-ha-harbor:6379"
+            addr: "redis-ha-harbor.harbor.svc.cluster.local:26379"
             sentinelMasterSet: "harbor-redis"
             coreDatabaseIndex: 0
             jobserviceDatabaseIndex: 1
