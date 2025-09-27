@@ -1,0 +1,196 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: harbor
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: harbor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  source:
+    chart: harbor
+    repoURL: https://helm.goharbor.io
+    targetRevision: 1.18.0
+    helm:
+      releaseName: harbor
+      valuesObject:
+        # External URL - Update with your actual domain
+        externalURL: https://harbor.anymus.pro
+
+        # Expose Harbor via Ingress
+        expose:
+          type: ingress
+          tls:
+            enabled: false
+          ingress:
+            hosts:
+              core: harbor.yourdomain.com
+            className: "nginx"
+            annotations:
+              nginx.ingress.kubernetes.io/proxy-body-size: "0"
+              nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+
+        # HA Configuration - Enable multiple replicas for stateless components
+        portal:
+          replicas: 2
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - harbor-portal
+                  topologyKey: kubernetes.io/hostname
+
+        core:
+          replicas: 2
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 200m
+            limits:
+              memory: 1Gi
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - harbor-core
+                  topologyKey: kubernetes.io/hostname
+
+        jobservice:
+          replicas: 2
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 200m
+            limits:
+              memory: 1Gi
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - harbor-jobservice
+                  topologyKey: kubernetes.io/hostname
+
+        registry:
+          replicas: 2
+          registry:
+            resources:
+              requests:
+                memory: 512Mi
+                cpu: 200m
+              limits:
+                memory: 1Gi
+          controller:
+            resources:
+              requests:
+                memory: 256Mi
+                cpu: 100m
+              limits:
+                memory: 512Mi
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - harbor-registry
+                  topologyKey: kubernetes.io/hostname
+
+        trivy:
+          enabled: true
+          replicas: 2
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 200m
+            limits:
+              memory: 1Gi
+              cpu: 1000m
+
+        database:
+          type: external
+          external:
+            host: "harbor-cnpg-cluster-rw"
+            port: 5432
+            username: "harbor"
+            coreDatabase: "registry"
+            existingSecret: "harbor-postgresql-creds"
+          maxIdleConns: 100
+          maxOpenConns: 900
+
+        # Redis Configuration - Using external Redis for HA
+        redis:
+          type: external
+          external:
+            addr: "redis-ha-harbor:6379"
+            sentinelMasterSet: "harbor-redis"
+            coreDatabaseIndex: 0
+            jobserviceDatabaseIndex: 1
+            registryDatabaseIndex: 2
+            trivyAdapterIndex: 5
+            harborDatabaseIndex: 0
+            cacheLayerDatabaseIndex: 0
+
+        # Persistence Configuration for HA
+        persistence:
+          enabled: true
+          resourcePolicy: "keep"
+          persistentVolumeClaim:
+            registry:
+              accessMode: ReadWriteMany
+              size: 50Gi
+              storageClass: "longhorn"
+            jobservice:
+              jobLog:
+                accessMode: ReadWriteMany
+                size: 10Gi
+                storageClass: "longhorn"
+            trivy:
+              accessMode: ReadWriteMany
+              size: 10Gi
+              storageClass: "longhorn"
+
+        # Security Configuration
+        existingSecretAdminPassword: "harbor-admin-creds"
+        existingSecretSecretKey: "HARBOR_ADMIN_PASSWORD"
+
+        # Additional HA configurations
+        updateStrategy:
+          type: RollingUpdate
+        logLevel: info
+        chartmuseum:
+          enabled: false  # Deprecated, use OCI registries instead
