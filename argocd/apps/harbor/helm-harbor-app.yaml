@@ -21,7 +21,6 @@ spec:
     helm:
       releaseName: harbor
       valuesObject:
-        # External URL - Update with your actual domain
         externalURL: https://harbor.anymus.pro
 
         # Expose Harbor via Ingress
@@ -31,7 +30,7 @@ spec:
             enabled: false
           ingress:
             hosts:
-              core: harbor.yourdomain.com
+              core: harbor.anymus.pro
             className: "nginx"
             annotations:
               nginx.ingress.kubernetes.io/proxy-body-size: "0"
