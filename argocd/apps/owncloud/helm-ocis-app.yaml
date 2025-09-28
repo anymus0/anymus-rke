@@ -15,7 +15,7 @@ spec:
   source:
     chart: ocis
     repoURL: harbor.anymus.pro/anymus-helm-pub
-    targetRevision: 15
+    targetRevision: "15"
     helm:
       releaseName: owncloud
       valuesObject:
