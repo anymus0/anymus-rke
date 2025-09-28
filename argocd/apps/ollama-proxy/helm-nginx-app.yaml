@@ -31,6 +31,9 @@ spec:
         existingContextHttpConfigmaps:
           - "ollama-nginx-http-cm"
         serverBlock: |-
+          upstream ollama {
+              server 192.168.0.200:8080;
+          }
           server {
             listen 0.0.0.0:8080;
             location / {

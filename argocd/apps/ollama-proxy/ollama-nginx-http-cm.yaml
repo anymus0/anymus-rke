@@ -17,7 +17,3 @@ data:
     map $http_upgrade $connection_upgrade {
         default upgrade;
         '' close;
-
-    upstream ollama {
-        server 192.168.0.200:8080; 
-    }
