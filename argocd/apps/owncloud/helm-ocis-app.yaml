@@ -1,58 +1,58 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: owncloud
-#   namespace: argocd
-# spec:
-#   project: default
-#   destination:
-#     server: "https://kubernetes.default.svc"
-#     namespace: cloud
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#   source:
-#     chart: ocis
-#     repoURL: harbor.anymus.pro/anymus-helm-pub
-#     targetRevision: "15"
-#     helm:
-#       releaseName: owncloud
-#       valuesObject:
-#         replicas: 2
-#         externalDomain: ocis.anymus.pro
-#         ingress:
-#           enabled: true
-#           ingressClassName: "nginx"
-#         services:
-#           idm:
-#             persistence:
-#               enabled: true
-#               storageClassName: "longhorn"
-#               size: "1Gi"
-#           nats:
-#             persistence:
-#               enabled: true
-#               storageClassName: "longhorn"
-#               size: "1Gi"
-#           storagesystem:
-#             persistence:
-#               enabled: true
-#               storageClassName: "longhorn"
-#               accessModes:
-#                 - ReadWriteMany
-#               size: "10Gi"
-#           storageusers:
-#             storageBackend:
-#               driver: "ocis"
-#             persistence:
-#               enabled: true
-#               storageClassName: "longhorn"
-#               size: "50Gi"
-#           web:
-#             persistence:
-#               enabled: true
-#               storageClassName: "longhorn"
-#               size: "1Gi"
-#         features:
-#           demoUsers: false
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: owncloud
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: ocis
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    chart: ocis
+    repoURL: harbor.anymus.pro/anymus-helm-pub
+    targetRevision: "15"
+    helm:
+      releaseName: owncloud
+      valuesObject:
+        replicas: 2
+        externalDomain: ocis.anymus.pro
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+        services:
+          idm:
+            persistence:
+              enabled: true
+              storageClassName: "longhorn"
+              size: "1Gi"
+          nats:
+            persistence:
+              enabled: true
+              storageClassName: "longhorn"
+              size: "1Gi"
+          storagesystem:
+            persistence:
+              enabled: true
+              storageClassName: "longhorn"
+              accessModes:
+                - ReadWriteMany
+              size: "10Gi"
+          storageusers:
+            storageBackend:
+              driver: "ocis"
+            persistence:
+              enabled: true
+              storageClassName: "longhorn"
+              size: "50Gi"
+          web:
+            persistence:
+              enabled: true
+              storageClassName: "longhorn"
+              size: "1Gi"
+        features:
+          demoUsers: false
