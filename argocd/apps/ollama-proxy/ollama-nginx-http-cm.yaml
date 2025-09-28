@@ -4,7 +4,7 @@ metadata:
   name: ollama-nginx-http-cm
   namespace: ollama
 data:
-  http: |
+  http-context.conf: |
     # Enable gzip compression
     gzip on;
     gzip_vary on;
@@ -14,6 +14,8 @@ data:
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
 
+    # Map for WebSocket upgrades
     map $http_upgrade $connection_upgrade {
         default upgrade;
         '' close;
+    }

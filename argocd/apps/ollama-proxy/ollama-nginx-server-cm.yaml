@@ -5,21 +5,23 @@ metadata:
   namespace: ollama
 data:
   ollama-server-block.conf: |
+    # Upstream definition for your application
     upstream ollama {
         server 192.168.0.200:8080;
     }
 
+    # Server block to handle requests
     server {
       listen 0.0.0.0:8080;
       server_name ollama.anymus.pro;
 
-      # Health check endpoint for probes
+      # Dedicated health check endpoint for Kubernetes probes
       location /healthz {
         return 200 "OK";
         access_log off;
       }
 
-      # Proxy to the ollama service
+      # Proxy all other requests to the ollama upstream
       location / {
         proxy_pass http://ollama;
         proxy_http_version 1.1;
