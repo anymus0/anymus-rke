@@ -49,8 +49,7 @@ spec:
               subPath: ollama-server-block.conf
               readOnly: true
             - name: nginx-http-config
-              # This path is included by default in the main http block of the Bitnami image
-              mountPath: /opt/bitnami/nginx/conf/bitnami/http-context.conf
+              mountPath: /opt/bitnami/nginx/conf/http-context.conf
               subPath: http-context.conf
               readOnly: true
               
