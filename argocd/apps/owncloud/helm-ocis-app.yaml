@@ -36,7 +36,6 @@ spec:
               storageClassName: "longhorn"
               size: "1Gi"
           storagesystem:
-            replicas: 2
             persistence:
               enabled: true
               storageClassName: "longhorn"
@@ -44,7 +43,6 @@ spec:
                 - ReadWriteMany
               size: "10Gi"
           storageusers:
-            replicas: 2
             storageBackend:
               driver: "ocis"
             persistence:
