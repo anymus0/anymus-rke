@@ -17,7 +17,7 @@ spec:
   source:
     chart: nginx
     repoURL: registry-1.docker.io/bitnamicharts
-    targetRevision: 22.0.0
+    targetRevision: 21.1.23
     helm:
       releaseName: nginx
       valuesObject:
