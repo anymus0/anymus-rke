@@ -8,10 +8,6 @@ spec:
   destination:
     server: "https://kubernetes.default.svc"
     namespace: ocis
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
   source:
     chart: ocis
     repoURL: harbor.anymus.pro/anymus-helm-pub
