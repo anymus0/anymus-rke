@@ -15,7 +15,7 @@ spec:
     helm:
       releaseName: owncloud
       valuesObject:
-        replicas: 2
+        replicas: 1
         externalDomain: ocis.anymus.pro
         ingress:
           enabled: true
