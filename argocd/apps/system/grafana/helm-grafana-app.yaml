@@ -1,0 +1,82 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: grafana
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  source:
+    chart: grafana
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 10.0.0
+    helm:
+      releaseName: grafana
+      valuesObject:
+        replicas: 1
+
+        persistence:
+          enabled: true
+          type: pvc
+          accessModes: ["ReadWriteOnce"]
+          size: 10Gi
+          storageClassName: longhorn
+
+        adminUser: admin
+        adminPassword: "change-me"
+
+        service:
+          type: ClusterIP
+          port: 80
+
+        # Optional Ingress
+        ingress:
+          enabled: true
+          className: nginx
+          hosts:
+            - grafana.anymus.pro
+
+        # Provision VictoriaMetrics as Prometheus-compatible
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+              - name: VictoriaMetrics
+                type: prometheus
+                access: proxy
+                isDefault: true
+                url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
+                jsonData:
+                  httpMethod: POST
+
+        # Auto-import dashboards from ConfigMaps with label grafana_dashboard=1
+        sidecar:
+          dashboards:
+            enabled: true
+            label: grafana_dashboard
+            searchNamespace: ALL
+          datasources:
+            enabled: true
+            label: grafana_datasource
+            searchNamespace: ALL
+
+        # Basic hardening
+        securityContext:
+          runAsUser: 472
+          runAsGroup: 472
+          fsGroup: 472
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 2Gi
