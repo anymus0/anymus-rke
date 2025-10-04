@@ -14,6 +14,7 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+    - ServerSideApply=true
   source:
     chart: victoria-metrics-k8s-stack
     repoURL: https://victoriametrics.github.io/helm-charts
@@ -25,12 +26,12 @@ spec:
           enabled: true
         grafana:
           enabled: false
-        defaultDashboardsEnabled: false
         defaultDashboards:
-          enabled: false
+          enabled: true
           labels:
             grafana_dashboard: "1"
-        # Choose simple single-node or full cluster:
+          annotations:
+            argocd.argoproj.io/sync-options: ServerSideApply=true
         vmsingle:
           enabled: false
         vmcluster:
