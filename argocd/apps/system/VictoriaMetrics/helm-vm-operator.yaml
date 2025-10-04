@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vm-operator
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: vm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  source:
+    chart: victoria-metrics-k8s-stack
+    repoURL: ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
+    targetRevision: 0.60.1
+    helm:
+      releaseName: vmks
+      valuesObject:
+        victoria-metrics-operator:
+          enabled: true
+        grafana:
+          enabled: false
+        defaultDashboardsEnabled: true
+        defaultDashboards:
+          enabled: true
+          labels:
+            grafana_dashboard: "1"
+        # Choose simple single-node or full cluster:
+        vmsingle:
+          enabled: false
+        vmcluster:
+          enabled: true
+          vmselect:
+            replicaCount: 2
+          vminsert:
+            enabled: true
+          vmstorage:
+            enabled: true
+            persistentVolume:
+              enabled: true
+              size: 50Gi
+        # Enable vmagent to scrape kube components
+        vmagent:
+          enabled: true
+          spec:
+            scrapeInterval: 30s
