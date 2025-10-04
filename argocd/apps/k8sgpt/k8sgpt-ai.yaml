@@ -14,3 +14,27 @@ spec:
   version: v0.4.25
   analysis:
     interval: 70s
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: k8sgpt-results-writer
+  namespace: k8sgpt-operator-system
+rules:
+- apiGroups: ["core.k8sgpt.ai"]
+  resources: ["results"]
+  verbs: ["create","get","list","watch","update","patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: k8sgpt-results-writer
+  namespace: k8sgpt-operator-system
+subjects:
+- kind: ServiceAccount
+  name: k8sgpt-k8sgpt-operator-system
+  namespace: k8sgpt-operator-system
+roleRef:
+  kind: Role
+  name: k8sgpt-results-writer
+  apiGroup: rbac.authorization.k8s.io
