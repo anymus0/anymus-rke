@@ -25,9 +25,9 @@ spec:
           enabled: true
         grafana:
           enabled: false
-        defaultDashboardsEnabled: true
+        defaultDashboardsEnabled: false
         defaultDashboards:
-          enabled: true
+          enabled: false
           labels:
             grafana_dashboard: "1"
         # Choose simple single-node or full cluster:
