@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: vm-operator
+  name: vmks
   namespace: argocd
 spec:
   project: default
@@ -16,7 +16,7 @@ spec:
     - CreateNamespace=true
   source:
     chart: victoria-metrics-k8s-stack
-    repoURL: ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
+    repoURL: https://victoriametrics.github.io/helm-charts
     targetRevision: 0.60.1
     helm:
       releaseName: vmks
