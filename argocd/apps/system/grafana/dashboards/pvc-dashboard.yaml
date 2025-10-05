@@ -156,7 +156,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "kubelet_volume_stats_used_bytes{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"} / on(cluster, instance, namespace, persistentvolumeclaim) kubelet_volume_stats_capacity_bytes",
@@ -260,7 +260,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "kubelet_volume_stats_used_bytes{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}",
@@ -364,7 +364,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "kubelet_volume_stats_capacity_bytes{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}",
@@ -468,7 +468,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (namespace, persistentvolumeclaim) (label_replace(kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}, \"persistentvolume\", \"$1\", \"volumename\", \"(.*)\") * on (instance, persistentvolume) group_left(image) label_replace(kube_persistentvolume_info{csi_driver=\"rook-ceph.rbd.csi.ceph.com\"}, \"image\", \"$1\", \"csi_volume_handle\", \"(.*)\") * on (image) group_right(namespace, persistentvolumeclaim) rate(ceph_rbd_read_ops[$__rate_interval]))",
@@ -572,7 +572,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (namespace, persistentvolumeclaim) (label_replace(kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}, \"persistentvolume\", \"$1\", \"volumename\", \"(.*)\") * on (instance, persistentvolume) group_left(image) label_replace(kube_persistentvolume_info{csi_driver=\"rook-ceph.rbd.csi.ceph.com\"}, \"image\", \"$1\", \"csi_volume_handle\", \"(.*)\") * on (image) group_right(namespace, persistentvolumeclaim) rate(ceph_rbd_write_ops[$__rate_interval]))",
@@ -676,7 +676,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (namespace, persistentvolumeclaim) (label_replace(kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}, \"persistentvolume\", \"$1\", \"volumename\", \"(.*)\") * on (instance, persistentvolume) group_left(image) label_replace(kube_persistentvolume_info{csi_driver=\"rook-ceph.rbd.csi.ceph.com\"}, \"image\", \"$1\", \"csi_volume_handle\", \"(.*)\") * on (image) group_right(namespace, persistentvolumeclaim) rate(ceph_rbd_read_bytes[$__rate_interval]))",
@@ -780,7 +780,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (namespace, persistentvolumeclaim) (label_replace(kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}, \"persistentvolume\", \"$1\", \"volumename\", \"(.*)\") * on (instance, persistentvolume) group_left(image) label_replace(kube_persistentvolume_info{csi_driver=\"rook-ceph.rbd.csi.ceph.com\"}, \"image\", \"$1\", \"csi_volume_handle\", \"(.*)\") * on (image) group_right(namespace, persistentvolumeclaim) rate(ceph_rbd_write_bytes[$__rate_interval]))",
@@ -884,7 +884,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (namespace, persistentvolumeclaim) (label_replace(kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}, \"persistentvolume\", \"$1\", \"volumename\", \"(.*)\") * on (instance, persistentvolume) group_left(image) label_replace(kube_persistentvolume_info{csi_driver=\"rook-ceph.rbd.csi.ceph.com\"}, \"image\", \"$1\", \"csi_volume_handle\", \"(.*)\") * on (image) group_right(namespace, persistentvolumeclaim) (rate(ceph_rbd_read_latency_sum[$__rate_interval]) / on (instance, image) rate(ceph_rbd_read_latency_count[$__rate_interval])) or kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"} * 0)",
@@ -988,7 +988,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (namespace, persistentvolumeclaim) (label_replace(kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"}, \"persistentvolume\", \"$1\", \"volumename\", \"(.*)\") * on (persistentvolume) group_left(instance, image) label_replace(kube_persistentvolume_info{csi_driver=\"rook-ceph.rbd.csi.ceph.com\"}, \"image\", \"$1\", \"csi_volume_handle\", \"(.*)\") * on (image) group_right(namespace, persistentvolumeclaim) (rate(ceph_rbd_write_latency_sum[$__rate_interval]) / on (instance, image) rate(ceph_rbd_write_latency_count[$__rate_interval])) or kube_persistentvolumeclaim_info{cluster=~\"$cluster\",namespace=~\"$namespace\",persistentvolumeclaim=~\"$claim\"} * 0)",
@@ -1041,7 +1041,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "label_values(kube_persistentvolumeclaim_info{cluster=~\"$cluster\"},namespace)",
             "description": "",

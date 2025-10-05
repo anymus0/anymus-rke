@@ -73,7 +73,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "Only available for OCP 3.8+ and for non NFS volumes",
           "fieldConfig": {
@@ -215,7 +215,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim,topology_kubernetes_io_zone)(kubelet_volume_stats_capacity_bytes{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -228,7 +228,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim)(kubelet_volume_stats_used_bytes{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -242,7 +242,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim)(kubelet_volume_stats_used_bytes{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"}/kubelet_volume_stats_capacity_bytes{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -256,7 +256,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim)(kubelet_volume_stats_inodes_used{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"}/kubelet_volume_stats_inodes{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -270,7 +270,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim)(kubelet_volume_stats_inodes_used{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -284,7 +284,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim,access_mode)(kube_persistentvolumeclaim_access_mode{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -298,7 +298,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "max by (persistentvolumeclaim,storageclass)(kube_persistentvolumeclaim_info{namespace=~\"$ns\",persistentvolumeclaim=~\"$PVC\"})",
@@ -404,7 +404,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "label_values(kubelet_volume_stats_available_bytes,namespace)",
             "includeAll": false,
@@ -423,7 +423,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "label_values(kubelet_volume_stats_available_bytes{namespace=~\"$ns\"},persistentvolumeclaim)",
             "includeAll": true,
