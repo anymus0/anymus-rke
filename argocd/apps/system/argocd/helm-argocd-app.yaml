@@ -45,6 +45,8 @@ spec:
             enabled: true
             minReplicas: 1
         applicationSet:
+          livenessProbe:
+            enabled: true
           metrics:
             enabled: true
             serviceMonitor:
