@@ -53,3 +53,9 @@ spec:
           enabled: true
           spec:
             scrapeInterval: 30s
+            resources:
+              requests:
+                cpu: "0.3"
+                memory: 1024m
+              limits:
+                memory: 1024m
