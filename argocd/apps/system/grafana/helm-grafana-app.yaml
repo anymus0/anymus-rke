@@ -50,12 +50,23 @@ spec:
             apiVersion: 1
             datasources:
               - name: VictoriaMetrics
+                uid: victoriametrics
                 type: prometheus
                 access: proxy
                 isDefault: true
                 url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
                 jsonData:
                   httpMethod: POST
+              
+              - name: Prometheus
+                uid: prometheus
+                type: prometheus
+                access: proxy
+                isDefault: false
+                url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
+                jsonData:
+                  httpMethod: POST
+
 
         # Auto-import dashboards from ConfigMaps with label grafana_dashboard=1
         sidecar:
