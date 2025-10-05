@@ -46,7 +46,7 @@ spec:
 
         # Provision VictoriaMetrics as Prometheus-compatible
         datasources:
-          datasources.yaml:
+          datasources-vm.yaml:
             apiVersion: 1
             datasources:
               - name: VictoriaMetrics
@@ -58,7 +58,10 @@ spec:
                 url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
                 jsonData:
                   httpMethod: POST
-                editable: false
+          
+          datasources-prometheus.yaml:
+            apiVersion: 1
+            datasources:
               - name: Prometheus
                 uid: prometheus
                 type: prometheus
@@ -68,9 +71,6 @@ spec:
                 url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
                 jsonData:
                   httpMethod: POST
-                editable: false
-
-
 
         # Auto-import dashboards from ConfigMaps with label grafana_dashboard=1
         sidecar:
