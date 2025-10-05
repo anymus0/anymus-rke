@@ -20,3 +20,8 @@ spec:
     targetRevision: 0.2.23
     helm:
       releaseName: k8s-operator
+      valuesObject:
+        serviceMonitor:
+          enabled: true
+        grafanaDashboard:
+          enabled: true
