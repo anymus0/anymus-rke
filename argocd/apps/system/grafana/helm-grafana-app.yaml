@@ -46,28 +46,13 @@ spec:
 
         # Provision VictoriaMetrics as Prometheus-compatible
         datasources:
-          datasources-vm.yaml:
+          datasources.yaml:
             apiVersion: 1
             datasources:
               - name: VictoriaMetrics
-                uid: victoriametrics
                 type: prometheus
                 access: proxy
-                orgId: 1
                 isDefault: true
-                url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
-                jsonData:
-                  httpMethod: POST
-          
-          datasources-prometheus.yaml:
-            apiVersion: 1
-            datasources:
-              - name: Prometheus
-                uid: prometheus
-                type: prometheus
-                access: proxy
-                orgId: 1
-                isDefault: false
                 url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
                 jsonData:
                   httpMethod: POST
