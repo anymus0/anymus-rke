@@ -53,19 +53,23 @@ spec:
                 uid: victoriametrics
                 type: prometheus
                 access: proxy
+                orgId: 1
                 isDefault: true
                 url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
                 jsonData:
                   httpMethod: POST
-              
+                editable: false
               - name: Prometheus
                 uid: prometheus
                 type: prometheus
                 access: proxy
+                orgId: 1
                 isDefault: false
                 url: http://vmselect-vmks-victoria-metrics-k8s-stack.vm.svc:8481/select/0/prometheus/
                 jsonData:
                   httpMethod: POST
+                editable: false
+
 
 
         # Auto-import dashboards from ConfigMaps with label grafana_dashboard=1
