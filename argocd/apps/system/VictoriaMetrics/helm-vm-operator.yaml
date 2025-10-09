@@ -66,6 +66,9 @@ spec:
           enabled: true
           spec:
             scrapeInterval: 30s
+            # Enable hostNetwork mode
+            hostNetwork: true
+            dnsPolicy: ClusterFirstWithHostNet
             resources:
               requests:
                 cpu: "0.3"
