@@ -20,5 +20,8 @@ spec:
       config:
         ssl-redirect: "true"
         force-ssl-redirect: "true"
+        hsts: "true"
+        hsts-max-age: "31536000"
+        hsts-preload: "true"
       extraArgs:
         default-ssl-certificate: "cert-manager/anymus-cf-cert"
