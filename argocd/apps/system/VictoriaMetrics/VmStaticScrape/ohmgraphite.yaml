@@ -1,0 +1,13 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: ohmgraphite
+  namespace: vm
+spec:
+  jobName: ohmgraphite
+  targetEndpoints:
+  - targets: ["192.168.0.200:4445"]
+    labels:
+      app: ohmgraphite
+      host: anymus-pc
+    path: /metrics/  # OhmGraphite metrics path
