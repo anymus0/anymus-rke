@@ -100,7 +100,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -180,7 +180,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_cpu_load_percent{instance=\"$instance\",sensor=\"CPU Total\"}",
@@ -195,7 +195,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -275,7 +275,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -292,7 +292,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -372,7 +372,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "max(ohm_hdd_load_percent{instance=\"$instance\",sensor=\"Total Activity\"})",
@@ -400,7 +400,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -480,7 +480,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": false,
               "expr": "max(ohm_hdd_load_percent{instance=\"$instance\",sensor=\"Used Space\"})",
@@ -508,7 +508,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -559,7 +559,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(increase(ohm_hdd_bytes{instance=\"$instance\", sensor=\"Data Read\"}[$__range]))",
@@ -575,7 +575,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -626,7 +626,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(increase(ohm_hdd_bytes{instance=\"$instance\", sensor=\"Data Written\"}[$__range]))",
@@ -642,7 +642,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -693,7 +693,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(ohm_nic_bytes_per_second{instance=\"$instance\"})",
@@ -709,7 +709,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -840,7 +840,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -973,7 +973,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -1023,7 +1023,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(increase(ohm_nic_bytes{instance=\"$instance\",sensor=\"Data Downloaded\"}[$__range]))",
@@ -1038,7 +1038,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1089,7 +1089,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(increase(ohm_nic_bytes{instance=\"$instance\",sensor=\"Data Uploaded\"}[$__range]))",
@@ -1104,7 +1104,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1155,7 +1155,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(ohm_hdd_bytes_per_second{instance=\"$instance\"})",
@@ -1171,7 +1171,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1251,7 +1251,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -1268,7 +1268,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1348,7 +1348,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -1365,7 +1365,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1445,7 +1445,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "max(ohm_nic_load_percent{instance=\"$instance\"})",
@@ -1460,7 +1460,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1540,7 +1540,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": false,
               "expr": "max({__name__=~\"ohm_.*_control_percent\",instance=\"$instance\"})",
@@ -1556,7 +1556,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "description": "",
           "fieldConfig": {
@@ -1646,7 +1646,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "ohm_cpu_watts{instance=\"$instance\", sensor=~\".*Package\"} + ignoring(sensor, hw_instance, hardware) (ohm_gpunvidia_watts{instance=\"$instance\"} or ohm_gpuati_watts{instance=\"$instance\"})",
@@ -1661,7 +1661,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -1715,7 +1715,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum(ohm_hdd_factor{instance=\"$instance\",sensor=\"Media Errors\"})",
@@ -1744,7 +1744,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -1831,7 +1831,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -1851,7 +1851,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -1939,7 +1939,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_cpu_watts{instance=\"$instance\"}",
@@ -1956,7 +1956,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2062,7 +2062,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2091,7 +2091,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2179,7 +2179,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2198,7 +2198,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2287,7 +2287,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "expr": "label_replace(label_replace(label_replace(ohm_cpu_hertz{instance=\"$instance\"}, \"_sensor\", \"$3 ${1}0$2\", \"sensor\", \"(.*?)(\\\\d{1})([^\\\\d]+\\\\d|\\\\d{0}|[^\\\\d]+)\"), \"_sensor\", \"$3 ${1}$2\", \"sensor\", \"(.*?)(\\\\d{2})([^\\\\d]+\\\\d|\\\\d{0}|[^\\\\d]+)\"), \"_sensor\", \"${1}\", \"sensor\", \"([^\\\\d]*?)\")",
@@ -2318,7 +2318,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2405,7 +2405,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2420,7 +2420,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2440,7 +2440,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2528,7 +2528,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2543,7 +2543,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2563,7 +2563,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2651,7 +2651,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2666,7 +2666,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2686,7 +2686,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2801,7 +2801,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2817,7 +2817,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -2834,7 +2834,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2850,7 +2850,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": false,
@@ -2889,7 +2889,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -2977,7 +2977,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -2992,7 +2992,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -3012,7 +3012,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -3099,7 +3099,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -3114,7 +3114,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -3134,7 +3134,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -3221,7 +3221,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_gpunvidia_bytes{instance=\"$instance\"}",
@@ -3235,7 +3235,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "editorMode": "code",
               "exemplar": true,
@@ -3268,7 +3268,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -3554,7 +3554,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "max by (hardware,hw_instance) (ohm_hdd_celsius{instance=\"$instance\"})",
@@ -3567,7 +3567,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_bytes{instance=\"$instance\",sensor=\"Data Read\"}",
@@ -3581,7 +3581,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_bytes{instance=\"$instance\",sensor=\"Data Written\"}",
@@ -3595,7 +3595,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum by (hardware,hw_instance) (increase(ohm_hdd_bytes{instance=\"$instance\",sensor=\"Data Read\"}[$__range]))",
@@ -3609,7 +3609,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum by (hardware,hw_instance) (increase(ohm_hdd_bytes{instance=\"$instance\",sensor=\"Data Written\"}[$__range]))",
@@ -3623,7 +3623,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_load_percent{instance=\"$instance\",sensor=\"Used Space\"}",
@@ -3637,7 +3637,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_factor{instance=\"$instance\",sensor=\"Power Cycles\"}",
@@ -3651,7 +3651,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_factor{instance=\"$instance\",sensor=\"Media Errors\"}",
@@ -3738,7 +3738,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -3784,7 +3784,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_factor{instance=\"$instance\",hw_instance=\"$hdd\"}",
@@ -3799,7 +3799,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -3883,7 +3883,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_celsius{instance=\"$instance\",hw_instance=\"$hdd\"}",
@@ -3899,7 +3899,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -3981,7 +3981,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_load_percent{instance=\"$instance\",hw_instance=\"$hdd\",sensor=\"Total Activity\"}",
@@ -3993,7 +3993,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_load_percent{instance=\"$instance\",hw_instance=\"$hdd\",sensor=\"Write Activity\"}",
@@ -4009,7 +4009,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -4091,7 +4091,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_hdd_bytes_per_second{instance=\"$instance\",hw_instance=\"$hdd\",sensor=\"Read Rate\"}",
@@ -4103,7 +4103,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "-ohm_hdd_bytes_per_second{instance=\"$instance\",hw_instance=\"$hdd\",sensor=\"Write Rate\"}",
@@ -4132,7 +4132,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -4216,7 +4216,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_superio_celsius{instance=\"$instance\"}",
@@ -4234,7 +4234,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -4321,7 +4321,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_superio_revolutions_per_minute{instance=\"$instance\"}",
@@ -4335,7 +4335,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "(max(ohm_superio_revolutions_per_minute{instance=\"$instance\"}) / ignoring(sensor) (max(ohm_superio_control_percent{instance=\"$instance\"}) / 100)) * 0.9",
@@ -4372,7 +4372,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -4458,7 +4458,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_superio_volts{instance=\"$instance\"}",
@@ -4488,7 +4488,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -4599,7 +4599,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum by (hardware) (increase(ohm_nic_bytes{instance=\"$instance\",sensor=\"Data Downloaded\"}[$__range]))",
@@ -4612,7 +4612,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "sum by (hardware) (increase(ohm_nic_bytes{instance=\"$instance\",sensor=\"Data Uploaded\"}[$__range]))",
@@ -4626,7 +4626,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "ohm_nic_load_percent{instance=\"$instance\"}",
@@ -4670,7 +4670,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "VictoriaMetrics"
           },
           "fieldConfig": {
             "defaults": {
@@ -4755,7 +4755,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "expr": "ohm_nic_bytes_per_second{instance=\"$instance\",hardware=~\"$network\",sensor=\"Download Speed\"}",
               "format": "time_series",
@@ -4766,7 +4766,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "VictoriaMetrics"
               },
               "exemplar": true,
               "expr": "-ohm_nic_bytes_per_second{instance=\"$instance\",hardware=~\"$network\",sensor=\"Upload Speed\"}",
@@ -4790,7 +4790,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "{__name__=~\"ohm_.*\"}",
             "includeAll": false,
@@ -4808,7 +4808,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "{__name__=~\"ohm_hdd_.*\",instance=\"$instance\"}",
             "hide": 2,
@@ -4827,7 +4827,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "{__name__=~\"ohm_nic_.*\",instance=\"$instance\"}",
             "hide": 2,
@@ -4846,7 +4846,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "{__name__=~\"ohm_cpu_.*\",instance=\"$instance\"}",
             "hide": 2,
@@ -4865,7 +4865,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${DS_PROMETHEUS}"
+              "uid": "VictoriaMetrics"
             },
             "definition": "{__name__=~\"ohm_gpu.*\",instance=\"$instance\"}",
             "hide": 2,
