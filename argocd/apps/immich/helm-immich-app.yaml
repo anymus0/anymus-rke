@@ -58,12 +58,6 @@ spec:
                 key: dbname
         externalLib:
           pvcName: "nextcloud-nextcloud-data"
-        postgresql:
-          enabled: false
-          global:
-            postgresql:
-              auth:
-                existingSecret: immich-postgresql-creds
         redis:
           enabled: true
         immich:
