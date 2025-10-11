@@ -1,17 +1,17 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: immich-default-vol
-  namespace: cloud
-  annotations:
-    volume.beta.kubernetes.io/storage-class: longhorn
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn
-  resources:
-    requests:
-      storage: 400Gi
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: immich-default-vol
+#   namespace: cloud
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: longhorn
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: longhorn
+#   resources:
+#     requests:
+#       storage: 400Gi
 # ---
 # apiVersion: argoproj.io/v1alpha1
 # kind: Application
