@@ -47,8 +47,6 @@ spec:
                         key: dbname
         externalLib:
           pvcName: "nextcloud-nextcloud-data"
-        redis:
-          enabled: false  # Disable redis since valkey is used
         immich:
           persistence:
             library:
