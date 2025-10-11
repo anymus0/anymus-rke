@@ -16,7 +16,7 @@ spec:
       releaseName: immich
       valuesObject:
         image:
-          tag: v1.137.0
+          tag: v1.132.3
         env:
           # Use the secret directly in the environment variables
           DB_HOSTNAME:
