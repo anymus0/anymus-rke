@@ -15,12 +15,8 @@ spec:
     helm:
       releaseName: immich
       valuesObject:
-        controllers:
-          main:
-            containers:
-              main:
-                image:
-                  tag: v1.137.0
+        image:
+          tag: v1.137.0
         env:
           # Use the secret directly in the environment variables
           DB_HOSTNAME:
