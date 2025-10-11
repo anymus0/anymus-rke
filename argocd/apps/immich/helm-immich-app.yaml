@@ -83,5 +83,11 @@ spec:
           persistence:
             cache:
               size: 20Gi
-              type: pvc
+              type: persistentVolumeClaim
+              storageClass: longhorn
+        valkey:
+          enabled: true
+          persistence:
+            data:
+              type: persistentVolumeClaim
               storageClass: longhorn
