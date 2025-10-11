@@ -58,8 +58,6 @@ spec:
                 key: dbname
         externalLib:
           pvcName: "nextcloud-nextcloud-data"
-        redis:
-          enabled: true
         immich:
           persistence:
             library:
