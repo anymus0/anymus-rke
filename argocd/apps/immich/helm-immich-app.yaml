@@ -10,45 +10,38 @@ spec:
     namespace: cloud
   source:
     repoURL: ghcr.io/immich-app/immich-charts
-    targetRevision: 0.9.3
+    targetRevision: 0.10.0
     chart: immich
     helm:
       releaseName: immich
       valuesObject:
-        image:
-          tag: v1.137.0
-        env:
-          # Use the secret directly in the environment variables
-          DB_HOSTNAME:
-            valueFrom:
-              secretKeyRef:
-                name: immich-postgresql-creds
-                key: host
-          DB_USERNAME:
-            valueFrom:
-              secretKeyRef:
-                name: immich-postgresql-creds
-                key: username
-          DB_PASSWORD:
-            valueFrom:
-              secretKeyRef:
-                name: immich-postgresql-creds
-                key: password
-          DB_DATABASE_NAME:
-            valueFrom:
-              secretKeyRef:
-                name: immich-postgresql-creds
-                key: dbname
+        controllers:
+          main:
+            containers:
+              main:
+                env:
+                  DB_HOSTNAME:
+                    valueFrom:
+                      secretKeyRef:
+                        name: immich-postgresql-creds
+                        key: host
+                  DB_USERNAME:
+                    valueFrom:
+                      secretKeyRef:
+                        name: immich-postgresql-creds
+                        key: username
+                  DB_PASSWORD:
+                    valueFrom:
+                      secretKeyRef:
+                        name: immich-postgresql-creds
+                        key: password
+                  DB_DATABASE_NAME:
+                    valueFrom:
+                      secretKeyRef:
+                        name: immich-postgresql-creds
+                        key: dbname
         externalLib:
           pvcName: "nextcloud-nextcloud-data"
-        postgresql:
-          enabled: false
-          global:
-            postgresql:
-              auth:
-                existingSecret: immich-postgresql-creds
-        redis:
-          enabled: true
         immich:
           persistence:
             library:
@@ -65,6 +58,17 @@ spec:
         machine-learning:
           persistence:
             cache:
+              enabled: true
+              type: persistentVolumeClaim
               size: 20Gi
-              type: pvc
+              accessMode: ReadWriteMany
+              storageClass: longhorn
+        valkey:
+          enabled: true
+          persistence:
+            data:
+              enabled: true
+              type: persistentVolumeClaim
+              size: 1Gi
+              accessMode: ReadWriteOnce
               storageClass: longhorn
