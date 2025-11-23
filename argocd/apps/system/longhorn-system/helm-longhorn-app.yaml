@@ -31,9 +31,9 @@ spec:
             nodeSelector:
               longhorn.io/storage-node: "true"
           persistence:
-            defaultClassReplicaCount: 2
+            defaultClassReplicaCount: 3
           defaultSettings:
-            defaultReplicaCount: "2"
+            defaultReplicaCount: "3"
             systemManagedComponentsNodeSelector: "longhorn.io/storage-node:true"
           preUpgradeChecker:
             jobEnabled: false
