@@ -51,6 +51,8 @@ spec:
         vmsingle:
           enabled: false
         vmcluster:
+          spec:
+            retentionPeriod: "14"
           enabled: true
           vmselect:
             replicaCount: 2
