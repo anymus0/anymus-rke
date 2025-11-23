@@ -27,7 +27,7 @@ spec:
                 enabled: true
           enabled: false
         controller:
-          replicas: 2
+          replicas: 3
           metrics:
             enabled: true
             serviceMonitor:
@@ -36,6 +36,10 @@ spec:
           autoscaling:
             enabled: true
             minReplicas: 1
+          metrics:
+            enabled: true
+            serviceMonitor:
+              enabled: true
         repoServer:
           metrics:
             enabled: true
@@ -51,17 +55,12 @@ spec:
             enabled: true
             serviceMonitor:
               enabled: true
-          replicas: 2
+          replicas: 3
         global:
           domain: argocd.anymus.pro
         configs:
           params:
             server.insecure: true
-        server:
-          metrics:
-            enabled: true
-            serviceMonitor:
-              enabled: true
           ingress:
             enabled: true
             ingressClassName: nginx
