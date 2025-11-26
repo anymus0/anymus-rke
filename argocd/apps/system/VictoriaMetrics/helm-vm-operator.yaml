@@ -40,35 +40,47 @@ spec:
           operator:
             disable_prometheus_converter: false
             enable_converter_ownership: true
+
         grafana:
           enabled: false
+
         defaultDashboards:
           enabled: true
           labels:
             grafana_dashboard: "1"
           annotations:
             argocd.argoproj.io/sync-options: ServerSideApply=true
+
         vmsingle:
           enabled: false
+
         vmcluster:
+          enabled: true
           spec:
             retentionPeriod: "14"
-          enabled: true
-          vmselect:
-            replicaCount: 1
-          vminsert:
-            enabled: true
-          vmstorage:
-            enabled: true
-            persistentVolume:
+            # keep single-replica cluster because of existing RWO PVCs
+            replicationFactor: 1
+            vmstorage:
+              replicaCount: 1
+              storage:
+                volumeClaimTemplate:
+                  spec:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 50Gi
+            vmselect:
               enabled: true
-              size: 50Gi
-        # Enable vmagent to scrape kube components
+              replicaCount: 1
+            vminsert:
+              enabled: true
+              replicaCount: 1
+
         vmagent:
           enabled: true
           spec:
             scrapeInterval: 30s
-            # Enable hostNetwork mode
             hostNetwork: true
             dnsPolicy: ClusterFirstWithHostNet
             resources:
@@ -77,50 +89,51 @@ spec:
                 memory: "512Mi"
               limits:
                 memory: "512Mi"
+
         kubeControllerManager:
           enabled: true
-          # Define localhost as the endpoint
           endpoints:
             - 127.0.0.1
-          
           service:
             enabled: true
             port: 10257
             targetPort: 10257
             selector:
               component: kube-controller-manager
-          
           vmScrape:
             spec:
               jobLabel: jobLabel
+              namespaceSelector:
+                matchNames:
+                  - kube-system
               endpoints:
                 - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
                   port: http-metrics
                   scheme: https
                   tlsConfig:
                     caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-                    # Skip server name verification since we're using 127.0.0.1
                     insecureSkipVerify: true
-                  # Force scraping from localhost on each node
                   relabelConfigs:
                     - sourceLabels: [__address__]
                       targetLabel: __address__
                       replacement: 127.0.0.1:10257
+
         kubeScheduler:
           enabled: true
           endpoints:
             - 127.0.0.1
-          
           service:
             enabled: true
             port: 10259
             targetPort: 10259
             selector:
               component: kube-scheduler
-          
           vmScrape:
             spec:
               jobLabel: jobLabel
+              namespaceSelector:
+                matchNames:
+                  - kube-system
               endpoints:
                 - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
                   port: http-metrics
@@ -132,29 +145,30 @@ spec:
                     - sourceLabels: [__address__]
                       targetLabel: __address__
                       replacement: 127.0.0.1:10259
+
         kubeEtcd:
           enabled: true
           endpoints:
             - 127.0.0.1
-          
           service:
             enabled: true
             port: 2381
             targetPort: 2381
             selector:
               component: etcd
-          
           vmScrape:
             spec:
               jobLabel: jobLabel
+              namespaceSelector:
+                matchNames:
+                  - kube-system
               endpoints:
                 - port: http-metrics
-                  # Use HTTP scheme - etcd metrics on 2381 don't require TLS
                   scheme: http
-                  # Force scraping from localhost on each node
                   relabelConfigs:
                     - sourceLabels: [__address__]
                       targetLabel: __address__
                       replacement: 127.0.0.1:2381
+
         kubeProxy:
           enabled: true
