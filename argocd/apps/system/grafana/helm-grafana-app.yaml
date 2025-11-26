@@ -21,7 +21,7 @@ spec:
     helm:
       releaseName: grafana
       valuesObject:
-        replicas: 3
+        replicas: 1
 
         persistence:
           enabled: true
