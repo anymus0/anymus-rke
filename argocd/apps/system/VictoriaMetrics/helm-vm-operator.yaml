@@ -31,7 +31,7 @@ spec:
   source:
     chart: victoria-metrics-k8s-stack
     repoURL: https://victoriametrics.github.io/helm-charts
-    targetRevision: 0.60.1
+    targetRevision: 0.63.6
     helm:
       releaseName: vmks
       valuesObject:
@@ -55,7 +55,7 @@ spec:
             retentionPeriod: "14"
           enabled: true
           vmselect:
-            replicaCount: 2
+            replicaCount: 3
           vminsert:
             enabled: true
           vmstorage:
