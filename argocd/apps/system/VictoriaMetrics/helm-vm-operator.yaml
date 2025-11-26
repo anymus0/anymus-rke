@@ -55,7 +55,7 @@ spec:
             retentionPeriod: "14"
           enabled: true
           vmselect:
-            replicaCount: 3
+            replicaCount: 1
           vminsert:
             enabled: true
           vmstorage:
