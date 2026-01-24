@@ -10,7 +10,7 @@ spec:
     chart: open-webui
     targetRevision: 3.1.8
     helm:
-      values: |
+      valuesObject:
         ollama:
           enabled: false
         ollamaUrls:
