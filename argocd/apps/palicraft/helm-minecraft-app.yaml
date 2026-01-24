@@ -10,7 +10,7 @@ spec:
     chart: minecraft
     targetRevision: 5.0.0
     helm:
-      values: |
+      valuesObject:
         minecraftServer:
           eula: true
           version: LATEST
@@ -23,7 +23,6 @@ spec:
           gameMode: survival
           pvp: true
           onlineMode: true
-       
         resources:
           requests:
             memory: 15Gi
@@ -31,20 +30,16 @@ spec:
           limits:
             memory: 15Gi
             cpu: 4000m
-        
         persistence:
           dataDir:
             enabled: true
             storageClass: longhorn
             size: 25Gi
-        
         serviceAnnotations:
           metallb.universe.tf/allow-shared-ip: minecraft
-  
   destination:
     server: https://kubernetes.default.svc
     namespace: palicraft
-  
   syncPolicy:
     automated:
       prune: true
