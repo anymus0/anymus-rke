@@ -1,63 +1,63 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx
-  namespace: ollama
-  labels:
-    app: ollama-nginx
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: ollama-nginx
-  template:
-    metadata:
-      labels:
-        app: ollama-nginx
-    spec:
-      containers:
-        - name: nginx
-          image: bitnami/nginx:latest
-          imagePullPolicy: IfNotPresent
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx
+#   namespace: ollama
+#   labels:
+#     app: ollama-nginx
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: ollama-nginx
+#   template:
+#     metadata:
+#       labels:
+#         app: ollama-nginx
+#     spec:
+#       containers:
+#         - name: nginx
+#           image: bitnami/nginx:latest
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#             - name: http
+#               containerPort: 8080
+#               protocol: TCP
           
-          # Health checks pointing to the custom healthz endpoint
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: http
-            initialDelaySeconds: 15
-            periodSeconds: 20
-            timeoutSeconds: 2
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            timeoutSeconds: 2
-            failureThreshold: 3
+#           # Health checks pointing to the custom healthz endpoint
+#           livenessProbe:
+#             httpGet:
+#               path: /healthz
+#               port: http
+#             initialDelaySeconds: 15
+#             periodSeconds: 20
+#             timeoutSeconds: 2
+#             failureThreshold: 3
+#           readinessProbe:
+#             httpGet:
+#               path: /healthz
+#               port: http
+#             initialDelaySeconds: 5
+#             periodSeconds: 10
+#             timeoutSeconds: 2
+#             failureThreshold: 3
           
-          # Mount the ConfigMaps into the correct NGINX configuration directories
-          volumeMounts:
-            - name: nginx-server-block
-              mountPath: /opt/bitnami/nginx/conf/server_blocks/ollama-server-block.conf
-              subPath: ollama-server-block.conf
-              readOnly: true
-            - name: nginx-http-config
-              mountPath: /opt/bitnami/nginx/conf/http-context.conf
-              subPath: http-context.conf
-              readOnly: true
+#           # Mount the ConfigMaps into the correct NGINX configuration directories
+#           volumeMounts:
+#             - name: nginx-server-block
+#               mountPath: /opt/bitnami/nginx/conf/server_blocks/ollama-server-block.conf
+#               subPath: ollama-server-block.conf
+#               readOnly: true
+#             - name: nginx-http-config
+#               mountPath: /opt/bitnami/nginx/conf/http-context.conf
+#               subPath: http-context.conf
+#               readOnly: true
               
-      # Define the volumes sourced from the ConfigMaps
-      volumes:
-        - name: nginx-server-block
-          configMap:
-            name: ollama-nginx-server-block-cm
-        - name: nginx-http-config
-          configMap:
-            name: ollama-nginx-http-cm
+#       # Define the volumes sourced from the ConfigMaps
+#       volumes:
+#         - name: nginx-server-block
+#           configMap:
+#             name: ollama-nginx-server-block-cm
+#         - name: nginx-http-config
+#           configMap:
+#             name: ollama-nginx-http-cm

@@ -1,32 +1,32 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ollama-nginx-server-block-cm
-  namespace: ollama
-data:
-  ollama-server-block.conf: |
-    # Upstream definition for your application
-    upstream ollama {
-        server 192.168.0.200:8080;
-    }
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: ollama-nginx-server-block-cm
+#   namespace: ollama
+# data:
+#   ollama-server-block.conf: |
+#     # Upstream definition for your application
+#     upstream ollama {
+#         server 192.168.0.200:8080;
+#     }
 
-    # Server block to handle requests
-    server {
-      listen 0.0.0.0:8080;
-      server_name ollama.anymus.pro;
+#     # Server block to handle requests
+#     server {
+#       listen 0.0.0.0:8080;
+#       server_name ollama.anymus.pro;
 
-      # Dedicated health check endpoint for Kubernetes probes
-      location /healthz {
-        return 200 "OK";
-        access_log off;
-      }
+#       # Dedicated health check endpoint for Kubernetes probes
+#       location /healthz {
+#         return 200 "OK";
+#         access_log off;
+#       }
 
-      # Proxy all other requests to the ollama upstream
-      location / {
-        proxy_pass http://ollama;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "Upgrade";
-        proxy_set_header Host $host;
-      }
-    }
+#       # Proxy all other requests to the ollama upstream
+#       location / {
+#         proxy_pass http://ollama;
+#         proxy_http_version 1.1;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection "Upgrade";
+#         proxy_set_header Host $host;
+#       }
+#     }
