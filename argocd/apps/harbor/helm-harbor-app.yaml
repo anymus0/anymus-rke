@@ -41,10 +41,10 @@ spec:
           replicas: 3
           resources:
             requests:
-              memory: 512Mi
-              cpu: 100m
+              memory: 1Gi
+              cpu: 200m
             limits:
-              memory: 512Mi
+              memory: 2Gi
           affinity:
             podAntiAffinity:
               preferredDuringSchedulingIgnoredDuringExecution:
@@ -62,10 +62,10 @@ spec:
           replicas: 3
           resources:
             requests:
-              memory: 512Mi
-              cpu: 200m
-            limits:
               memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 4Gi
           affinity:
             podAntiAffinity:
               preferredDuringSchedulingIgnoredDuringExecution:
@@ -83,10 +83,10 @@ spec:
           replicas: 3
           resources:
             requests:
-              memory: 512Mi
-              cpu: 200m
-            limits:
               memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 4Gi
           affinity:
             podAntiAffinity:
               preferredDuringSchedulingIgnoredDuringExecution:
@@ -105,17 +105,17 @@ spec:
           registry:
             resources:
               requests:
+                memory: 1Gi
+                cpu: 500m
+              limits:
+                memory: 4Gi
+          controller:
+            resources:
+              requests:
                 memory: 512Mi
                 cpu: 200m
               limits:
                 memory: 1Gi
-          controller:
-            resources:
-              requests:
-                memory: 256Mi
-                cpu: 100m
-              limits:
-                memory: 512Mi
           affinity:
             podAntiAffinity:
               preferredDuringSchedulingIgnoredDuringExecution:
@@ -134,10 +134,10 @@ spec:
           replicas: 3
           resources:
             requests:
-              memory: 512Mi
-              cpu: 200m
-            limits:
               memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 4Gi
               cpu: 1000m
 
         database:
