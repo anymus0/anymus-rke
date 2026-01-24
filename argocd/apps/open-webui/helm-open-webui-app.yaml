@@ -21,6 +21,11 @@ spec:
           host: ollama.anymus.pro
           tls: false
           existingSecret: ""
+        resources:
+          requests:
+            memory: 512Mi
+          limits:
+            memory: 512Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: open-web-ui
