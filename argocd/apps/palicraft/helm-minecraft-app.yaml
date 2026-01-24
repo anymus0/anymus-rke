@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minecraft-palicraft
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://itzg.github.io/minecraft-server-charts/
+    chart: minecraft
+    targetRevision: 5.0.0
+    helm:
+      values: |
+        minecraftServer:
+          eula: true
+          version: LATEST
+          type: VANILLA
+          motd: "PaliCraft"
+          difficulty: normal
+          maxPlayers: 20
+          memory: 12G
+          serviceType: LoadBalancer
+          gameMode: survival
+          pvp: true
+          onlineMode: true
+       
+        resources:
+          requests:
+            memory: 15Gi
+            cpu: 2000m
+          limits:
+            memory: 15Gi
+            cpu: 4000m
+        
+        persistence:
+          dataDir:
+            enabled: true
+            storageClass: longhorn
+            size: 25Gi
+        
+        serviceAnnotations:
+          metallb.universe.tf/allow-shared-ip: minecraft
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: palicraft
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
