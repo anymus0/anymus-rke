@@ -18,8 +18,6 @@ spec:
         ingress:
           enabled: true
           class: nginx
-          annotations:
-            cert-manager.io/cluster-issuer: cloudflare-issuer
           host: ollama.anymus.pro
           tls: false
           existingSecret: ""
