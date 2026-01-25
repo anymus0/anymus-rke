@@ -26,6 +26,11 @@ spec:
             cpu: 4
           limits:
             memory: 5Gi
+        extraEnvVars:
+          - name: ENABLE_API_KEYS
+            value: "true"
+          - name: WEBUI_AUTH
+            value: "true"
   destination:
     server: https://kubernetes.default.svc
     namespace: open-web-ui
