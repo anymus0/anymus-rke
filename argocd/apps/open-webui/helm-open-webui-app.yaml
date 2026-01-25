@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/open-webui/helm-charts.git
-    chart: open-webui
+    path: open-charts/open-webui
     targetRevision: 1141e87d4ff460a1cd00e4130ad013c63e0153c5
     helm:
       valuesObject:
@@ -20,7 +20,6 @@ spec:
           class: nginx
           host: ollama.anymus.pro
           tls: false
-          existingSecret: ""
         resources:
           requests:
             memory: 512Mi
