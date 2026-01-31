@@ -31,6 +31,8 @@ spec:
             value: "true"
           - name: WEBUI_AUTH
             value: "true"
+          - name: ENABLE_OLLAMA_API
+            value: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: open-web-ui
