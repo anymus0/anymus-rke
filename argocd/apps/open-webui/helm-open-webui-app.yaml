@@ -13,8 +13,6 @@ spec:
       valuesObject:
         ollama:
           enabled: false
-        ollamaUrls:
-          - http://192.168.0.200:11434
         ingress:
           enabled: true
           class: nginx
