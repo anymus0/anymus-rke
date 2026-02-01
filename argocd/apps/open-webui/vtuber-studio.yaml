@@ -68,7 +68,7 @@ metadata:
   labels:
     app: nginx-reverse-proxy
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: nginx-reverse-proxy
@@ -104,15 +104,13 @@ spec:
             cpu: 500m
             memory: 256Mi
         livenessProbe:
-          httpGet:
-            path: /
+          tcpSocket:
             port: 8080
           initialDelaySeconds: 10
           periodSeconds: 10
           failureThreshold: 3
         readinessProbe:
-          httpGet:
-            path: /
+          tcpSocket:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
