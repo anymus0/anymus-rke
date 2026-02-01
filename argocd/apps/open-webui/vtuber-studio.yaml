@@ -92,6 +92,10 @@ spec:
         - name: auth-secret
           mountPath: /etc/nginx/auth
           readOnly: true
+        - name: cache
+          mountPath: /var/cache/nginx
+        - name: run
+          mountPath: /var/run
         resources:
           requests:
             cpu: 100m
@@ -126,11 +130,14 @@ spec:
       - name: auth-secret
         secret:
           secretName: nginx-basic-auth
+      - name: cache
+        emptyDir: {}
+      - name: run
+        emptyDir: {}
       securityContext:
         fsGroup: 101
         seccompProfile:
           type: RuntimeDefault
-
 ---
 apiVersion: v1
 kind: Service
