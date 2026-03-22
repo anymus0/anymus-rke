@@ -35,6 +35,7 @@ spec:
           defaultSettings:
             defaultReplicaCount: "3"
             systemManagedComponentsNodeSelector: "longhorn.io/storage-node:true"
+            nodeDrainPolicy: "block-for-eviction-if-contains-last-replica"
           preUpgradeChecker:
             jobEnabled: false
   destination:
