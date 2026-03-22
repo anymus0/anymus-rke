@@ -9,6 +9,7 @@ metadata:
   name: rke2-server
   namespace: system-upgrade
 spec:
+  serviceAccountName: system-upgrade
   # ---- target version --------------------------------------------------------
   # Option A – pin a specific version (recommended for production):
   version: v1.33.9+rke2r1   # <-- bump this to trigger an upgrade
@@ -54,6 +55,7 @@ metadata:
   name: rke2-agent
   namespace: system-upgrade
 spec:
+  serviceAccountName: system-upgrade
   version: v1.33.9+rke2r1   # keep in sync with server plan above
   # channel: https://update.rke2.io/v1-release/channels/stable
 
