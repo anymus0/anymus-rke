@@ -15,9 +15,9 @@ spec:
     syncOptions:
     - CreateNamespace=true
   source:
-    chart: grafana
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 11.3.3
+    path: charts/grafana
+    repoURL: https://github.com/grafana-community/helm-charts
+    targetRevision: c80038d15d5acec5ae16b1b30adab680bb126ba4
     helm:
       releaseName: grafana
       valuesObject:
