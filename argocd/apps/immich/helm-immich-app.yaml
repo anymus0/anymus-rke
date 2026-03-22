@@ -19,6 +19,8 @@ spec:
           main:
             containers:
               main:
+                image:
+                  tag: commit-2b27e6183d55cc2aace1e305dd698e3b36bb5688
                 env:
                   DB_HOSTNAME:
                     valueFrom:
@@ -43,6 +45,8 @@ spec:
         externalLib:
           pvcName: "nextcloud-nextcloud-data"
         immich:
+          metrics:
+            enabled: true
           persistence:
             library:
               existingClaim: immich-default-vol
