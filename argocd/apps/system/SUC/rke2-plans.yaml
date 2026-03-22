@@ -1,0 +1,80 @@
+---
+# ── Server (control-plane) Plan ───────────────────────────────────────────────
+# Upgrades master nodes one-by-one. Agent plan is gated to start only after
+# this plan's label appears on all server nodes (via the `prepare` job trick
+# or simply by running after — here we use concurrency=1 + drain for safety).
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: rke2-server
+  namespace: system-upgrade
+spec:
+  # ---- target version --------------------------------------------------------
+  # Option A – pin a specific version (recommended for production):
+  version: v1.33.9+rke2r1   # <-- bump this to trigger an upgrade
+  # Option B – track a release channel (uncomment to use instead):
+  # channel: https://update.rke2.io/v1-release/channels/stable
+
+  # ---- concurrency & safety --------------------------------------------------
+  concurrency: 1          # upgrade one server at a time — critical for etcd quorum
+  cordon: true            # cordon before upgrade, uncordon after
+  drain:
+    force: false          # don't force-delete pods with no controller
+    skipWaitForDeleteTimeout: 60   # seconds to wait for pods to vacate
+
+  # ---- which nodes to upgrade ------------------------------------------------
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: In
+        values: ["true"]
+
+  # ---- upgrade job -----------------------------------------------------------
+  upgrade:
+    image: rancher/rke2-upgrade
+    # The entrypoint is baked into the image; it reads the SYSTEM_UPGRADE_PLAN_LATEST_VERSION env var.
+
+  # ---- tolerate control-plane taints ─────────────────
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/etcd
+      operator: Exists
+      effect: NoExecute
+
+---
+# ── Agent (worker) Plan ───────────────────────────────────────────────────────
+# Currently no dedicated agent nodes, but ready for when you add them.
+# Waits for the server plan to complete on all servers before running,
+# using the label SUC stamps after a successful server upgrade.
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: rke2-agent
+  namespace: system-upgrade
+spec:
+  version: v1.33.9+rke2r1   # keep in sync with server plan above
+  # channel: https://update.rke2.io/v1-release/channels/stable
+
+  concurrency: 1
+  cordon: true
+  drain:
+    force: false
+    skipWaitForDeleteTimeout: 60
+
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist   # any node that is NOT a control-plane node
+
+  # Gate: only run after all server nodes have been stamped by the server plan.
+  # SUC stamps each upgraded node with:
+  #   plan.upgrade.cattle.io/<plan-name>=<hash>
+  # The `prepare` container checks for that label on the local node's server peers.
+  prepare:
+    image: rancher/rke2-upgrade
+    args: ["prepare", "rke2-server"]   # waits until server plan is complete
+
+  upgrade:
+    image: rancher/rke2-upgrade
