@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-vm
+provisioner: driver.longhorn.io
+parameters:
+  numberOfReplicas: "2"        # 2 is enough; 3 wastes SSD space for a single VM
+  dataLocality: "best-effort"  # tries to keep replica on the same node as the VM pod
+  fsType: ""                   # must be empty for block mode
+volumeBindingMode: Immediate
+reclaimPolicy: Retain          # critical — never auto-delete a running VM's disk
+allowVolumeExpansion: true
