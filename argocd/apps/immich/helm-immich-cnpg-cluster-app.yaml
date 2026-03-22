@@ -20,11 +20,12 @@ spec:
       releaseName: immich-cnpg-cluster
       valuesObject:
         cluster:
-          imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16-v0.3.0
+          imageName: ghcr.io/corentingiraud/cnpg-pgvector-vectorchord:16-migration
           initdb:
             database: immich
             postInitApplicationSQL:
               - CREATE EXTENSION IF NOT EXISTS "vectors";
+              - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
             owner: immich
             dataChecksums: true
             encoding: "UTF8"
