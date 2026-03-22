@@ -17,7 +17,7 @@ spec:
   source:
     chart: jenkins
     repoURL: ghcr.io/jenkinsci/helm-charts
-    targetRevision: 5.8.110
+    targetRevision: 5.9.9
     helm:
       releaseName: jenkins
       valuesObject:
