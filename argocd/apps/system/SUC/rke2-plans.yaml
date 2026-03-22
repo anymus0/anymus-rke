@@ -21,6 +21,7 @@ spec:
   cordon: true            # cordon before upgrade, uncordon after
   drain:
     force: false          # don't force-delete pods with no controller
+    disableEviction: true # use DELETE instead of EVICT — bypasses PDBs
     skipWaitForDeleteTimeout: 60   # seconds to wait for pods to vacate
 
   # ---- which nodes to upgrade ------------------------------------------------
@@ -63,6 +64,7 @@ spec:
   cordon: true
   drain:
     force: false
+    disableEviction: true
     skipWaitForDeleteTimeout: 60
 
   nodeSelector:
