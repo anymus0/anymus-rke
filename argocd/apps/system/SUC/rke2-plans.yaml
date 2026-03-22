@@ -12,7 +12,7 @@ spec:
   serviceAccountName: system-upgrade
   # ---- target version --------------------------------------------------------
   # Option A – pin a specific version (recommended for production):
-  version: v1.34.5+rke2r1   # <-- bump this to trigger an upgrade
+  version: v1.35.2+rke2r1   # <-- bump this to trigger an upgrade
   # Option B – track a release channel (uncomment to use instead):
   # channel: https://update.rke2.io/v1-release/channels/stable
 
@@ -57,7 +57,7 @@ metadata:
   namespace: system-upgrade
 spec:
   serviceAccountName: system-upgrade
-  version: v1.34.5+rke2r1   # keep in sync with server plan above
+  version: v1.35.2+rke2r1   # keep in sync with server plan above
   # channel: https://update.rke2.io/v1-release/channels/stable
 
   concurrency: 1
