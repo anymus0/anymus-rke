@@ -85,15 +85,20 @@ spec:
             dnsPolicy: ClusterFirstWithHostNet
             resources:
               requests:
-                cpu: "100m"
-                memory: "256Mi"
+                cpu: "1"           # Integer CPU units — Go runtime performs better with whole cores [web:43]
+                memory: "512Mi"
               limits:
-                cpu: "500m"
-                memory: "768Mi"
+                cpu: "2"
+                memory: "1Gi"
             extraArgs:
-              memory.allowedBytes: "600MB"
+              memory.allowedBytes: "900MB"
+              promscrape.maxScrapeSize: "64MB"
               promscrape.noStaleMarkers: "true"
-              promscrape.maxScrapeSize: "8MB"
+            extraEnvs:
+              - name: GOGC
+                value: "100"
+              - name: GOMAXPROCS
+                value: "2"
 
         kubeControllerManager:
           enabled: true
