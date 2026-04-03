@@ -42,10 +42,12 @@ spec:
               enabled: true
           ingress:
             enabled: true
-            ingressClassName: nginx
+            ingressClassName: tailscale
             annotations:
-              nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-              nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+              tailscale.com/proxy-group: ingress-proxies   # reference the ProxyGroup
+            tls:
+              - hosts:
+                  - argocd
         repoServer:
           metrics:
             enabled: true
