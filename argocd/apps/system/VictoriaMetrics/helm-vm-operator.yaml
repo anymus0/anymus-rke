@@ -76,6 +76,8 @@ spec:
             vminsert:
               enabled: true
               replicaCount: 1
+              extraArgs:
+                maxLabelsPerTimeseries: "60"
 
         vmagent:
           enabled: true
