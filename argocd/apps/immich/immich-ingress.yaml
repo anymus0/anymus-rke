@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: immich
+  namespace: cloud
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    tailscale.com/proxy-group: ingress-proxies
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: immich-server
+      port:
+        number: 2283
+  tls:
+    - hosts:
+        - immich              # → immich.<tailnet>.ts.net

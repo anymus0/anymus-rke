@@ -54,11 +54,7 @@ spec:
         server:
           ingress:
             main:
-              enabled: true
-              hosts:
-                - host: immich.anymus.pro
-                  paths:
-                    - path: "/"
+              enabled: false
         machine-learning:
           persistence:
             cache:
