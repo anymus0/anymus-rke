@@ -80,27 +80,12 @@ spec:
         vmagent:
           enabled: true
           spec:
-            metricRelabelConfigs:
-              - action: labeldrop
-                regex: "cpu_feature_node_kubevirt_io_.+"
-              - action: labeldrop
-                regex: "cpu_model_node_kubevirt_io_.+"
-              - action: labeldrop
-                regex: "cpu_model_migration_node_kubevirt_io_.+"
-              - action: labeldrop
-                regex: "machine_type_node_kubevirt_io_.+"
-              - action: labeldrop
-                regex: "host_model_required_features_node_kubevirt_io_.+"
-              - action: labeldrop
-                regex: "hyperv_node_kubevirt_io_.+"
-              - action: labeldrop
-                regex: "scheduling_node_kubevirt_io_.+"
             scrapeInterval: 30s
             hostNetwork: true
             dnsPolicy: ClusterFirstWithHostNet
             resources:
               requests:
-                cpu: "1"           # Integer CPU units — Go runtime performs better with whole cores [web:43]
+                cpu: "1"
                 memory: "512Mi"
               limits:
                 cpu: "2"
@@ -114,6 +99,27 @@ spec:
                 value: "100"
               - name: GOMAXPROCS
                 value: "2"
+            globalScrapeMetricRelabelConfigs:
+              - action: labeldrop
+                regex: "cpu_feature_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "cpu_model_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "cpu_model_migration_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "cpu_timer_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "cpu_vendor_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "machine_type_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "host_model_cpu_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "host_model_required_features_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "hyperv_node_kubevirt_io_.+"
+              - action: labeldrop
+                regex: "scheduling_node_kubevirt_io_.+"
 
         kubeControllerManager:
           enabled: true
