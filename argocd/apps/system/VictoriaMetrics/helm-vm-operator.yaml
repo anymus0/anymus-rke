@@ -182,3 +182,50 @@ spec:
 
         kubeProxy:
           enabled: true
+
+        kubelet:
+          enabled: true
+          vmScrape:
+            kind: VMNodeScrape
+            spec:
+              scheme: https
+              honorLabels: true
+              honorTimestamps: false
+              interval: 30s
+              scrapeTimeout: 5s
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                insecureSkipVerify: true
+              relabelConfigs:
+                - action: labelmap
+                  regex: __meta_kubernetes_node_label_(.+)
+                - sourceLabels: [__meta_kubernetes_node_name]
+                  targetLabel: node                        # ← THIS is what was missing
+                - sourceLabels: [__metrics_path__]
+                  targetLabel: metrics_path
+                - replacement: kubelet
+                  targetLabel: job
+              metricRelabelConfigs:
+                - action: labeldrop
+                  regex: (uid)
+                - action: labeldrop
+                  regex: (id|name)
+                - action: drop
+                  sourceLabels: [__name__]
+                  regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+              vmScrapes:
+                cadvisor:
+                  enabled: true
+                  spec:
+                    path: /metrics/cadvisor
+                kubelet:
+                  spec: {}
+                probes:
+                  enabled: true
+                  spec:
+                    path: /metrics/probes
+                resources:
+                  enabled: true
+                  spec:
+                    path: /metrics/resource
