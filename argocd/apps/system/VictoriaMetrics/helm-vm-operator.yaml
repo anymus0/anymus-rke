@@ -185,32 +185,3 @@ spec:
 
         kubelet:
           enabled: true
-          vmScrape:
-            kind: VMNodeScrape
-            spec:
-              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-              honorLabels: true
-              honorTimestamps: false
-              interval: 30s
-              scrapeTimeout: 5s
-              scheme: https
-              tlsConfig:
-                insecureSkipVerify: true
-                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-              relabelConfigs:
-                - action: labelmap
-                  regex: __meta_kubernetes_node_label_(.+)
-                - sourceLabels: [__meta_kubernetes_node_name]
-                  targetLabel: node
-                - sourceLabels: [__metrics_path__]
-                  targetLabel: metrics_path
-                - replacement: kubelet
-                  targetLabel: job
-              metricRelabelConfigs:
-                - action: labeldrop
-                  regex: (uid)
-                - action: labeldrop
-                  regex: (id|name)
-                - action: drop
-                  sourceLabels: [__name__]
-                  regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
