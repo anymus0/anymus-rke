@@ -14,10 +14,7 @@ spec:
         ollama:
           enabled: false
         ingress:
-          enabled: true
-          class: nginx
-          host: ollama.anymus.pro
-          tls: false
+          enabled: false
         resources:
           requests:
             memory: 5Gi
