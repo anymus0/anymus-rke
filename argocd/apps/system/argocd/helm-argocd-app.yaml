@@ -41,13 +41,7 @@ spec:
             serviceMonitor:
               enabled: true
           ingress:
-            enabled: true
-            ingressClassName: tailscale
-            annotations:
-              tailscale.com/proxy-group: ingress-proxies   # reference the ProxyGroup
-            tls:
-              - hosts:
-                  - argocd
+            enabled: false
         repoServer:
           metrics:
             enabled: true

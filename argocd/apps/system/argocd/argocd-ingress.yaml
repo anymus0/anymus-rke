@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    tailscale.com/proxy-group: ingress-proxies
+spec:
+  ingressClassName: tailscale
+  defaultBackend:          # no rules, no host matching — all traffic goes here
+    service:
+      name: argocd-server
+      port:
+        number: 80         # works because server.insecure: true
+  tls:
+    - hosts:
+        - argocd           # → argocd.<tailnet>.ts.net
