@@ -24,10 +24,7 @@ spec:
         controller:
           jenkinsUrlProtocol: https
           ingress:
-            enabled: true
-            paths: []
-            apiVersion: "extensions/v1beta1"
-            hostName: ci.anymus.pro
+            enabled: false
           JCasC:
             securityRealm: |-
               local:
