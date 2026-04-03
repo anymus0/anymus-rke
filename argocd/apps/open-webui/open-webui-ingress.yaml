@@ -11,9 +11,9 @@ spec:
   ingressClassName: tailscale
   defaultBackend:
     service:
-      name: ollama
+      name: open-webui
       port:
-        number: 11434
+        number: 80
   tls:
     - hosts:
         - ollama              # → ollama.<tailnet>.ts.net
