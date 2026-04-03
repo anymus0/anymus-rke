@@ -23,18 +23,10 @@ spec:
       valuesObject:
         externalURL: https://harbor.anymus.pro
 
-        # Expose Harbor via Ingress
         expose:
-          type: ingress
+          type: clusterIP
           tls:
             enabled: false
-          ingress:
-            hosts:
-              core: harbor.anymus.pro
-            className: "nginx"
-            annotations:
-              nginx.ingress.kubernetes.io/proxy-body-size: "0"
-              nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
 
         # HA Configuration - Enable multiple replicas for stateless components
         portal:
