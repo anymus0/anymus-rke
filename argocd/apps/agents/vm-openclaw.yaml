@@ -16,10 +16,10 @@ spec:
           sockets: 1
           threads: 1
         memory:
-          guest: 8Gi
+          guest: 6Gi
         resources:
           requests:
-            memory: 8Gi
+            memory: 6Gi
         devices:
           disks:
           - name: rootdisk
