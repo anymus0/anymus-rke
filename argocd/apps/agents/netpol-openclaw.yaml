@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: openclaw-egress
+  namespace: agents
+spec:
+  podSelector:
+    matchLabels:
+      app: openclaw
+  policyTypes:
+  - Ingress
+  - Egress
+
+  ingress: []   # block all inbound from pod network — VM is only reachable via Tailscale
+
+  egress:
+  # Allow DNS to CoreDNS in kube-system — without this internet hostnames won't resolve
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+  # Allow internet — everything except RFC1918 ranges (pod network, LAN, etc.)
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8       # pod network (10.42.x.x) + cluster services (10.43.x.x)
+        - 172.16.0.0/12    # docker/other bridge ranges
+        - 192.168.0.0/16   # physical LAN
