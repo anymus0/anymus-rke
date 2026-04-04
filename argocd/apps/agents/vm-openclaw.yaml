@@ -50,12 +50,10 @@ spec:
   dataVolumeTemplates:
   - metadata:
       name: openclaw-root
-      annotations:
-        cdi.kubevirt.io/storage.usePopulator: "false"   # force legacy privileged importer — populator path cannot open raw block devices
     spec:
       storage:
         storageClassName: longhorn-vm
-        volumeMode: Block              # critical — block device, not filesystem
+        volumeMode: Filesystem         # Block mode requires CDI privileged importer — dropped in newer CDI; Filesystem works fine for this workload
         accessModes: [ReadWriteOnce]
         resources:
           requests:
