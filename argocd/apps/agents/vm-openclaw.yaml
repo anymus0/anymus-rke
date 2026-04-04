@@ -1,64 +1,64 @@
-apiVersion: kubevirt.io/v1
-kind: VirtualMachine
-metadata:
-  name: openclaw
-  namespace: agents
-spec:
-  runStrategy: Always    # equivalent to Deployment restartPolicy: Always
-  template:
-    metadata:
-      labels:
-        app: openclaw
-    spec:
-      domain:
-        cpu:
-          cores: 4
-          sockets: 1
-          threads: 1
-        memory:
-          guest: 6Gi
-        resources:
-          requests:
-            memory: 6Gi
-        devices:
-          disks:
-          - name: rootdisk
-            disk:
-              bus: virtio
-          - name: cloudinit
-            disk:
-              bus: virtio
-          interfaces:
-          - name: default
-            masquerade: {}   # NAT through pod network; no macvlan needed
-        machine:
-          type: q35
-      nodeSelector:
-        kubernetes.io/hostname: anymus-rke03
-      networks:
-      - name: default
-        pod: {}
-      volumes:
-      - name: rootdisk
-        dataVolume:
-          name: openclaw-root
-      - name: cloudinit
-        cloudInitNoCloud:
-          secretRef:
-            name: openclaw-cloudinit   # references the SealedSecret above
+# apiVersion: kubevirt.io/v1
+# kind: VirtualMachine
+# metadata:
+#   name: openclaw
+#   namespace: agents
+# spec:
+#   runStrategy: Always    # equivalent to Deployment restartPolicy: Always
+#   template:
+#     metadata:
+#       labels:
+#         app: openclaw
+#     spec:
+#       domain:
+#         cpu:
+#           cores: 4
+#           sockets: 1
+#           threads: 1
+#         memory:
+#           guest: 6Gi
+#         resources:
+#           requests:
+#             memory: 6Gi
+#         devices:
+#           disks:
+#           - name: rootdisk
+#             disk:
+#               bus: virtio
+#           - name: cloudinit
+#             disk:
+#               bus: virtio
+#           interfaces:
+#           - name: default
+#             masquerade: {}   # NAT through pod network; no macvlan needed
+#         machine:
+#           type: q35
+#       nodeSelector:
+#         kubernetes.io/hostname: anymus-rke03
+#       networks:
+#       - name: default
+#         pod: {}
+#       volumes:
+#       - name: rootdisk
+#         dataVolume:
+#           name: openclaw-root
+#       - name: cloudinit
+#         cloudInitNoCloud:
+#           secretRef:
+#             name: openclaw-cloudinit   # references the SealedSecret above
 
-  dataVolumeTemplates:
-  - metadata:
-      name: openclaw-root
-    spec:
-      storage:
-        storageClassName: longhorn-vm
-        volumeMode: Filesystem         # Block mode requires CDI privileged importer — dropped in newer CDI; Filesystem works fine for this workload
-        accessModes: [ReadWriteOnce]
-        resources:
-          requests:
-            storage: 40Gi
-      source:
-        http:
-          url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
-          # CDI will import this image into the Longhorn block PVC
+#   dataVolumeTemplates:
+#   - metadata:
+#       name: openclaw-root
+#     spec:
+#       storage:
+#         storageClassName: longhorn-vm
+#         volumeMode: Filesystem         # Block mode requires CDI privileged importer — dropped in newer CDI; Filesystem works fine for this workload
+#         accessModes: [ReadWriteOnce]
+#         resources:
+#           requests:
+#             storage: 40Gi
+#       source:
+#         http:
+#           url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+#           # CDI will import this image into the Longhorn block PVC
