@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: openclaw-egress
+  name: openclaw-ingress-egress
   namespace: agents
 spec:
   podSelector:
@@ -11,10 +11,20 @@ spec:
   - Ingress
   - Egress
 
-  ingress: []   # block all inbound from pod network — VM is only reachable via Tailscale
+  ingress:
+    # Allow SSH from Jenkins only — nothing else from the pod network
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: jenkins
+        podSelector:
+          matchLabels:
+            pipeline: openclaw
+      ports:
+      - protocol: TCP
+        port: 22
 
   egress:
-  # Allow DNS to CoreDNS in kube-system — without this internet hostnames won't resolve
   - to:
     - namespaceSelector:
         matchLabels:
@@ -25,7 +35,6 @@ spec:
     - protocol: TCP
       port: 53
 
-  # Allow internet — everything except RFC1918 ranges (pod network, LAN, etc.)
   - to:
     - ipBlock:
         cidr: 0.0.0.0/0
