@@ -38,17 +38,7 @@ spec:
         # The machine name in tls.hosts becomes the MagicDNS hostname:
         #   qdrant.icefish-pickerel.ts.net
         ingress:
-          enabled: true
-          ingressClassName: tailscale
-          hosts:
-            - host: qdrant
-              paths:
-                - path: /
-                  pathType: Prefix
-                  servicePort: 6333
-          tls:
-            - hosts:
-                - qdrant      # → qdrant.icefish-pickerel.ts.net
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: agents
