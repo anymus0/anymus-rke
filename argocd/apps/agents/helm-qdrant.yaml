@@ -1,0 +1,60 @@
+# argocd/apps/qdrant.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: qdrant
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/qdrant/qdrant-helm
+    targetRevision: 996e3bbd616a842c0a482d0158179bf164ea8e7d
+    path: charts/qdrant
+    helm:
+      valuesObject:
+        replicaCount: 1
+
+        image:
+          repository: qdrant/qdrant
+          tag: v1.17
+
+        persistence:
+          accessModes:
+            - ReadWriteOnce
+          size: 10Gi
+
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 512Mi
+
+        service:
+          type: ClusterIP
+          # REST on 6333, gRPC on 6334
+
+        # Tailscale Ingress exposes the REST API (HTTP/S) on port 6333.
+        # The machine name in tls.hosts becomes the MagicDNS hostname:
+        #   qdrant.icefish-pickerel.ts.net
+        ingress:
+          enabled: true
+          ingressClassName: tailscale
+          hosts:
+            - host: qdrant
+              paths:
+                - path: /
+                  pathType: Prefix
+                  servicePort: 6333
+          tls:
+            - hosts:
+                - qdrant      # → qdrant.icefish-pickerel.ts.net
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: agents
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
