@@ -23,7 +23,6 @@ spec:
             - sentence-transformers/all-MiniLM-L6-v2
             - --port
             - "80"
-            - float32           # required for CPU; float16 is GPU-only
           ports:
             - containerPort: 80
           # Model downloads from HuggingFace Hub on first boot (~600MB).
