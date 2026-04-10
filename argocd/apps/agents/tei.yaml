@@ -20,10 +20,9 @@ spec:
           image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.9
           args:
             - --model-id
-            - Qwen/Qwen3-Embedding-0.6B
+            - sentence-transformers/all-MiniLM-L6-v2
             - --port
             - "80"
-            - --dtype
             - float32           # required for CPU; float16 is GPU-only
           ports:
             - containerPort: 80
@@ -35,10 +34,9 @@ spec:
           resources:
             requests:
               cpu: 500m
-              memory: 2Gi
+              memory: 1Gi
             limits:
-              cpu: 2000m
-              memory: 3Gi
+              memory: 1Gi
           readinessProbe:
             httpGet:
               path: /health
