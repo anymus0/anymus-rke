@@ -118,32 +118,27 @@ spec:
               # -------------------------------------------------------
               jobs: |
                 jobs:
-                - script: |
-                    multibranchPipelineJob('OPENCLAW-DEPLOY') {
-                        branchSources {
-                        github {
-                            id('test-pipeline-source')
-                            repoOwner('anymus0')
-                            repository('openclaw-config')
-                            scanCredentialsId('openclaw-config-github-jenkins-creds')
-                        }
-                        }
-                        factory {
-                        workflowBranchProjectFactory {
+                  - script: |
+                      pipelineJob('OPENCLAW-DEPLOY') {
+                        definition {
+                          cpsScm {
+                            scm {
+                              git {
+                                remote {
+                                  url('https://github.com/anymus0/openclaw-config.git')
+                                  credentials('openclaw-config-github-jenkins-creds')
+                                }
+                                branches('*/main')
+                              }
+                            }
                             scriptPath('jenkins/Jenkinsfile')
-                        }
+                            lightweight(true)
+                          }
                         }
                         triggers {
-                        periodicFolderTrigger {
-                            interval('1d')
+                          githubPush()
                         }
-                        }
-                        orphanedItemStrategy {
-                        discardOldItems {
-                            numToKeep(10)
-                        }
-                        }
-                    }
+                      }
 
         # -------------------------------------------------------
         # Agent: switch to WebSocket, drop the JNLP tunnel
