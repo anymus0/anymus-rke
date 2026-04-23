@@ -119,30 +119,32 @@ spec:
               # -------------------------------------------------------
               jobs: |
                 jobs:
-                  - script: |
-                      multibranchPipelineJob('OPENCLAW-DEPLOY') {
+                - script: |
+                    multibranchPipelineJob('OPENCLAW-DEPLOY') {
                         branchSources {
-                          github {
+                        github {
                             id('test-pipeline-source')
                             repoOwner('anymus0')
                             repository('openclaw-config')
-                            scanCredentialsId('github-repo-creds')
-                          }
+                            scanCredentialsId('openclaw-config-github-jenkins-creds')
+                        }
                         }
                         factory {
-                          workflowBranchProjectFactory {
+                        workflowBranchProjectFactory {
                             scriptPath('jenkins/Jenkinsfile')
-                          }
+                        }
                         }
                         triggers {
-                          periodic(1440)
+                        periodicFolderTrigger {
+                            interval('1d')
+                        }
                         }
                         orphanedItemStrategy {
-                          discardOldItems {
+                        discardOldItems {
                             numToKeep(10)
-                          }
                         }
-                      }
+                        }
+                    }
 
         # -------------------------------------------------------
         # Agent: switch to WebSocket, drop the JNLP tunnel
