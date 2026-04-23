@@ -107,7 +107,7 @@ spec:
                     domainCredentials:
                       - credentials:
                           - usernamePassword:
-                              id: "github-repo-creds"
+                              id: "openclaw-config-github-jenkins-creds"
                               description: "GitHub credentials for private repo"
                               scope: GLOBAL
                               username: "${openclaw-config-github-jenkins-creds-username}"
