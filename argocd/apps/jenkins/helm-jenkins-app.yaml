@@ -35,7 +35,6 @@ spec:
             existingSecret: "jenkins-admin-secret"
             userKey: jenkins-admin-user
             passwordKey: jenkins-admin-password
-            createSecret: false
 
           # -------------------------------------------------------
           # Don't reinitialize plugins/config on every pod restart
