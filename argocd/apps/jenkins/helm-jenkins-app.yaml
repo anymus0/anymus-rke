@@ -46,10 +46,10 @@ spec:
           # on top of the defaults
           # -------------------------------------------------------
           installPlugins:
-            - kubernetes:4423.vb_59f230b_ce53
-            - workflow-aggregator:608.v67378e9d3db_1
-            - git:5.10.1
-            - configuration-as-code:2074.va_57f83f7a_10b_
+            - kubernetes:latest
+            - workflow-aggregator:latest
+            - git:latest
+            - configuration-as-code:latest
             - dark-theme:latest
             - job-dsl:latest
             - github-branch-source:latest
