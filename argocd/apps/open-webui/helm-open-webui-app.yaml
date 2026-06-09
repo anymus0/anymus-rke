@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/open-webui/helm-charts.git
     path: charts/open-webui
-    targetRevision: fac008fb026dd0bc6a3e064b62bbe0615ef6f7de
+    targetRevision: c328f1ba7d6b6eafc6f3d339fafcd3514bddfc95
     helm:
       valuesObject:
         ollama:
