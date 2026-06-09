@@ -1,0 +1,77 @@
+# mcpo-duckduckgo.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcpo-config
+  namespace: open-webui          # adjust to wherever your open-webui lives
+data:
+  config.json: |
+    {
+      "mcpServers": {
+        "duckduckgo": {
+          "command": "uvx",
+          "args": ["duckduckgo-mcp-server"]
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcpo
+  namespace: open-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcpo
+  template:
+    metadata:
+      labels:
+        app: mcpo
+    spec:
+      containers:
+        - name: mcpo
+          image: ghcr.io/open-webui/mcpo:main
+          args:
+            - "--config"
+            - "/config/config.json"
+            - "--port"
+            - "8000"
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /duckduckgo/openapi.json
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: mcpo-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcpo
+  namespace: open-webui
+spec:
+  selector:
+    app: mcpo
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: ClusterIP
