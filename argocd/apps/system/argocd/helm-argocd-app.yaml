@@ -13,9 +13,9 @@ spec:
       prune: true
       selfHeal: true
   source:
-    chart: argo-cd
-    repoURL: https://argoproj.github.io/argo-helm
-    targetRevision: 9.4.15
+    chart: charts/argo-cd
+    repoURL: https://github.com/argoproj/argo-helm.git
+    targetRevision: 4676fa5171dbc07d1ac7da7a4996561a6f2804dd
     helm:
       releaseName: argocd
       valuesObject:
@@ -59,7 +59,7 @@ spec:
               enabled: true
           replicas: 3
         global:
-          domain: argocd.anymus.pro
+          domain: argocd.icefish-pickerel.ts.net
         configs:
           params:
             server.insecure: true
