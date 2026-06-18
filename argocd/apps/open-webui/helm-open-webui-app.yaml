@@ -17,10 +17,10 @@ spec:
           enabled: false
         resources:
           requests:
-            memory: 5Gi
-            cpu: 4
+            memory: 4Gi
+            cpu: 2
           limits:
-            memory: 5Gi
+            memory: 4Gi
         extraEnvVars:
           - name: ENABLE_API_KEYS
             value: "true"
