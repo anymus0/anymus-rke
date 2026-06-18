@@ -13,7 +13,7 @@ spec:
       prune: true
       selfHeal: true
   source:
-    chart: charts/argo-cd
+    path: charts/argo-cd
     repoURL: https://github.com/argoproj/argo-helm.git
     targetRevision: 4676fa5171dbc07d1ac7da7a4996561a6f2804dd
     helm:
