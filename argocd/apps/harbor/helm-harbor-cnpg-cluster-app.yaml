@@ -14,7 +14,7 @@ spec:
       selfHeal: true
   source:
     path: charts/cluster
-    repoURL: https://cloudnative-pg.github.io/charts
+    repoURL: https://github.com/cloudnative-pg/charts.git
     targetRevision: 6014e4d5ad35e866df6312027c73c8fea71a341e
     helm:
       releaseName: harbor-cnpg-cluster
