@@ -15,9 +15,9 @@ spec:
     syncOptions:
       - CreateNamespace=true
   source:
-    chart: jenkins
-    repoURL: ghcr.io/jenkinsci/helm-charts
-    targetRevision: 5.9.9
+    path: charts/jenkins
+    repoURL: https://github.com/jenkinsci/helm-charts.git
+    targetRevision: d4e9f4a89d005d9158e9d33b831d11c5fda6f8b2
     helm:
       releaseName: jenkins
       valuesObject:
