@@ -64,5 +64,5 @@ spec:
             storage: 40Gi
       source:
         http:
-          url: https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+          url: https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img
           # CDI will import this image into the Longhorn block PVC
