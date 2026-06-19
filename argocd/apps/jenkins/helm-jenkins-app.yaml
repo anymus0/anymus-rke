@@ -13,30 +13,141 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true
   source:
-    chart: jenkins
-    repoURL: ghcr.io/jenkinsci/helm-charts
-    targetRevision: 5.9.9
+    path: charts/jenkins
+    repoURL: https://github.com/jenkinsci/helm-charts.git
+    targetRevision: d4e9f4a89d005d9158e9d33b831d11c5fda6f8b2
     helm:
       releaseName: jenkins
       valuesObject:
         controller:
+          # -------------------------------------------------------
+          # URL & protocol
+          # -------------------------------------------------------
           jenkinsUrlProtocol: https
+          jenkinsUrl: "https://ci.icefish-pickerel.ts.net"
+
+          # -------------------------------------------------------
+          # Use YOUR secret for admin — chart will not generate one
+          # -------------------------------------------------------
+          admin:
+            existingSecret: "jenkins-admin-secret"
+            userKey: jenkins-admin-user
+            passwordKey: jenkins-admin-password
+
+          # -------------------------------------------------------
+          # Don't reinitialize plugins/config on every pod restart
+          # -------------------------------------------------------
+          initializeOnce: true
+
+          # -------------------------------------------------------
+          # Plugins — add dark-theme, job-dsl, github-branch-source
+          # on top of the defaults
+          # -------------------------------------------------------
+          installPlugins:
+            - kubernetes:latest
+            - workflow-aggregator:latest
+            - git:latest
+            - configuration-as-code:latest
+            - dark-theme:latest
+            - job-dsl:latest
+            - github-branch-source:latest
+
+          # -------------------------------------------------------
+          # Mount GitHub secret so JCasC can interpolate it.
+          # Convention: ${<secret-name>-<keyName>}
+          # → ${openclaw-config-github-jenkins-creds-username}
+          # → ${openclaw-config-github-jenkins-creds-password}
+          # -------------------------------------------------------
+          additionalExistingSecrets:
+            - name: openclaw-config-github-jenkins-creds
+              keyName: username
+            - name: openclaw-config-github-jenkins-creds
+              keyName: password
+
           ingress:
             enabled: false
+
           JCasC:
+            defaultConfig: true
+            overwriteConfiguration: true
+
             securityRealm: |-
               local:
                 allowsSignup: false
                 enableCaptcha: false
                 users:
-                - id: "${chart-admin-username}"
-                  name: "Jenkins Admin"
-                  password: "${chart-admin-password}"
+                  - id: "${chart-admin-username}"
+                    name: "Jenkins Admin"
+                    password: "${chart-admin-password}"
+
             authorizationStrategy: |-
               loggedInUsersCanDoAnything:
                 allowAnonymousRead: false
+
+            configScripts:
+
+              # -------------------------------------------------------
+              # Dark theme — forces dark for all users
+              # Use theme: "darkSystem" to respect OS preference instead
+              # -------------------------------------------------------
+              appearance: |
+                appearance:
+                  themeManager:
+                    disableUserThemes: true
+                    theme: "dark"
+
+              # -------------------------------------------------------
+              # GitHub credentials for private repo
+              # -------------------------------------------------------
+              credentials: |
+                credentials:
+                  system:
+                    domainCredentials:
+                      - credentials:
+                          - usernamePassword:
+                              id: "openclaw-config-github-jenkins-creds"
+                              description: "GitHub credentials for private repo"
+                              scope: GLOBAL
+                              username: "${openclaw-config-github-jenkins-creds-username}"
+                              password: "${openclaw-config-github-jenkins-creds-password}"
+
+              # -------------------------------------------------------
+              # OPENCLAW-DEPLOY multibranch pipeline job
+              # -------------------------------------------------------
+              jobs: |
+                jobs:
+                  - script: |
+                      pipelineJob('OPENCLAW-DEPLOY') {
+                        definition {
+                          cpsScm {
+                            scm {
+                              git {
+                                remote {
+                                  url('https://github.com/anymus0/openclaw-config.git')
+                                  credentials('openclaw-config-github-jenkins-creds')
+                                }
+                                branches('*/main')
+                              }
+                            }
+                            scriptPath('jenkins/Jenkinsfile')
+                            lightweight(true)
+                          }
+                        }
+                        triggers {
+                          githubPush()
+                        }
+                      }
+
+        # -------------------------------------------------------
+        # Agent: switch to WebSocket, drop the JNLP tunnel
+        # defaultConfig: true generates the k8s cloud JCasC from
+        # these values — do NOT also define the cloud in configScripts
+        # or you'll get a duplicate cloud error
+        # -------------------------------------------------------
         agent:
-          jenkinsTunnel: "jenkinsci-agent:50000"
-          directConnection: true
+          websocket: true
+          jenkinsUrl: "http://jenkins.jenkins:8080"
+          jenkinsTunnel: ""
+          directConnection: false

@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/open-webui/helm-charts.git
     path: charts/open-webui
-    targetRevision: 1141e87d4ff460a1cd00e4130ad013c63e0153c5
+    targetRevision: c328f1ba7d6b6eafc6f3d339fafcd3514bddfc95
     helm:
       valuesObject:
         ollama:
@@ -17,17 +17,15 @@ spec:
           enabled: false
         resources:
           requests:
-            memory: 5Gi
-            cpu: 4
+            memory: 4Gi
+            cpu: 2
           limits:
-            memory: 5Gi
+            memory: 4Gi
         extraEnvVars:
           - name: ENABLE_API_KEYS
             value: "true"
           - name: WEBUI_AUTH
             value: "true"
-          - name: ENABLE_OLLAMA_API
-            value: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: open-web-ui

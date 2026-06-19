@@ -15,9 +15,9 @@ spec:
       prune: true
       selfHeal: true
   source:
-    chart: cloudnative-pg
-    repoURL: https://cloudnative-pg.github.io/charts
-    targetRevision: 0.27.1
+    path: charts/cloudnative-pg
+    repoURL: https://github.com/cloudnative-pg/charts.git
+    targetRevision: 6014e4d5ad35e866df6312027c73c8fea71a341e
     helm:
       releaseName: cloudnative-pg
       valuesObject:

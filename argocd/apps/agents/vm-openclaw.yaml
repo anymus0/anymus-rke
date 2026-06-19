@@ -21,6 +21,10 @@ spec:
           requests:
             memory: 6Gi
         devices:
+          interfaces:
+            - name: default
+              masquerade: {}
+              macAddress: "d6:a0:5b:21:dc:43"
           disks:
           - name: rootdisk
             disk:
