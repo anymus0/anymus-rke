@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openclaw-ssh
+  name: hermes-ssh
   namespace: agents
   labels:
-    app: openclaw
+    app: hermes
 spec:
   type: ClusterIP
   selector:
-    vm.kubevirt.io/name: openclaw
+    vm.kubevirt.io/name: hermes
   ports:
     - name: ssh
       port: 22

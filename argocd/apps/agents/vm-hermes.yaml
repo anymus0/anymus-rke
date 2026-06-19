@@ -1,14 +1,14 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: openclaw
+  name: hermes
   namespace: agents
 spec:
   runStrategy: Always    # equivalent to Deployment restartPolicy: Always
   template:
     metadata:
       labels:
-        app: openclaw
+        app: hermes
     spec:
       domain:
         cpu:
@@ -45,15 +45,15 @@ spec:
       volumes:
       - name: rootdisk
         dataVolume:
-          name: openclaw-root
+          name: hermes-root
       - name: cloudinit
         cloudInitNoCloud:
           secretRef:
-            name: openclaw-cloudinit   # references the cloud-init SealedSecret
+            name: hermes-cloudinit   # references the cloud-init SealedSecret
 
   dataVolumeTemplates:
   - metadata:
-      name: openclaw-root
+      name: hermes-root
     spec:
       storage:
         storageClassName: longhorn-vm
