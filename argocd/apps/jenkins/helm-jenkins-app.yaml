@@ -65,6 +65,10 @@ spec:
               keyName: username
             - name: openclaw-config-github-jenkins-creds
               keyName: password
+            - name: hermes-config-github-jenkins-creds
+              keyName: username
+            - name: hermes-config-github-jenkins-creds
+              keyName: password
 
           ingress:
             enabled: false
@@ -112,6 +116,12 @@ spec:
                               scope: GLOBAL
                               username: "${openclaw-config-github-jenkins-creds-username}"
                               password: "${openclaw-config-github-jenkins-creds-password}"
+                          - usernamePassword:
+                              id: "hermes-config-github-jenkins-creds"
+                              description: "GitHub credentials for private repo"
+                              scope: GLOBAL
+                              username: "${hermes-config-github-jenkins-creds-username}"
+                              password: "${hermes-config-github-jenkins-creds-password}"
 
               # -------------------------------------------------------
               # OPENCLAW-DEPLOY multibranch pipeline job
@@ -127,6 +137,27 @@ spec:
                                 remote {
                                   url('https://github.com/anymus0/openclaw-config.git')
                                   credentials('openclaw-config-github-jenkins-creds')
+                                }
+                                branches('*/main')
+                              }
+                            }
+                            scriptPath('jenkins/Jenkinsfile')
+                            lightweight(true)
+                          }
+                        }
+                        triggers {
+                          githubPush()
+                        }
+                      }
+                  - script: |
+                      pipelineJob('HERMES-DEPLOY') {
+                        definition {
+                          cpsScm {
+                            scm {
+                              git {
+                                remote {
+                                  url('https://github.com/anymus0/hermes-config.git')
+                                  credentials('hermes-config-github-jenkins-creds')
                                 }
                                 branches('*/main')
                               }
