@@ -23,6 +23,13 @@ spec:
       ports:
       - protocol: TCP
         port: 22
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: open-web-ui
+      ports:
+      - protocol: TCP
+        port: 8642
 
   egress:
   - to:
