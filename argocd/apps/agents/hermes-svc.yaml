@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hermes
+  namespace: agents
+spec:
+  selector:
+    # Match the label which KubeVirt VMI pod carries.
+    kubevirt.io/domain: hermes
+  ports:
+    - name: ssh
+      port: 22
+      targetPort: 22
+      protocol: TCP
+    - name: api
+      port: 8642
+      targetPort: 8642
+      protocol: TCP
+  type: ClusterIP
