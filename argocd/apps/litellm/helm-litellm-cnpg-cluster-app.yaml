@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: litellm-cnpg-cluster
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: litellm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    path: charts/cluster
+    repoURL: https://github.com/cloudnative-pg/charts.git
+    targetRevision: 6014e4d5ad35e866df6312027c73c8fea71a341e
+    helm:
+      releaseName: litellm-cnpg-cluster
+      valuesObject:
+        cluster:
+          initdb:
+            database: litellm
+            owner: litellm
+            dataChecksums: true
+            encoding: "UTF8"
+            secret:
+              name: litellm-cnpg-initdb-credentials
+          instances: 1
+          storage:
+            storageClass: "longhorn"
