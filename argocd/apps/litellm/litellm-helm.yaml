@@ -46,6 +46,7 @@ spec:
         # ── Provider API keys (GLM + future cloud models) via envFrom ──
         environmentSecrets:
           - litellm-provider-keys       # holds GLM_API_KEY (referenced as os.environ/GLM_API_KEY below)
+          - litellm-ui-auth
 
         # ── Master key from pre-created secret ──
         masterkeySecretName: litellm-masterkey
@@ -64,6 +65,7 @@ spec:
         proxy_config:
           general_settings:
             master_key: os.environ/PROXY_MASTER_KEY
+            disable_master_key_return: true
           litellm_settings:
             cache: true
             cache_params:
@@ -71,6 +73,9 @@ spec:
               host: os.environ/REDIS_HOST
               port: os.environ/REDIS_PORT
               password: os.environ/REDIS_PASSWORD
+            upperbound_key_generate_params:
+              max_budget: 50
+              budget_duration: "30d"
           model_list:
             - model_name: glm-5.2
               litellm_params:
