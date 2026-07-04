@@ -1,0 +1,83 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: litellm-ingress-egress
+  namespace: litellm
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: litellm
+      app.kubernetes.io/instance: litellm
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    # Hermes (the only API consumer) → proxy :4000
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: agents
+          podSelector:
+            matchLabels:
+              app: hermes
+      ports:
+        - protocol: TCP
+          port: 4000
+
+    # Tailscale ingress proxies → proxy :4000 (for the Admin UI over the tailnet)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tailscale
+      ports:
+        - protocol: TCP
+          port: 4000
+
+    # If kubelet health probes get denied by CNI (pods flap NotReady after
+    # this policy applies), uncomment and set RKE2 node LAN subnet:
+    # - from:
+    #     - ipBlock:
+    #         cidr: 192.168.1.0/24
+    #   ports:
+    #     - protocol: TCP
+    #       port: 4000
+
+  egress:
+    # DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    # External Postgres + Redis (operator-managed, same namespace)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: litellm
+      ports:
+        - protocol: TCP
+          port: 5432
+        - protocol: TCP
+          port: 6379
+
+    # Cloud LLM APIs (z.ai / GLM, future models) — HTTPS to public internet only.
+    # Private ranges excepted so this rule can't reach in-cluster / LAN;
+    # in-cluster PG/Redis/DNS go through the explicit rules above.
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
