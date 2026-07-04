@@ -82,9 +82,14 @@ spec:
                 model: openai/glm-5.2
                 api_base: https://api.z.ai/api/paas/v4
                 api_key: os.environ/GLM_API_KEY
-            - model_name: glm-4.7-flash              # ← add
+            - model_name: glm-4.7-flash
               litellm_params:
                 model: openai/glm-4.7-flash
+                api_base: https://api.z.ai/api/paas/v4
+                api_key: os.environ/GLM_API_KEY
+            - model_name: glm-4.5-flash
+              litellm_params:
+                model: openai/glm-4.5-flash
                 api_base: https://api.z.ai/api/paas/v4
                 api_key: os.environ/GLM_API_KEY
 
