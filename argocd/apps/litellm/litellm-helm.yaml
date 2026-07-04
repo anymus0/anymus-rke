@@ -67,7 +67,7 @@ spec:
             master_key: os.environ/PROXY_MASTER_KEY
             disable_master_key_return: true
           litellm_settings:
-            cache: true
+            cache: false
             cache_params:
               type: redis
               host: os.environ/REDIS_HOST
@@ -80,7 +80,12 @@ spec:
             - model_name: glm-5.2
               litellm_params:
                 model: openai/glm-5.2
-                api_base: https://api.z.ai/api/openai/v1   # metered OpenAI-compatible endpoint
+                api_base: https://api.z.ai/api/openai/v1
+                api_key: os.environ/GLM_API_KEY
+            - model_name: glm-4.7-flash              # ← add
+              litellm_params:
+                model: openai/glm-4.7-flash
+                api_base: https://api.z.ai/api/openai/v1
                 api_key: os.environ/GLM_API_KEY
 
   destination:
