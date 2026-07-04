@@ -88,16 +88,16 @@ spec:
                 output_cost_per_token: 0.0000044
               model_info:
                 cache_read_input_token_cost: 0.00000026   # the $0.26/M cached rate
-            - model_name: glm-4.7-flash
-              litellm_params:
-                model: openai/glm-4.7-flash
-                api_base: https://api.z.ai/api/paas/v4
-                api_key: os.environ/GLM_API_KEY
-            - model_name: glm-4.5-flash
-              litellm_params:
-                model: openai/glm-4.5-flash
-                api_base: https://api.z.ai/api/paas/v4
-                api_key: os.environ/GLM_API_KEY
+            # - model_name: glm-4.7-flash
+            #   litellm_params:
+            #     model: openai/glm-4.7-flash
+            #     api_base: https://api.z.ai/api/paas/v4
+            #     api_key: os.environ/GLM_API_KEY
+            # - model_name: glm-4.5-flash
+            #   litellm_params:
+            #     model: openai/glm-4.5-flash
+            #     api_base: https://api.z.ai/api/paas/v4
+            #     api_key: os.environ/GLM_API_KEY
 
   destination:
     server: https://kubernetes.default.svc
