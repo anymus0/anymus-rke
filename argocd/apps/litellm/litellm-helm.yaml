@@ -1,0 +1,90 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: litellm
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: ghcr.io/berriai            # OCI registry + org (no oci:// prefix on recent ArgoCD)
+    chart: litellm-helm
+    targetRevision: "1.90.3"            # latest: helm show chart oci://ghcr.io/berriai/litellm-helm
+    helm:
+      releaseName: litellm
+      valuesObject:
+        fullnameOverride: litellm
+
+        image:
+          repository: ghcr.io/berriai/litellm-database   # keep DB image (bundles prisma) — required for external PG
+
+        # ── External Postgres ──
+        db:
+          useExisting: true
+          deployStandalone: false       # disable Bitnami postgres subchart
+          endpoint: litellm-cnpg-cluster-rw.litellm.svc.cluster.local
+          database: litellm
+          secret:
+            name: litellm-cnpg-initdb-credentials
+            usernameKey: username
+            passwordKey: password
+
+        # ── External Redis (operator-managed, same ns) ──
+        redis:
+          enabled: false                # do NOT deploy Bitnami redis; also skips its env wiring
+        envVars:
+          REDIS_HOST: redis-ha-litellm.litellm.svc.cluster.local
+          REDIS_PORT: "26379"
+        # extraEnvVars:
+        #   - name: REDIS_PASSWORD
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: litellm-redis-secret
+        #         key: password
+
+        # ── Provider API keys (GLM + future cloud models) via envFrom ──
+        environmentSecrets:
+          - litellm-provider-keys       # holds GLM_API_KEY (referenced as os.environ/GLM_API_KEY below)
+
+        # ── Master key from pre-created secret ──
+        masterkeySecretName: litellm-masterkey
+        masterkeySecretKey: masterkey
+
+        migrationJob:
+          hooks:
+            argocd:
+              enabled: true
+            helm:
+              enabled: false
+
+        # ── Proxy config (rendered into the config.yaml ConfigMap) ──
+        proxyConfigMap:
+          create: true
+        proxy_config:
+          general_settings:
+            master_key: os.environ/PROXY_MASTER_KEY
+          litellm_settings:
+            cache: true
+            cache_params:
+              type: redis
+              host: os.environ/REDIS_HOST
+              port: os.environ/REDIS_PORT
+              password: os.environ/REDIS_PASSWORD
+          model_list:
+            - model_name: glm-5.2
+              litellm_params:
+                model: openai/glm-5.2
+                api_base: https://api.z.ai/api/openai/v1   # metered OpenAI-compatible endpoint
+                api_key: os.environ/GLM_API_KEY
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: litellm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
