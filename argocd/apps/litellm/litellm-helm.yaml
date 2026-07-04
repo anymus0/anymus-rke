@@ -33,9 +33,9 @@ spec:
         # ── External Redis (operator-managed, same ns) ──
         redis:
           enabled: false                # do NOT deploy Bitnami redis; also skips its env wiring
-        envVars:
-          REDIS_HOST: redis-ha-litellm.litellm.svc.cluster.local
-          REDIS_PORT: "26379"
+        # envVars:
+        #   REDIS_HOST: redis-ha-litellm.litellm.svc.cluster.local
+        #   REDIS_PORT: "26379"
         # extraEnvVars:
         #   - name: REDIS_PASSWORD
         #     valueFrom:
