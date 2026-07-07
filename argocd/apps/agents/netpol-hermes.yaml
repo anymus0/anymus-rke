@@ -12,7 +12,7 @@ spec:
   - Egress
 
   ingress:
-    # Allow SSH from Jenkins only — nothing else from the pod network
+    # SSH from Jenkins only
     - from:
       - namespaceSelector:
           matchLabels:
@@ -23,6 +23,7 @@ spec:
       ports:
       - protocol: TCP
         port: 22
+    # OpenAI-compatible API from Open-WebUI
     - from:
       - namespaceSelector:
           matchLabels:
@@ -30,6 +31,14 @@ spec:
       ports:
       - protocol: TCP
         port: 8642
+    # Dashboard from the nginx reverse proxy (same namespace)  ← added
+    - from:
+      - podSelector:
+          matchLabels:
+            app: hermes-dashboard-nginx
+      ports:
+      - protocol: TCP
+        port: 9119
 
   egress:
   - to:
@@ -46,6 +55,28 @@ spec:
     - ipBlock:
         cidr: 0.0.0.0/0
         except:
-        - 10.0.0.0/8       # pod network (10.42.x.x) + cluster services (10.43.x.x)
-        - 172.16.0.0/12    # docker/other bridge ranges
-        - 192.168.0.0/16   # physical LAN
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: hermes-dashboard-nginx
+  namespace: agents
+spec:
+  podSelector:
+    matchLabels: {app: hermes-dashboard-nginx}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: tailscale}}
+      ports:
+        - {protocol: TCP, port: 8080}   # ← scoped to nginx's actual listen port
+  egress:
+    - to:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}
+      ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]
+    - to:
+        - podSelector: {matchLabels: {app: hermes}}   # ← was vm.kubevirt.io/name: hermes
+      ports: [{protocol: TCP, port: 9119}]
