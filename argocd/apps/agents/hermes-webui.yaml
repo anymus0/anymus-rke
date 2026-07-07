@@ -127,6 +127,10 @@ kind: Ingress
 metadata:
   name: hermes-webui
   namespace: agents
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    tailscale.com/proxy-group: ingress-proxies
 spec:
   ingressClassName: tailscale
   defaultBackend:
