@@ -40,6 +40,8 @@ spec:
           ports:
             - containerPort: 8787
           env:
+            - name: HERMES_WEBUI_SKIP_ONBOARDING
+              value: "1"
             - name: WANTED_UID
               value: "1024"
             - name: WANTED_GID
