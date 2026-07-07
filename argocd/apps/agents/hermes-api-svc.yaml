@@ -15,4 +15,8 @@ spec:
     - name: dashboard
       port: 9119
       targetPort: 9119
+    - name: webui
+      port: 8787
+      protocol: TCP
+      targetPort: 8787
   type: ClusterIP

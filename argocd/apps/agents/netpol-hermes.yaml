@@ -31,7 +31,7 @@ spec:
       ports:
       - protocol: TCP
         port: 8642
-    # Dashboard from the nginx reverse proxy (same namespace)  ← added
+    # Dashboard from the nginx reverse proxy (same namespace)
     - from:
       - podSelector:
           matchLabels:
@@ -39,6 +39,14 @@ spec:
       ports:
       - protocol: TCP
         port: 9119
+    # WebUI from the nginx reverse proxy (same namespace)
+    - from:
+      - podSelector:
+          matchLabels:
+            app: hermes-webui-nginx
+      ports:
+      - protocol: TCP
+        port: 8787
 
   egress:
   - to:
@@ -72,11 +80,33 @@ spec:
     - from:
         - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: tailscale}}
       ports:
+        - {protocol: TCP, port: 8080}
+  egress:
+    - to:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}
+      ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]
+    - to:
+        - podSelector: {matchLabels: {app: hermes}}
+      ports: [{protocol: TCP, port: 9119}]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: hermes-webui-nginx
+  namespace: agents
+spec:
+  podSelector:
+    matchLabels: {app: hermes-webui-nginx}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: tailscale}}
+      ports:
         - {protocol: TCP, port: 8080}   # ← scoped to nginx's actual listen port
   egress:
     - to:
         - namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}
       ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]
     - to:
-        - podSelector: {matchLabels: {app: hermes}}   # ← was vm.kubevirt.io/name: hermes
-      ports: [{protocol: TCP, port: 9119}]
+        - podSelector: {matchLabels: {app: hermes}}
+      ports: [{protocol: TCP, port: 8787}]
