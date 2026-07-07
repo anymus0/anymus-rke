@@ -29,6 +29,7 @@ spec:
       labels:
         app: hermes-webui
     spec:
+      enableServiceLinks: false
       securityContext:
         fsGroup: 1024        # matches hermeswebui GID baked into the image
       containers:
