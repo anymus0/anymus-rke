@@ -33,7 +33,7 @@ spec:
         fsGroup: 1024        # matches hermeswebui GID baked into the image
       containers:
         - name: hermes-webui
-          image: ghcr.io/nesquena/hermes-webui:v0.51.374
+          image: ghcr.io/nesquena/hermes-webui:0.51.919
           securityContext:
             allowPrivilegeEscalation: true   # required: docker_init.bash uses sudo
           ports:
