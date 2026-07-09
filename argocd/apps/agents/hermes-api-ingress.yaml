@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hermes-api
+  namespace: agents
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    tailscale.com/proxy-group: ingress-proxies
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: hermes
+      port:
+        number: 8642
+  tls:
+    - hosts:
+        - hermes-api
