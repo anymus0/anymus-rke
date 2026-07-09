@@ -13,7 +13,7 @@ spec:
     service:
       name: hermes
       port:
-        number: 8642
+        number: 9119
   tls:
     - hosts:
         - hermes-api
