@@ -31,14 +31,6 @@ spec:
       ports:
       - protocol: TCP
         port: 8642
-    # Dashboard from the nginx reverse proxy (same namespace)
-    - from:
-      - podSelector:
-          matchLabels:
-            app: hermes-dashboard-nginx
-      ports:
-      - protocol: TCP
-        port: 9119
     # WebUI from the nginx reverse proxy (same namespace)
     - from:
       - podSelector:
