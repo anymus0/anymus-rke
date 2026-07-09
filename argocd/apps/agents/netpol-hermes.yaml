@@ -47,6 +47,14 @@ spec:
       ports:
       - protocol: TCP
         port: 8787
+# OpenAI-compatible API from the Tailscale ingress proxy
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: tailscale
+      ports:
+      - protocol: TCP
+        port: 8642
 
   egress:
   - to:
