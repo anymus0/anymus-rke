@@ -36,9 +36,6 @@ spec:
             serial: hermesdata          # → /dev/disk/by-id/virtio-hermesdata
             disk:
               bus: virtio
-          interfaces:
-          - name: default
-            masquerade: {}   # NAT through pod network; no macvlan needed
         machine:
           type: q35
       nodeSelector:
