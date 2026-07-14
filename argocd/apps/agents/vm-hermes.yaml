@@ -32,6 +32,10 @@ spec:
           - name: cloudinit
             disk:
               bus: virtio
+          - name: hermes-data
+            serial: hermesdata          # → /dev/disk/by-id/virtio-hermesdata
+            disk:
+              bus: virtio
           interfaces:
           - name: default
             masquerade: {}   # NAT through pod network; no macvlan needed
@@ -43,13 +47,16 @@ spec:
       - name: default
         pod: {}
       volumes:
-      - name: rootdisk
-        dataVolume:
-          name: hermes-root
-      - name: cloudinit
-        cloudInitNoCloud:
-          secretRef:
-            name: hermes-cloudinit   # references the cloud-init SealedSecret
+        - name: rootdisk
+          dataVolume:
+            name: hermes-root
+        - name: cloudinit
+          cloudInitNoCloud:
+            secretRef:
+              name: hermes-cloudinit   # references the cloud-init SealedSecret
+        - name: hermes-data
+          persistentVolumeClaim:
+            claimName: hermes-session-data
 
   dataVolumeTemplates:
   - metadata:
@@ -61,8 +68,33 @@ spec:
         accessModes: [ReadWriteOnce]
         resources:
           requests:
-            storage: 40Gi
+            storage: 20Gi
       source:
         http:
           url: https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img
           # CDI will import this image into the Longhorn block PVC
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hermes-session-data
+  namespace: agents
+  labels:
+    recurring-job.longhorn.io/source: enabled                 # sync PVC labels → Volume
+    recurring-job-group.longhorn.io/hermes-snap: enabled      # assign to group
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: longhorn
+  resources: { requests: { storage: 15Gi } }
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: hermes-session-snap
+  namespace: longhorn-system
+spec:
+  task: snapshot
+  cron: "0 */6 * * *"
+  retain: 4
+  concurrency: 1
+  groups: [hermes-snap]
