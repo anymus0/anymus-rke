@@ -10,6 +10,7 @@ spec:
   template:
     metadata: { labels: { app: searxng } }
     spec:
+      enableServiceLinks: false
       initContainers:
         - name: render-settings
           image: busybox:1.37
@@ -26,13 +27,14 @@ spec:
             - { name: settings-rendered, mountPath: /etc/searxng }
       containers:
         - name: searxng
-          image: searxng/searxng:latest      # pin to a dated tag
+          image: searxng/searxng:2026.7.17-81c9c2386
           ports: [{ containerPort: 8080 }]
           env:
             - name: SEARXNG_BASE_URL
               value: "https://searxng.icefish-pickerel.ts.net/"
           volumeMounts:
-            - { name: settings-rendered, mountPath: /etc/searxng, readOnly: true }
+            - name: settings-rendered
+              mountPath: /etc/searxng
           resources:
             requests: { cpu: 50m, memory: 128Mi }
             limits:   { cpu: 500m, memory: 512Mi }
