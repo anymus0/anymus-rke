@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crw
+  namespace: crawl
+  labels: { app: crw }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: crw } }
+  template:
+    metadata: { labels: { app: crw } }
+    spec:
+      containers:
+        - name: crw
+          image: ghcr.io/us/crw:v0.18.3
+          ports: [{ containerPort: 3000 }]
+          env:
+            - name: CRW_SERVER__HOST
+              value: "0.0.0.0"
+            - name: CRW_SERVER__PORT
+              value: "3000"
+            - name: CRW_API_KEY
+              valueFrom:
+                secretKeyRef: { name: crw-auth, key: CRW_API_KEY }
+            # renderer.mode defaults to auto (bundled browser).
+            # To slim RAM at the cost of JS rendering: set CRW_RENDERER__MODE=none
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits:   { cpu: "2",  memory: 2Gi }     # headroom for browser render spikes
+          readinessProbe:
+            httpGet: { path: /health, port: 3000 }   # /health needs no auth
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet: { path: /health, port: 3000 }
+            initialDelaySeconds: 15
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - { name: dshm, mountPath: /dev/shm }
+      volumes:
+        - name: dshm
+          emptyDir: { medium: Memory, sizeLimit: 512Mi }   # Chromium crashes on the default 64Mi /dev/shm

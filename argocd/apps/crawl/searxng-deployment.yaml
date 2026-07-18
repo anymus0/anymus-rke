@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: searxng
+  namespace: crawl
+  labels: { app: searxng }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: searxng } }
+  template:
+    metadata: { labels: { app: searxng } }
+    spec:
+      initContainers:
+        - name: render-settings
+          image: busybox:1.37
+          command:
+            - sh
+            - -c
+            - sed "s|__SEARXNG_SECRET__|${SEARXNG_SECRET}|" /tmp/cm/settings.yml > /etc/searxng/settings.yml
+          env:
+            - name: SEARXNG_SECRET
+              valueFrom:
+                secretKeyRef: { name: searxng-auth, key: SEARXNG_SECRET }
+          volumeMounts:
+            - { name: settings-src, mountPath: /tmp/cm, readOnly: true }
+            - { name: settings-rendered, mountPath: /etc/searxng }
+      containers:
+        - name: searxng
+          image: searxng/searxng:latest      # pin to a dated tag
+          ports: [{ containerPort: 8080 }]
+          env:
+            - name: SEARXNG_BASE_URL
+              value: "https://searxng.icefish-pickerel.ts.net/"
+          volumeMounts:
+            - { name: settings-rendered, mountPath: /etc/searxng, readOnly: true }
+          resources:
+            requests: { cpu: 50m, memory: 128Mi }
+            limits:   { cpu: 500m, memory: 512Mi }
+          readinessProbe:
+            httpGet: { path: /, port: 8080 }
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet: { path: /, port: 8080 }
+            initialDelaySeconds: 20
+      volumes:
+        - name: settings-src
+          configMap: { name: searxng-settings }
+        - name: settings-rendered
+          emptyDir: {}
