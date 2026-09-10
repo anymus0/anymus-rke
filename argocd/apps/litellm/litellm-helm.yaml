@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: ghcr.io/berriai            # OCI registry + org (no oci:// prefix on recent ArgoCD)
     chart: litellm-helm
-    targetRevision: "1.90.3"            # latest: helm show chart oci://ghcr.io/berriai/litellm-helm
+    targetRevision: "1.100.1"            # latest: helm show chart oci://ghcr.io/berriai/litellm-helm
     helm:
       releaseName: litellm
       valuesObject:
