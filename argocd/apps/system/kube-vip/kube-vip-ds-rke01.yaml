@@ -29,7 +29,7 @@ spec:
               - key: network-interface
                 operator: In
                 values:
-                - enp8s0
+                - enp7s0
             - matchExpressions:
               - key: node-role.kubernetes.io/control-plane
                 operator: Exists
