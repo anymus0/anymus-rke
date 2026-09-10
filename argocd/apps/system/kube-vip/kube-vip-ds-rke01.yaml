@@ -36,7 +36,7 @@ spec:
               - key: network-interface
                 operator: In
                 values:
-                - enp8s0
+                - enp7s0
       containers:
       - args:
         - manager
