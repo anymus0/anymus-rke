@@ -29,14 +29,14 @@ spec:
               - key: network-interface
                 operator: In
                 values:
-                - enp16s0
+                - enp42s0
             - matchExpressions:
               - key: node-role.kubernetes.io/control-plane
                 operator: Exists
               - key: network-interface
                 operator: In
                 values:
-                - enp16s0
+                - enp42s0
       containers:
       - args:
         - manager
