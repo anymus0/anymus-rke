@@ -13,9 +13,9 @@ spec:
       prune: true
       selfHeal: true
   source:
-    chart: jellyfin
-    repoURL: https://jellyfin.github.io/jellyfin-helm
-    targetRevision: 3.2.0
+    path: charts/jellyfin
+    repoURL: https://github.com/jellyfin/jellyfin-helm.git
+    targetRevision: 1bf4aa842ddf0b2dba8403aa72532b543f42489c
     helm:
       releaseName: jellyfin
       valuesObject:
