@@ -15,7 +15,7 @@ spec:
   source:
     path: charts/argo-cd
     repoURL: https://github.com/argoproj/argo-helm.git
-    targetRevision: 2c6b07c7fbe7c11651fa8dd76cd4119b665d2b4e
+    targetRevision: 45e454310013b928e4abd49a09ccd407d54eb5d7
     helm:
       releaseName: argocd
       valuesObject:
