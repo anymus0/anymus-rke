@@ -9,9 +9,9 @@ spec:
     server: "https://kubernetes.default.svc"
     namespace: cloud
   source:
-    repoURL: ghcr.io/immich-app/immich-charts
-    targetRevision: 0.10.0
-    chart: immich
+    repoURL: https://github.com/immich-app/immich-charts.git
+    targetRevision: 4cde6937cd2fc12458bb1d8f014888f20b3fc193
+    path: charts/immich
     helm:
       releaseName: immich
       valuesObject:
@@ -19,8 +19,8 @@ spec:
           main:
             containers:
               main:
-                image:
-                  tag: commit-2b27e6183d55cc2aace1e305dd698e3b36bb5688
+                # image:
+                #   tag: commit-2b27e6183d55cc2aace1e305dd698e3b36bb5688
                 env:
                   DB_HOSTNAME:
                     valueFrom:
