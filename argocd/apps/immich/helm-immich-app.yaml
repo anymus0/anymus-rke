@@ -19,8 +19,8 @@ spec:
           main:
             containers:
               main:
-                # image:
-                #   tag: commit-2b27e6183d55cc2aace1e305dd698e3b36bb5688
+                image:
+                  tag: v3.2.2
                 env:
                   DB_HOSTNAME:
                     valueFrom:
