@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: crw
-          image: ghcr.io/us/crw:0.25.2
+          image: ghcr.io/us/crw:0.35.1
           ports: [{ containerPort: 3000 }]
           env:
             - name: CRW_SERVER__HOST
