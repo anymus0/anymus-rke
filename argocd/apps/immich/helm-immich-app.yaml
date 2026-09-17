@@ -42,15 +42,12 @@ spec:
                       secretKeyRef:
                         name: immich-postgresql-creds
                         key: dbname
-        externalLib:
-          pvcName: "nextcloud-nextcloud-data"
         immich:
           metrics:
             enabled: true
           persistence:
             library:
               existingClaim: immich-default-vol
-              readOnly: true
         server:
           ingress:
             main:
