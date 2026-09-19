@@ -69,6 +69,21 @@ spec:
               keyName: username
             - name: hermes-config-github-jenkins-creds
               keyName: password
+            # ── Hermes pipeline runtime secrets ──
+            - name: hermes-jenkins-creds
+              keyName: herm-ssh-key
+            - name: hermes-jenkins-creds
+              keyName: api-server-key
+            - name: hermes-jenkins-creds
+              keyName: llm-api-key
+            - name: hermes-jenkins-creds
+              keyName: firecrawl-api-key
+            - name: hermes-jenkins-creds
+              keyName: litellm-virtual-key
+            - name: hermes-jenkins-creds
+              keyName: dashboard-pw-hash
+            - name: hermes-jenkins-creds
+              keyName: dashboard-secret
 
           ingress:
             enabled: false
@@ -122,6 +137,48 @@ spec:
                               scope: GLOBAL
                               username: "${hermes-config-github-jenkins-creds-username}"
                               password: "${hermes-config-github-jenkins-creds-password}"
+
+                          # ── Hermes VM SSH ──
+                          - basicSSHUserPrivateKey:
+                              id: "HERMES_HERM_SSH"
+                              description: "SSH key for herm@hermes VM"
+                              scope: GLOBAL
+                              username: "herm"
+                              privateKeySource:
+                                directEntry:
+                                  privateKey: "${hermes-jenkins-creds-herm-ssh-key}"
+
+                          # ── Hermes runtime secrets ──
+                          - string:
+                              id: "HERMES_API_SERVER_KEY"
+                              description: "Hermes API server bearer key"
+                              scope: GLOBAL
+                              secret: "${hermes-jenkins-creds-api-server-key}"
+                          - string:
+                              id: "HERMES_LLM_API_KEY"
+                              description: "OPENAI_API_KEY for local LM Studio endpoint"
+                              scope: GLOBAL
+                              secret: "${hermes-jenkins-creds-llm-api-key}"
+                          - string:
+                              id: "HERMES_FIRECRAWL_API_KEY"
+                              description: "crw / Firecrawl-compatible API key"
+                              scope: GLOBAL
+                              secret: "${hermes-jenkins-creds-firecrawl-api-key}"
+                          - string:
+                              id: "HERMES_LITELLM_VIRTUAL_KEY"
+                              description: "LiteLLM scoped virtual key for Hermes"
+                              scope: GLOBAL
+                              secret: "${hermes-jenkins-creds-litellm-virtual-key}"
+                          - string:
+                              id: "HERMES_DASHBOARD_PW_HASH"
+                              description: "Hermes dashboard basic-auth bcrypt hash"
+                              scope: GLOBAL
+                              secret: "${hermes-jenkins-creds-dashboard-pw-hash}"
+                          - string:
+                              id: "HERMES_DASHBOARD_SECRET"
+                              description: "Hermes dashboard basic-auth session secret"
+                              scope: GLOBAL
+                              secret: "${hermes-jenkins-creds-dashboard-secret}"
 
               # -------------------------------------------------------
               # OPENCLAW-DEPLOY multibranch pipeline job
