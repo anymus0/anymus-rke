@@ -15,7 +15,7 @@ spec:
   source:
     path: charts/cluster
     repoURL: https://github.com/cloudnative-pg/charts.git
-    targetRevision: 6014e4d5ad35e866df6312027c73c8fea71a341e
+    targetRevision: 7aa517a05e50cff8df5bfa849e9dc18322dab240
     helm:
       releaseName: litellm-cnpg-cluster
       valuesObject:
