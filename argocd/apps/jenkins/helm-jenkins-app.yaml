@@ -17,7 +17,7 @@ spec:
   source:
     path: charts/jenkins
     repoURL: https://github.com/jenkinsci/helm-charts.git
-    targetRevision: d4e9f4a89d005d9158e9d33b831d11c5fda6f8b2
+    targetRevision: bcddfb71addaf3c0cd865fc7491fbc1df2c7c9f1
     helm:
       releaseName: jenkins
       valuesObject:
