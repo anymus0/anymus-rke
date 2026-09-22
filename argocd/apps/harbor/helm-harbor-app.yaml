@@ -21,7 +21,7 @@ spec:
     helm:
       releaseName: harbor
       valuesObject:
-        externalURL: http://harbor.harbor.svc.cluster.local
+        externalURL: https://harbor.icefish-pickerel.ts.net
 
         expose:
           type: clusterIP
