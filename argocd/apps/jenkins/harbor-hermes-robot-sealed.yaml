@@ -1,0 +1,18 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+  name: harbor-hermes-robot
+  namespace: jenkins
+spec:
+  encryptedData:
+    password: AgDIOveECfLLRqCAqSefDSG3ddSIvB7JSMg6KH5pdfr/jp3iaiqigyrvebIPefZaWRjkAV5OCPCw1LIXxljZo9Egcscjw6vYv+EweJKXUxoc6NP1eDLJXchCcniHLtYGCokqz4jqqATcdKSYrTjRI2SBuROPgkSyUeAu67zWyM4zmkjgL5KJ0dVG7E/VSJAiPdTB2LMMcv4zGWkRqY8x5OXbYAr9OjWk3zTpc4jOidVsaTHfKmBnO0+jcU2yNYCQ+Mzp1eSZCBsiTKX8GsYrtxThlzzYiCpYfauzBi3j5hI++/gR6Qu0/QXBgTTD6+SK/Fn/+UqAkJCLAmfetcKwJn4jHo7AwHVMPMAcw6b3VPaorQRn2PwnnppurEv/DP4+vv4mMteUDXRaRNfO44Vh1yuiKpy0SLDpS+KglMprmO4PCBJty3V0yxsm6jypEZn4Vx612FzjxD3lq09sSc7NY1n1rQ0cJm2fj4w657Hll2uM3xQTD3aZp7jCbJ7+cMn5AGt7VZ3VpGT4bkxVuZbDBXV8Y+LX6FyyY5FMvirq+HtoIpEfSlzdvg29qXKA4tlALIou27EX1vLvQmrEoD+lbYvZPJQgHjRZJ8PX7RE/w0Tn90to/YIqJ1D4+v4FXYA+XX0LVidyHr5jBAx1ZdWrKG92yoncDDBim80V3uNIWRjB0HhHzfypbn9joCJKfXvjr2NbQelegIf3ZH/Ffwa5oDA9fjVzOQw/s+5Srckua6TniQ==
+    username: AgABtYx93S3utzeuBRb8YyFpMROHhDzrKCyVPISGtdR/dODfn3L0TnSvrZpoymKk9/uJms3PpgI/LhfL8bRuTly2YINUwspLmgINL2PutzM6E7H0Nq1DRx9+n/FeYr/n+n7IkbZ0oNwjAcWpGBf717H5IkIxVeUXkXOwPuSC/kGl5xwSJHDc6/SPuGM9vxCt4VU8E+DdSokUyk7Q0I2JOd4YsshsURL64yOan9SgSvaj/UMQX1g8xSiUaovMfrpjUS2012+10DTuRQkqPMGAGSEOrtjObklt8kRZgQ7m7YnIMqEadpDDr82SU/c4/ZBS6qrh1ekiTbC/sOyCVP2BgM1bSf8LRSAgkmc50Tz0NvgJRG8NSxEENjWIpHorzAeeOHCliW7T4ITTvL84whoOG69CUpPM/QMa9UyK2iCX6aUyPT3dobUmuEwT9kXFxyIBTMb5v0by61PFQoxl0fwY+kxHV0d8UaVSwuZCHzhLJSJZ7d5m7Ej0bqoFHXJNwH1qm5xcZEtVXtajU9qC9O0kqzmMx78Hu85VWcCmxmqLxGvMl8WYn+wMSkpiwoon7+LTlIcX6vttMorb8UfiMmGlITYtH+XdRpeiZJZkFfLG9TsZfIUcSrwix1jSOB6sE3/SoUarIl6yJ9r0VlAuv+Tjk0/E+RnvARn3V08Kn5G8OQFihZuW+Q+h0NEfJsibpOSvwgQ0G7FBRzOAUydkM+3WP2aNhc97
+  template:
+    metadata:
+      creationTimestamp: null
+      name: harbor-hermes-robot
+      namespace: jenkins
