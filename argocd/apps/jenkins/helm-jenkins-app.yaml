@@ -145,10 +145,10 @@ spec:
 
                           - usernamePassword:
                               id: "harbor-robot-hermes"
-                              description: "Harbor robot, push to project hermes"
+                              description: "Harbor robot (hermes project, push+pull)"
                               scope: GLOBAL
-                              username: "${harbor-robot-hermes-username}"
-                              password: "${harbor-robot-hermes-password}"
+                              username: "${harbor-hermes-robot-username}"
+                              password: "${harbor-hermes-robot-password}"
 
                           # ── Hermes VM SSH ──
                           - basicSSHUserPrivateKey:
