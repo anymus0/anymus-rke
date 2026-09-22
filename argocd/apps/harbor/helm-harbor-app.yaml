@@ -21,7 +21,7 @@ spec:
     helm:
       releaseName: harbor
       valuesObject:
-        externalURL: https://harbor.anymus.pro
+        externalURL: http://harbor.harbor.svc.cluster.local
 
         expose:
           type: clusterIP
