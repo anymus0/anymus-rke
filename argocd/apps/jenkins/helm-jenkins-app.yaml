@@ -69,6 +69,11 @@ spec:
               keyName: username
             - name: hermes-config-github-jenkins-creds
               keyName: password
+            # hermes harbor
+            - name: harbor-hermes-robot
+              keyName: username
+            - name: harbor-hermes-robot
+              keyName: password
             # ── Hermes pipeline runtime secrets ──
             - name: hermes-jenkins-creds
               keyName: herm-ssh-key
@@ -137,6 +142,13 @@ spec:
                               scope: GLOBAL
                               username: "${hermes-config-github-jenkins-creds-username}"
                               password: "${hermes-config-github-jenkins-creds-password}"
+
+                          - usernamePassword:
+                              id: "harbor-robot-hermes"
+                              description: "Harbor robot, push to project hermes"
+                              scope: GLOBAL
+                              username: "${harbor-robot-hermes-username}"
+                              password: "${harbor-robot-hermes-password}"
 
                           # ── Hermes VM SSH ──
                           - basicSSHUserPrivateKey:
@@ -217,6 +229,27 @@ spec:
                                   credentials('hermes-config-github-jenkins-creds')
                                 }
                                 branches('*/main')
+                              }
+                            }
+                            scriptPath('jenkins/Jenkinsfile')
+                            lightweight(true)
+                          }
+                        }
+                        triggers {
+                          githubPush()
+                        }
+                      }
+                  - script: |
+                      pipelineJob('HERMES-CI') {
+                        definition {
+                          cpsScm {
+                            scm {
+                              git {
+                                remote {
+                                  url('https://github.com/anymus0/hermes-config.git')
+                                  credentials('hermes-config-github-jenkins-creds')
+                                }
+                                branches('*/k8s')
                               }
                             }
                             scriptPath('jenkins/Jenkinsfile')
