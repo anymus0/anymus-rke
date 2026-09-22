@@ -1,0 +1,35 @@
+# Hermes on Kubernetes (replaces the KubeVirt VM in ns agents).
+# Chart: unofficial ultraworkers chart, pinned commit, direct mode.
+# Values + extra manifests: hermes-config repo (private).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hermes-k8s
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hermes
+  sources:
+    - repoURL: https://github.com/ultraworkers/hermes-agent-helm-chart.git
+      targetRevision: e3b685d4d0288668a37216435742cd0a659ebc6c
+      path: .
+      helm:
+        releaseName: hermes          # selector label instance=hermes (services.yaml depends on it)
+        skipCrds: true               # chart ships a HermesTenant CRD, not needed in direct mode
+        valueFiles:
+          - $cfg/deploy/values.yaml
+    - repoURL: https://github.com/anymus0/hermes-config.git
+      targetRevision: k8s
+      ref: cfg
+    - repoURL: https://github.com/anymus0/hermes-config.git
+      targetRevision: k8s
+      path: deploy/manifests
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
