@@ -21,12 +21,20 @@ spec:
     helm:
       releaseName: harbor
       valuesObject:
-        externalURL: https://harbor.icefish-pickerel.ts.net
+        externalURL: https://harbor.anymus.pro
 
+        # Expose Harbor via Ingress
         expose:
-          type: clusterIP
+          type: ingress
           tls:
             enabled: false
+          ingress:
+            hosts:
+              core: harbor.anymus.pro
+            className: "nginx"
+            annotations:
+              nginx.ingress.kubernetes.io/proxy-body-size: "0"
+              nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
 
         # HA Configuration - Enable multiple replicas for stateless components
         portal:
