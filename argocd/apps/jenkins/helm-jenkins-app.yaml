@@ -249,7 +249,7 @@ spec:
                                   url('https://github.com/anymus0/hermes-config.git')
                                   credentials('hermes-config-github-jenkins-creds')
                                 }
-                                branches('*/k8s')
+                                branches('*/main')
                               }
                             }
                             scriptPath('jenkins/Jenkinsfile')
