@@ -8,6 +8,7 @@ data:
     use_default_settings:
       engines:
         keep_only:
+          - braveapi
           - bing
           - yahoo
           - google cse
@@ -44,7 +45,12 @@ data:
         disabled: false
       - name: mojeek
         disabled: false
+      # Brave Search API (paid, ~1000 req/month covered by free credit).
+      # Scraper engine "brave" intentionally not in keep_only.
       - name: braveapi
         engine: braveapi
+        shortcut: bra
         api_key: "__BRAVE_API_KEY__"   # substituted at runtime from searxng-auth
+        results_per_page: 20
+        inactive: false                # API-key engines default to inactive: true
         disabled: false
