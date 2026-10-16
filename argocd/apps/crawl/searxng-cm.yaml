@@ -5,7 +5,15 @@ metadata:
   namespace: crawl
 data:
   settings.yml: |
-    use_default_settings: true
+    use_default_settings:
+      engines:
+        keep_only:
+          - bing
+          - yahoo
+          - google cse
+          - startpage
+          - mojeek
+          - wikipedia
     general:
       instance_name: "hermes-searxng"
       debug: false
@@ -16,6 +24,9 @@ data:
       limiter: false
       public_instance: false
       image_proxy: false
+    outgoing:
+      request_timeout: 4.0       # default 2.0, too tight
+      max_request_timeout: 8.0
     search:
       safe_search: 0
       formats:
@@ -23,3 +34,13 @@ data:
         - json
     ui:
       static_use_hash: true
+    engines:
+      # not enabled by default upstream, enable explicitly
+      - name: bing
+        disabled: false
+      - name: yahoo
+        disabled: false
+      - name: startpage
+        disabled: false
+      - name: mojeek
+        disabled: false
