@@ -8,7 +8,12 @@ spec:
   replicas: 1
   selector: { matchLabels: { app: searxng } }
   template:
-    metadata: { labels: { app: searxng } }
+    metadata:
+      labels: { app: searxng }
+      annotations:
+        # ConfigMap/Secret changes do not roll the pod. Bump by hand when
+        # searxng-cm.yaml or searxng-auth changes.
+        crawl/settings-rev: "2"
     spec:
       enableServiceLinks: false
       initContainers:
@@ -17,11 +22,22 @@ spec:
           command:
             - sh
             - -c
-            - sed "s|__SEARXNG_SECRET__|${SEARXNG_SECRET}|" /tmp/cm/settings.yml > /etc/searxng/settings.yml
+            - |
+              set -eu
+              # fail loud on missing keys instead of rendering a broken settings.yml
+              : "${SEARXNG_SECRET:?missing}" "${BRAVE_API_KEY:?missing}"
+              # values must not contain | or & (sed delimiter / replacement token)
+              sed -e "s|__SEARXNG_SECRET__|${SEARXNG_SECRET}|" \
+                  -e "s|__BRAVE_API_KEY__|${BRAVE_API_KEY}|" \
+                  /tmp/cm/settings.yml > /etc/searxng/settings.yml
+              ! grep -q '__[A-Z_]*__' /etc/searxng/settings.yml
           env:
             - name: SEARXNG_SECRET
               valueFrom:
                 secretKeyRef: { name: searxng-auth, key: SEARXNG_SECRET }
+            - name: BRAVE_API_KEY
+              valueFrom:
+                secretKeyRef: { name: searxng-auth, key: BRAVE_API_KEY }
           volumeMounts:
             - { name: settings-src, mountPath: /tmp/cm, readOnly: true }
             - { name: settings-rendered, mountPath: /etc/searxng }
