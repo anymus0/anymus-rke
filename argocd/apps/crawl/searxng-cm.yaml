@@ -44,3 +44,7 @@ data:
         disabled: false
       - name: mojeek
         disabled: false
+      - name: braveapi
+        engine: braveapi
+        api_key: "__BRAVE_API_KEY__"   # substituted at runtime from searxng-auth
+        disabled: false
