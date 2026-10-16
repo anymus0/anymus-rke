@@ -11,6 +11,14 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: tailscale   # the ingress proxy pods
+    # Hermes pod (namespace hermes). Ports are pod ports (post-DNAT), not Service ports.
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: hermes
+      ports:
+        - { protocol: TCP, port: 8080 }   # searxng
+        - { protocol: TCP, port: 3000 }   # crw
   egress:
     - to:
         - namespaceSelector: {}
