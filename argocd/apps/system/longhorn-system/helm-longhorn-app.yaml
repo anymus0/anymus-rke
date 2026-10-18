@@ -36,8 +36,17 @@ spec:
             defaultReplicaCount: "3"
             systemManagedComponentsNodeSelector: "longhorn.io/storage-node:true"
             nodeDrainPolicy: "block-for-eviction-if-contains-last-replica"
-          preUpgradeChecker:
-            jobEnabled: false
+            # fence pods on dead node, frees RWO attachment
+            nodeDownPodDeletionPolicy: "delete-both-statefulset-and-deployment-pod"
+            # heal detached degraded volumes
+            offlineReplicaRebuilding: "true"
+            # move replicas back onto rke03 after it returns
+            replicaAutoBalance: "best-effort"
+            # tolerate short laptop stalls (range 8..30s), cost: longer I/O freeze on real failure
+            engineReplicaTimeout: "15"
+          metrics:
+            serviceMonitor:
+              enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
