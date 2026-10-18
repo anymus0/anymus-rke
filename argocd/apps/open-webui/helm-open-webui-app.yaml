@@ -1,37 +1,37 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: open-webui
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/open-webui/helm-charts.git
-    path: charts/open-webui
-    targetRevision: ef46de2748cb75307d7f897e58f83fdacdae9dd7
-    helm:
-      valuesObject:
-        ollama:
-          enabled: false
-        ingress:
-          enabled: false
-        resources:
-          requests:
-            memory: 4Gi
-            cpu: 2
-          limits:
-            memory: 4Gi
-        extraEnvVars:
-          - name: ENABLE_API_KEYS
-            value: "true"
-          - name: WEBUI_AUTH
-            value: "true"
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: open-web-ui
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: open-webui
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://github.com/open-webui/helm-charts.git
+#     path: charts/open-webui
+#     targetRevision: ef46de2748cb75307d7f897e58f83fdacdae9dd7
+#     helm:
+#       valuesObject:
+#         ollama:
+#           enabled: false
+#         ingress:
+#           enabled: false
+#         resources:
+#           requests:
+#             memory: 4Gi
+#             cpu: 2
+#           limits:
+#             memory: 4Gi
+#         extraEnvVars:
+#           - name: ENABLE_API_KEYS
+#             value: "true"
+#           - name: WEBUI_AUTH
+#             value: "true"
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: open-web-ui
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
