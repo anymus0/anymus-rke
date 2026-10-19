@@ -12,9 +12,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: hermes
   sources:
-    - repoURL: https://github.com/ultraworkers/hermes-agent-helm-chart.git
+    - repoURL: https://github.com/anymus0/hermes-agent-helm-chart.git
       # Keep in lockstep with CHART_REF in hermes-config jenkins/Jenkinsfile
-      targetRevision: e3b685d4d0288668a37216435742cd0a659ebc6c
+      targetRevision: f3aa0c0efc996ad7774a4bf4c9099a2752861228
       path: .
       helm:
         releaseName: hermes          # selector label instance=hermes (services.yaml depends on it)
