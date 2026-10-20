@@ -1,38 +1,19 @@
-# apiVersion: helm.cattle.io/v1
-# kind: HelmChartConfig
-# metadata:
-#   name: rke2-canal-enp16s0
-#   namespace: kube-system
-# spec:
-#   valuesContent: |-
-#     flannel:
-#       iface: "enp16s0"
-#       backend: "wireguard"
-#     nodeSelector:
-#       network-interface: "enp16s0"
-# ---
-# apiVersion: helm.cattle.io/v1
-# kind: HelmChartConfig
-# metadata:
-#   name: rke2-canal-br0
-#   namespace: kube-system
-# spec:
-#   valuesContent: |-
-#     flannel:
-#       iface: "br0"
-#       backend: "wireguard"
-#     nodeSelector:
-#       network-interface: "br0"
-# ---
-# apiVersion: helm.cattle.io/v1
-# kind: HelmChartConfig
-# metadata:
-#   name: rke2-canal-br0
-#   namespace: kube-system
-# spec:
-#   valuesContent: |-
-#     flannel:
-#       iface: "enp8s0"
-#       backend: "wireguard"
-#     nodeSelector:
-#       network-interface: "enp8s0"
+# Cluster-wide. Apply BEFORE the GCP node joins.
+# Goal: flannel picks the physical NIC on LAN servers and tailscale0 on the GCP
+# node (whose ens4 must NOT match). flannel walks interfaces in kernel index
+# order and takes the first regex match; the physical NIC always has a lower
+# index than tailscale0, so LAN servers keep their current interface.
+#
+# Replace enp1s0 with the real LAN NIC name(s) from `ip -o link` on rke01/rke02.
+# If you already manage a rke2-canal HelmChartConfig (ArgoCD or
+# /var/lib/rancher/rke2/server/manifests), merge into it instead.
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-canal
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    flannel:
+      iface: ""
+      regexIface: "^(enp1s0|tailscale0)$"
