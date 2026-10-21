@@ -23,7 +23,7 @@ spec:
           # -- Container image repository for Jellyfin.
           repository: docker.io/jellyfin/jellyfin
           # -- Jellyfin container image tag. Leave empty to automatically use the Chart's app version.
-          tag: "12"
+          tag: "12.2"
           # -- Image pull policy (Always, IfNotPresent, or Never).
           pullPolicy: IfNotPresent
         persistence:
@@ -37,6 +37,11 @@ spec:
             nfs:
               server: "192.168.0.212"
               path: "/"
+          - name: torrent-downloads
+            persistentVolumeClaim:
+              claimName: torrent-downloads
         volumeMounts:
           - name: external-media
             mountPath: "/externalmedia"
+          - name: torrent-downloads
+            mountPath: "/torrents"
