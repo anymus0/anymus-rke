@@ -10,7 +10,7 @@ spec:
     namespace: cloud
   source:
     repoURL: https://github.com/immich-app/immich-charts.git
-    targetRevision: 4cde6937cd2fc12458bb1d8f014888f20b3fc193
+    targetRevision: 574bafe27c21d5314f8b5256933595e5d3c0494c
     path: charts/immich
     helm:
       releaseName: immich
@@ -20,7 +20,7 @@ spec:
             containers:
               main:
                 image:
-                  tag: v3.2.2
+                  tag: v3.3.5
                 env:
                   DB_HOSTNAME:
                     valueFrom:
