@@ -36,6 +36,10 @@ spec:
           autoscaling:
             enabled: true
             minReplicas: 1
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
           metrics:
             enabled: true
             serviceMonitor:
@@ -50,6 +54,10 @@ spec:
           autoscaling:
             enabled: true
             minReplicas: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
         applicationSet:
           livenessProbe:
             enabled: true
