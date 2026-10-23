@@ -43,7 +43,7 @@ spec:
             - { name: settings-rendered, mountPath: /etc/searxng }
       containers:
         - name: searxng
-          image: searxng/searxng:2026.10.16-8252c0bf6
+          image: searxng/searxng:2026.10.19-81371861f
           ports: [{ containerPort: 8080 }]
           env:
             - name: SEARXNG_BASE_URL
