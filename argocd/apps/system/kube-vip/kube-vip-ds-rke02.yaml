@@ -2,7 +2,6 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  creationTimestamp: null
   labels:
     app.kubernetes.io/name: kube-vip-ds-rke02
     app.kubernetes.io/version: v1.1.1
@@ -14,7 +13,6 @@ spec:
       app.kubernetes.io/name: kube-vip-ds-rke02
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app.kubernetes.io/name: kube-vip-ds-rke02
         app.kubernetes.io/version: v1.1.1
@@ -59,15 +57,20 @@ spec:
         - name: vip_leasename
           value: plndr-cp-lock
         - name: vip_leaseduration
-          value: "5"
+          value: "15"
         - name: vip_renewdeadline
-          value: "3"
+          value: "10"
         - name: vip_retryperiod
-          value: "1"
+          value: "2"
         - name: address
           value: 192.168.0.230
         - name: prometheus_server
           value: :2112
+        # talk to node-local apiserver, bypass kube-proxy and the other node
+        - name: KUBERNETES_SERVICE_HOST
+          value: "127.0.0.1"
+        - name: KUBERNETES_SERVICE_PORT
+          value: "6443"
         image: ghcr.io/kube-vip/kube-vip:v1.1.1
         imagePullPolicy: IfNotPresent
         name: kube-vip
@@ -79,6 +82,7 @@ spec:
             - NET_RAW
             drop:
             - ALL
+      dnsPolicy: ClusterFirstWithHostNet
       hostNetwork: true
       serviceAccountName: kube-vip
       tolerations:
