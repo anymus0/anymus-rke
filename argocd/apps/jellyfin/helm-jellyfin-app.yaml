@@ -37,11 +37,6 @@ spec:
             nfs:
               server: "192.168.0.212"
               path: "/"
-          - name: torrent-downloads
-            persistentVolumeClaim:
-              claimName: torrent-downloads
         volumeMounts:
           - name: external-media
             mountPath: "/externalmedia"
-          - name: torrent-downloads
-            mountPath: "/torrents"
