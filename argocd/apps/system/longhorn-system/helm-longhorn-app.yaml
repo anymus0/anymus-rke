@@ -31,9 +31,9 @@ spec:
             nodeSelector:
               longhorn.io/storage-node: "true"
           persistence:
-            defaultClassReplicaCount: 2
+            defaultClassReplicaCount: 3
           defaultSettings:
-            defaultReplicaCount: '{"v1":"2","v2":"2"}'
+            defaultReplicaCount: '{"v1":"3","v2":"3"}'
             systemManagedComponentsNodeSelector: "longhorn.io/storage-node:true"
             nodeDrainPolicy: "block-for-eviction-if-contains-last-replica"
             # fence pods on dead node, frees RWO attachment
