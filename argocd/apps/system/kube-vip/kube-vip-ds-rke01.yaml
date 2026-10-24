@@ -4,7 +4,7 @@ kind: DaemonSet
 metadata:
   labels:
     app.kubernetes.io/name: kube-vip-ds-rke01
-    app.kubernetes.io/version: v1.1.1
+    app.kubernetes.io/version: v1.3.1
   name: kube-vip-ds-rke01
   namespace: kube-system
 spec:
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: kube-vip-ds-rke01
-        app.kubernetes.io/version: v1.1.1
+        app.kubernetes.io/version: v1.3.1
     spec:
       affinity:
         nodeAffinity:
@@ -71,7 +71,7 @@ spec:
           value: "127.0.0.1"
         - name: KUBERNETES_SERVICE_PORT
           value: "6443"
-        image: ghcr.io/kube-vip/kube-vip:v1.1.1
+        image: ghcr.io/kube-vip/kube-vip:v1.3.1
         imagePullPolicy: IfNotPresent
         name: kube-vip
         resources: {}
