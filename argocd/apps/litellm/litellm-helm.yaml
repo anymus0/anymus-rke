@@ -1,0 +1,71 @@
+# LiteLLM proxy, stateless: no CNPG Postgres, no Redis, no database.
+# Chart: oci://ghcr.io/berriai/litellm-helm — chart version carries the LiteLLM
+# release number (image tag defaults to it: ghcr.io/berriai/litellm:1.106.4).
+#
+# Without a database: no virtual keys, no spend tracking, no UI persistence —
+# auth is the master key alone, model config lives in this valuesObject.
+# Secrets (sealed, see litellm-*-sealed-secret.yaml in this dir once sealed):
+#   litellm-masterkey    key: masterkey   -> PROXY_MASTER_KEY
+#   litellm-provider-keys key: ZAI_API_KEY -> z.ai API key
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: litellm
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: oci://ghcr.io/berriai/litellm-helm
+    targetRevision: "1.106.4"
+    chart: litellm-helm
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: litellm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  helm:
+    releaseName: litellm
+    valuesObject:
+      # --- secrets (existing, sealed) ---
+      masterkeySecretName: litellm-masterkey
+      masterkeySecretKey: masterkey
+      environmentSecrets:
+        - litellm-provider-keys
+      # --- stateless: no database, no redis, no migrations ---
+      db:
+        deployStandalone: false
+        useExisting: false
+      migrationJob:
+        enabled: false
+      redis:
+        enabled: false
+      # --- proxy config (rendered into configmap litellm-config, config.yaml) ---
+      proxyConfigMap:
+        create: true
+      proxy_config:
+        general_settings:
+          master_key: os.environ/PROXY_MASTER_KEY
+          disable_master_key_return: true
+        model_list:
+          # z.ai GLM-5.3 (z.ai flagship, 1M context, reasoning always on).
+          # If the API key is for the CN endpoint (bigmodel.cn) instead of the
+          # international one, change api_base to https://open.bigmodel.cn/api/paas/v4.
+          - model_name: glm-5.3
+            litellm_params:
+              model: zai/glm-5.3
+              api_key: os.environ/ZAI_API_KEY
+              api_base: https://api.z.ai/api/paas/v4
+            model_info:
+              max_input_tokens: 1000000
+              max_output_tokens: 128000
+              supports_function_calling: true
+              # z.ai list price, per token (input $1.40/M, output $4.40/M,
+              # cached input $0.26/M). Used if spend tracking is ever re-enabled.
+              cost_per_token:
+                input: 0.0000014
+                output: 0.0000044
+                cache_read_input_token_cost: 0.00000026

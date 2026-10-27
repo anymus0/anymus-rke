@@ -1,0 +1,52 @@
+# NetworkPolicy for the stateless LiteLLM proxy.
+#
+# Ingress: only the hermes pod (release `hermes` in namespace `hermes`) may
+# call the proxy. In-cluster only — the tailnet reaches it via the ingress
+# controller, not through a NetworkPolicy ingress rule.
+#
+# Egress: DNS + outbound 443 for the LLM provider API (api.z.ai). No local
+# Postgres/Redis egress — the proxy runs without a database.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: litellm-netpol
+  namespace: litellm
+spec:
+  podSelector:
+    matchLabels:
+      # chart labels pods app.kubernetes.io/instance=<releaseName>
+      app.kubernetes.io/instance: litellm
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: hermes
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: hermes
+      ports:
+        - protocol: TCP
+          port: 4000
+  egress:
+    # DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Outbound HTTPS to the LLM provider
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443

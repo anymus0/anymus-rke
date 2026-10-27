@@ -1,0 +1,5 @@
+# Namespace for the LiteLLM proxy (stateless, no CNPG cluster).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: litellm
