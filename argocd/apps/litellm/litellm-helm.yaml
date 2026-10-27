@@ -50,6 +50,17 @@ spec:
                 model: zai/glm-5.3
                 api_key: os.environ/ZAI_API_KEY
                 api_base: https://api.z.ai/api/paas/v4
+                # zai's provider config does not list reasoning_effort as a supported param, so
+                # LiteLLM raises UnsupportedParamsError -> HTTP 400 before the request leaves the
+                # proxy. The allowlist is the per-deployment escape hatch: the Router merges
+                # litellm_params into the completion kwargs (router.py input_kwargs) and
+                # get_optional_params extends its supported set with this entry
+                # (utils.py: add_allowed_openai_params_to_optional_params), so the caller's
+                # reasoning_effort is forwarded verbatim instead of being rejected.
+                # Verified against the pinned image, litellm 1.106.4. Prefer this over the global
+                # litellm_settings.drop_params, which would silently swallow every unsupported
+                # param for every model behind this proxy.
+                allowed_openai_params: ["reasoning_effort"]
               model_info:
                 max_input_tokens: 1000000
                 max_output_tokens: 128000
