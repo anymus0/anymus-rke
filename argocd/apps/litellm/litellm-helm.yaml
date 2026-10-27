@@ -16,7 +16,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/BerriAI/litellm.git
-    targetRevision: "v1.106.4"
+    targetRevision: ea7ca16dbc3904d9e59a9505f379a2ca3091821f
     path: helm/litellm-helm
   destination:
     server: https://kubernetes.default.svc
