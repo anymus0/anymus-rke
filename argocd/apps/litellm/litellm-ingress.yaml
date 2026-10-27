@@ -1,31 +1,19 @@
-# Ingress for LiteLLM — reachable only through the Tailnet, same as before.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: litellm-ingress
   namespace: litellm
   annotations:
-    nginx.ingress.kubernetes.io/server-snippet: |
-      if ($http_upgrade = "websocket") {
-          proxy_pass http://litellm.litellm.svc.cluster.local:4000;
-          proxy_http_version 1.1;
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "upgrade";
-      }
-      proxy_read_timeout 300s;
-      proxy_connect_timeout 75s;
-      proxy_send_timeout 300s;
-      client_max_body_size 10M;
+    argocd.argoproj.io/sync-wave: "20"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    tailscale.com/proxy-group: ingress-proxies
 spec:
   ingressClassName: tailscale
-  rules:
-    - host: litellm.litellm.svc.cluster.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: litellm
-                port:
-                  number: 4000
+  defaultBackend:
+    service:
+      name: litellm
+      port:
+        number: 4000
+  tls:
+    - hosts:
+        - litellm
