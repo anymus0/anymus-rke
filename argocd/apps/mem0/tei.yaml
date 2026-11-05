@@ -34,7 +34,7 @@ spec:
       containers:
         - name: tei
           image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.9.4
-          args: [ "--model-id intfloat/multilingual-e5-small", "--port 8080", "--served-model-name multilingual-e5-small" ]
+          args: [ "--model-id", "intfloat/multilingual-e5-small", "--port", "8080", "--served-model-name", "multilingual-e5-small" ]
           ports: [ { containerPort: 8080 } ]
           env:
             - name: HF_HUB_CACHE
