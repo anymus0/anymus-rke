@@ -1,12 +1,23 @@
 # LiteLLM proxy, stateless: no CNPG Postgres, no Redis, no database.
-# Chart: oci://ghcr.io/berriai/litellm-helm — chart version carries the LiteLLM
+# Chart: oci://ghcr.io/berriai/litellm-helm, chart version carries the LiteLLM
 # release number (image tag defaults to it: ghcr.io/berriai/litellm:1.106.4).
 #
-# Without a database: no virtual keys, no spend tracking, no UI persistence —
-# auth is the master key alone, model config lives in this valuesObject.
-# Secrets (sealed, see litellm-*-sealed-secret.yaml in this dir once sealed):
-#   litellm-masterkey    key: masterkey   -> PROXY_MASTER_KEY
-#   litellm-provider-keys key: ZAI_API_KEY -> z.ai API key
+# Without a database: no virtual keys, no spend tracking, no UI persistence.
+# Auth is the master key alone, model config lives in this valuesObject.
+#
+# Purpose: LLM router for Hermes' Mem0 memory provider (fact extraction and
+# ADD/UPDATE/DELETE decisions). Clients call model "mem0":
+#   1. local  : llama-server on the PC, RTX 3090, Qwen3.8 27B Q4_K_M (aux, :8081, thinking off)
+#   2. cloud  : DeepSeek API direct, deepseek-flash, thinking off (router fallback)
+# On fallback, the memory extraction prompt (conversation turn + existing memories) goes to DeepSeek.
+#
+# Local endpoint reuses the hermes namespace Tailscale egress Service `llama-aux`
+# (ExternalName rewritten by the operator to the egress proxy in ns tailscale).
+# ACL: the proxy is tag:agent-vm, which is granted tag:llm-api tcp:8081. No second proxy needed.
+#
+# Secrets (sealed, litellm-creds-sealed-secret.yaml in this dir):
+#   litellm-masterkey     key: masterkey    -> PROXY_MASTER_KEY
+#   litellm-provider-keys key: DEEPSEEK_API_KEY -> DeepSeek API key (separate key from Hermes main)
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -16,7 +27,7 @@ spec:
   project: default
   source:
     repoURL: oci://ghcr.io/berriai/litellm-helm
-    targetRevision: "1.106.4"
+    targetRevision: "1.106.7"
     chart: litellm-helm
     helm:
       releaseName: litellm
@@ -41,36 +52,55 @@ spec:
           general_settings:
             master_key: os.environ/PROXY_MASTER_KEY
             disable_master_key_return: true
+
           model_list:
-            # z.ai GLM-5.3 (z.ai flagship, 1M context, reasoning always on).
-            # If the API key is for the CN endpoint (bigmodel.cn) instead of the
-            # international one, change api_base to https://open.bigmodel.cn/api/paas/v4.
-            - model_name: glm-5.3
+            # Primary: local aux llama-server (RTX 3090). Q4 on purpose, see README / commit msg:
+            # main Q6 on the 5090 is the chat model, single slot; a Mem0 call there would queue
+            # behind the user's turn and evict its cached prompt prefix.
+            - model_name: mem0
               litellm_params:
-                model: zai/glm-5.3
-                api_key: os.environ/ZAI_API_KEY
-                api_base: https://api.z.ai/api/paas/v4
-                # zai's provider config does not list reasoning_effort as a supported param, so
-                # LiteLLM raises UnsupportedParamsError -> HTTP 400 before the request leaves the
-                # proxy. The allowlist is the per-deployment escape hatch: the Router merges
-                # litellm_params into the completion kwargs (router.py input_kwargs) and
-                # get_optional_params extends its supported set with this entry
-                # (utils.py: add_allowed_openai_params_to_optional_params), so the caller's
-                # reasoning_effort is forwarded verbatim instead of being rejected.
-                # Verified against the pinned image, litellm 1.106.4. Prefer this over the global
-                # litellm_settings.drop_params, which would silently swallow every unsupported
-                # param for every model behind this proxy.
-                allowed_openai_params: ["reasoning_effort"]
+                model: openai/qwen3.8-27b-aux              # = llama-server --alias in start-aux.ps1
+                api_base: http://llama-aux.hermes.svc.cluster.local:8081/v1
+                api_key: "none"                            # llama-server runs without auth, placeholder, not a secret
+                # PC off: the tailnet dial hangs until this fires (litellm.Timeout),
+                # then the router falls back to mem0-cloud. Extraction with thinking off
+                # finishes well inside this on the 3090.
+                timeout: 90
+                num_retries: 0                             # no retry on a dead PC, go straight to fallback
               model_info:
-                max_input_tokens: 1000000
-                max_output_tokens: 128000
-                supports_function_calling: true
-                # z.ai list price, per token (input $1.40/M, output $4.40/M,
-                # cached input $0.26/M). Used if spend tracking is ever re-enabled.
-                cost_per_token:
-                  input: 0.0000014
-                  output: 0.0000044
-                  cache_read_input_token_cost: 0.00000026
+                max_input_tokens: 64000                    # MUST equal llama-server -c in start-aux.ps1
+                max_output_tokens: 8192
+                # Single-deployment groups are exempt from cooldown by default. An explicit
+                # per-exception policy overrides that (litellm 1.106.4,
+                # router_utils/cooldown_handlers.py): first Timeout cools local down for
+                # cooldown_time, so later Mem0 calls skip the 90 s wait and go to cloud directly.
+                # Connection refused (PC up, aux server not started) fails fast, needs no cooldown.
+                allowed_fails_policy:
+                  TimeoutErrorAllowedFails: 0
+                cooldown_time: 300
+                input_cost_per_token: 0
+                output_cost_per_token: 0
+
+            # Fallback: DeepSeek API direct. deepseek-flash = DeepSeek-V4.1-Flash-1017
+            # (legacy name deepseek-v4-flash is served by the same model). Known to the
+            # pinned litellm 1.106.4 model map, incl. cache-read pricing.
+            - model_name: mem0-cloud
+              litellm_params:
+                model: deepseek/deepseek-flash
+                api_key: os.environ/DEEPSEEK_API_KEY       # api_base defaults to https://api.deepseek.com
+                # DeepSeek defaults to thinking ON. Pin it off: extraction is short JSON,
+                # reasoning tokens would be billed at output price for nothing.
+                # litellm deepseek provider maps this to the request body (chat/transformation.py).
+                thinking:
+                  type: disabled
+                timeout: 120
+              model_info:
+                max_output_tokens: 8192
+
+          router_settings:
+            fallbacks:
+              - mem0: ["mem0-cloud"]
+
   destination:
     server: https://kubernetes.default.svc
     namespace: litellm
