@@ -1,12 +1,16 @@
-# NetworkPolicy for the stateless LiteLLM proxy.
+# NetworkPolicy for the stateless LiteLLM proxy (Mem0 router).
 #
 # Ingress: only the hermes pod (release `hermes` in namespace `hermes`, the
-# API consumer) and the tailscale ingress proxies (tailnet traffic for
+# Mem0 client) and the tailscale ingress proxies (tailnet traffic for
 # litellm.<cluster>.ts.net arrives via pods in namespace `tailscale`) may
 # call the proxy. Without the tailscale rule, ts.net traffic is dropped.
 #
-# Egress: DNS + outbound 443 for the LLM provider API (api.z.ai). No local
-# Postgres/Redis egress — the proxy runs without a database.
+# Egress:
+#   - DNS
+#   - tailscale ns tcp:8081: egress proxy behind hermes/llama-aux (ExternalName),
+#     forwards to the aux llama-server on the PC
+#   - outbound 443 for the cloud fallback (api.deepseek.com)
+# No local Postgres/Redis egress, the proxy runs without a database.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -31,7 +35,7 @@ spec:
       ports:
         - protocol: TCP
           port: 4000
-    # Tailscale ingress proxies → proxy :4000 (Admin UI / API over the tailnet)
+    # Tailscale ingress proxies -> proxy :4000 (Admin UI / API over the tailnet)
     - from:
         - namespaceSelector:
             matchLabels:
@@ -48,7 +52,15 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-    # Outbound HTTPS to the LLM provider
+    # Local aux llama-server via the Tailscale egress proxy (ns tailscale)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tailscale
+      ports:
+        - protocol: TCP
+          port: 8081
+    # Outbound HTTPS to the cloud fallback provider
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
