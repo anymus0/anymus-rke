@@ -1,0 +1,51 @@
+# Mem0's PostgreSQL (CNPG): pgvector storage for memories, plus a second
+# database for the Mem0 app/auth layer.
+#
+# The operator generates the credentials Secret `mem0-cnpg-cluster-app`
+# (keys: username, password, host, port, dbname); mem0-server.yaml reads it.
+#
+# initdb creates the vector db `mem0` (owner mem0) and `mem0_app` (the auth
+# db behind APP_DB_NAME); the vector extension is created in the initdb db.
+# Image: CNPG `standard` flavor (bundles pgvector), PostgreSQL 17 on Debian
+# trixie; pinned to a weekly timestamped build tag.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mem0-cnpg-cluster
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: mem0
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    path: charts/cluster
+    repoURL: https://github.com/cloudnative-pg/charts.git
+    targetRevision: 7aa517a05e50cff8df5bfa849e9dc18322dab240
+    helm:
+      releaseName: mem0-cnpg-cluster
+      valuesObject:
+        cluster:
+          imageName: ghcr.io/cloudnative-pg/postgresql:17.11-202611020810-standard-trixie
+          initdb:
+            database: mem0
+            owner: mem0
+            dataChecksums: true
+            encoding: "UTF8"
+            postInitSQL:
+              - CREATE DATABASE mem0_app OWNER mem0;   # auth db for Mem0 (APP_DB_NAME)
+            postInitApplicationSQL:
+              - CREATE EXTENSION IF NOT EXISTS vector;
+          instances: 1
+          resources:
+            requests:
+              memory: 128Mi
+            limits:
+              memory: 512Mi    # cluster is memory tight
+          storage:
+            storageClass: "longhorn"
+            size: 2Gi

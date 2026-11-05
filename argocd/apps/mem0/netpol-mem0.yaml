@@ -1,0 +1,172 @@
+# NetworkPolicies for the Mem0 pods (server, dashboard, TEI).
+# One policy per app, each selecting ONLY its own pods; the CNPG cluster is
+# deliberately NOT selected — the operator must reach the Postgres pods.
+#
+# mem0-server:
+#   Ingress: tailscale ingress proxies (mem0-api.<tailnet>.ts.net), the
+#   hermes pod (Mem0 client, once hermes-config allows the egress), the
+#   dashboard and the configure job (both same ns).
+#   Egress: DNS, CNPG Postgres :5432, litellm :4000.
+#
+# mem0-dashboard:
+#   Ingress: tailscale ingress proxies (mem0.<tailnet>.ts.net).
+#   Egress: DNS, mem0-server :8000 (server-side API calls).
+#
+# tei:
+#   Ingress: litellm proxy (mem0-embed route).
+#   Egress: DNS, outbound 443 for Hugging Face model downloads.
+# Ports are pod ports (post-DNAT), not Service ports.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mem0-server-netpol
+  namespace: mem0
+spec:
+  podSelector:
+    matchLabels:
+      app: mem0-server
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Tailscale ingress proxies -> API :8000 (mem0-api.<tailnet>.ts.net)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tailscale
+      ports:
+        - protocol: TCP
+          port: 8000
+    # Hermes pod (namespace hermes): direct Mem0 client
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: hermes
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: hermes
+      ports:
+        - protocol: TCP
+          port: 8000
+    # Dashboard (same ns): server-side API calls
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mem0-dashboard
+      ports:
+        - protocol: TCP
+          port: 8000
+    # Configure job (same ns): the /configure PostSync hook
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mem0-configure
+      ports:
+        - protocol: TCP
+          port: 8000
+  egress:
+    # DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # CNPG Postgres (mem0 + mem0_app databases)
+    - to:
+        - podSelector:
+            matchLabels:
+              cnpg.io/cluster: mem0-cnpg-cluster
+      ports:
+        - protocol: TCP
+          port: 5432
+    # LiteLLM proxy (mem0 chat + mem0-embed routes)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: litellm
+      ports:
+        - protocol: TCP
+          port: 4000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mem0-dashboard-netpol
+  namespace: mem0
+spec:
+  podSelector:
+    matchLabels:
+      app: mem0-dashboard
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Tailscale ingress proxies -> dashboard :3000 (mem0.<tailnet>.ts.net)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tailscale
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    # DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Mem0 server (server-side API calls)
+    - to:
+        - podSelector:
+            matchLabels:
+              app: mem0-server
+      ports:
+        - protocol: TCP
+          port: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: tei-netpol
+  namespace: mem0
+spec:
+  podSelector:
+    matchLabels:
+      app: tei
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # LiteLLM proxy -> TEI :8080 (mem0-embed route)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: litellm
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # DNS
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Outbound HTTPS to Hugging Face (model download), RFC1918 excluded
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443

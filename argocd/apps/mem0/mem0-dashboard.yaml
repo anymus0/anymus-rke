@@ -1,0 +1,45 @@
+# Mem0 dashboard (Next.js web UI).
+# NEXT_PUBLIC_API_URL is baked into the browser bundle: the dashboard JS
+# calls the API directly over the tailnet (see mem0-api-ingress in
+# mem0-ingress.yaml); server-side it talks to the API in-cluster.
+#
+# The entrypoint rewrites files under .next/ at start, so
+# readOnlyRootFilesystem would break it (left at the image default).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mem0-dashboard
+  namespace: mem0
+  labels: { app: mem0-dashboard }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: mem0-dashboard } }
+  template:
+    metadata: { labels: { app: mem0-dashboard } }
+    spec:
+      containers:
+        - name: mem0-dashboard
+          image: docker.io/dockette/memzero:dashboard-2.2.1
+          ports: [ { containerPort: 3000 } ]
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: https://mem0-api.icefish-pickerel.ts.net   # must be reachable from the tailnet (browser)
+            - name: API_INTERNAL_URL
+              value: http://mem0-server.mem0.svc.cluster.local:8000
+            - name: NEXT_PUBLIC_INSTANCE_NAME
+              value: anymus-rke
+          resources:
+            requests: { memory: 128Mi }
+            limits:   { memory: 512Mi }
+          readinessProbe:
+            httpGet: { path: /api/health, port: 3000 }
+          livenessProbe:
+            httpGet: { path: /api/health, port: 3000 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: mem0-dashboard, namespace: mem0 }
+spec:
+  selector: { app: mem0-dashboard }
+  ports: [ { port: 3000, targetPort: 3000 } ]
+  type: ClusterIP

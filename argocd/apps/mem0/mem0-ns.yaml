@@ -1,0 +1,5 @@
+# Namespace for Mem0 (self-hosted: server, dashboard, TEI embeddings, CNPG Postgres).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mem0

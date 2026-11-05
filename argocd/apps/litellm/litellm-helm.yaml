@@ -10,6 +10,8 @@
 #   1. local  : llama-server on the PC, RTX 3090, Qwen3.8 27B Q4_K_M (aux, :8081, thinking off)
 #   2. cloud  : DeepSeek API direct, deepseek-flash, thinking off (router fallback)
 # On fallback, the memory extraction prompt (conversation turn + existing memories) goes to DeepSeek.
+# The self-hosted Mem0 server (ns mem0) also uses this proxy: model "mem0-embed"
+# routes to TEI in ns mem0 (multilingual-e5-small, 384 dims) for its embedder.
 #
 # Local endpoint reuses the hermes namespace Tailscale egress Service `llama-aux`
 # (ExternalName rewritten by the operator to the egress proxy in ns tailscale).
@@ -96,6 +98,17 @@ spec:
                 timeout: 120
               model_info:
                 max_output_tokens: 8192
+
+            # Embeddings for Mem0: TEI (CPU) in ns mem0, multilingual-e5-small, 384 dims.
+            - model_name: mem0-embed
+              litellm_params:
+                model: openai/multilingual-e5-small        # = TEI --served-model-name
+                api_base: http://tei.mem0.svc.cluster.local:8080/v1
+                api_key: "none"                            # TEI runs without auth, placeholder, not a secret
+                timeout: 30
+              model_info:
+                mode: embedding
+                input_cost_per_token: 0
 
           router_settings:
             fallbacks:

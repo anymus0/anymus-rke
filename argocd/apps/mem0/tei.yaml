@@ -1,0 +1,65 @@
+# TEI (text-embeddings-inference) for Mem0 embeddings:
+# intfloat/multilingual-e5-small (384 dims), served on :8080.
+# litellm exposes it as `multilingual-e5-small` (the `mem0-embed` route in
+# litellm-helm.yaml); Mem0 reaches it only through litellm.
+#
+# amd64 CPU build. The first start downloads the model from Hugging Face
+# into the tei-cache PVC — hence the long liveness initialDelay.
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tei-cache
+  namespace: mem0
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tei
+  namespace: mem0
+  labels: { app: tei }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: tei } }
+  strategy: { type: Recreate }   # RWO PVC: never run old+new pod at once
+  template:
+    metadata: { labels: { app: tei } }
+    spec:
+      containers:
+        - name: tei
+          image: ghcr.io/huggingface/text-embeddings-inference:cpu-1.9.4
+          args: [ "--model-id intfloat/multilingual-e5-small", "--port 8080", "--served-model-name multilingual-e5-small" ]
+          ports: [ { containerPort: 8080 } ]
+          env:
+            - name: HF_HUB_CACHE
+              value: /data
+          resources:
+            requests: { cpu: 100m, memory: 512Mi }
+            limits:   { cpu: "2",  memory: 1536Mi }
+          readinessProbe:
+            httpGet: { path: /health, port: 8080 }
+            initialDelaySeconds: 20
+          livenessProbe:
+            httpGet: { path: /health, port: 8080 }
+            initialDelaySeconds: 120   # first start downloads the model
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - { name: tei-cache, mountPath: /data }
+      volumes:
+        - name: tei-cache
+          persistentVolumeClaim: { claimName: tei-cache }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: tei, namespace: mem0 }
+spec:
+  selector: { app: tei }
+  ports: [ { port: 8080, targetPort: 8080 } ]
+  type: ClusterIP

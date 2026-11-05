@@ -1,0 +1,72 @@
+# Why this Job: Mem0's embedding dims CANNOT be set by env. At startup the
+# server creates the pgvector collection POSTGRES_COLLECTION_NAME with the
+# hardcoded default of 1536 dims, but our embedder (multilingual-e5-small
+# via litellm) produces 384-dim vectors. The fix is POST /configure (admin):
+# point the vector store at a DIFFERENT collection (`memories_e5s384`) with
+# 384 dims. The override persists in the app db and survives restarts, and
+# the POST is idempotent — so the Job is safe to run on every root app sync
+# (PostSync hook, deleted before re-creation).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mem0-configure
+  namespace: mem0
+  labels: { app: mem0-configure }
+data:
+  # No secrets in here: model names and dims only.
+  config.json: |
+    {
+      "llm": { "provider": "openai", "config": { "model": "mem0", "temperature": 0.2 } },
+      "embedder": { "provider": "openai", "config": { "model": "mem0-embed", "embedding_dims": 384 } },
+      "vector_store": { "provider": "pgvector", "config": { "collection_name": "memories_e5s384", "embedding_model_dims": 384 } }
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mem0-configure
+  namespace: mem0
+  labels: { app: mem0-configure }
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata: { labels: { app: mem0-configure } }
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: curl
+          image: docker.io/curlimages/curl:8.23.0
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - |
+              set -eu
+              # Wait for the API to come up (max ~5 min: CNPG first boot + migrations).
+              i=0
+              until curl -fsS http://mem0-server.mem0.svc.cluster.local:8000/auth/setup-status >/dev/null; do
+                i=$((i+1))
+                if [ "$i" -ge 60 ]; then
+                  echo "mem0-server not ready after 5 min" >&2
+                  exit 1
+                fi
+                sleep 5
+              done
+              # Idempotent: overrides persist in the app db and survive restarts.
+              # Never echo the key.
+              curl -fsS -X POST \
+                -H "X-API-Key: $ADMIN_API_KEY" \
+                -H 'Content-Type: application/json' \
+                --data @/cfg/config.json \
+                http://mem0-server.mem0.svc.cluster.local:8000/configure
+              echo
+          env:
+            - name: ADMIN_API_KEY
+              valueFrom: { secretKeyRef: { name: mem0-secrets, key: ADMIN_API_KEY } }
+          volumeMounts:
+            - { name: cfg, mountPath: /cfg, readOnly: true }
+      volumes:
+        - name: cfg
+          configMap: { name: mem0-configure }

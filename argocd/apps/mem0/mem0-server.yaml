@@ -1,0 +1,111 @@
+# Mem0 server (API, self-hosted memory backend).
+# LLM and embeddings go through litellm (models `mem0` and `mem0-embed`),
+# vectors are stored in pgvector in the CNPG cluster (this ns).
+#
+# Embedding dims: the server creates the pgvector collection
+# POSTGRES_COLLECTION_NAME with a hardcoded default of 1536 dims at startup
+# (not overridable by env). So the env points at a throwaway table, and the
+# mem0-configure PostSync job (mem0-configure-job.yaml) POSTs the real
+# collection `memories_e5s384` (384 dims) via /configure. The override
+# persists in the app db and survives restarts; the POST is idempotent.
+#
+# Secrets: `mem0-secrets` is a SealedSecret and is NOT committed (sealing
+# needs the cluster's public key). Create it before merging, on a machine
+# with cluster access (commands only, no values here):
+#
+#   kubectl create secret generic mem0-secrets -n mem0 \
+#     --from-literal=OPENAI_API_KEY='<litellm master key, same value as litellm-masterkey/masterkey>' \
+#     --from-literal=JWT_SECRET="$(openssl rand -base64 48)" \
+#     --from-literal=ADMIN_API_KEY="$(openssl rand -hex 32)" \
+#     --dry-run=client -o yaml \
+#   | kubeseal --controller-name sealed-secrets --controller-namespace kubeseal -o yaml \
+#   > argocd/apps/mem0/mem0-sealed-secret.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mem0-history
+  namespace: mem0
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mem0-server
+  namespace: mem0
+  labels: { app: mem0-server }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: mem0-server } }
+  strategy: { type: Recreate }   # RWO history PVC
+  template:
+    metadata: { labels: { app: mem0-server } }
+    spec:
+      containers:
+        - name: mem0-server
+          image: docker.io/dockette/memzero:server-2.2.1
+          ports: [ { containerPort: 8000 } ]
+          env:
+            - name: POSTGRES_COLLECTION_NAME
+              value: bootstrap_unused   # startup creates this table with wrong 1536 dims; the real one is set by the configure Job
+            - name: APP_DB_NAME
+              value: mem0_app           # auth db, separate database (see CNPG initdb postInitSQL)
+            - name: OPENAI_BASE_URL
+              value: http://litellm.litellm.svc.cluster.local:4000/v1   # used by BOTH the LLM and the embedder
+            - name: MEM0_DEFAULT_LLM_MODEL
+              value: mem0
+            - name: MEM0_DEFAULT_EMBEDDER_MODEL
+              value: mem0-embed
+            - name: AUTH_DISABLED
+              value: "false"
+            - name: MEM0_TELEMETRY
+              value: "false"
+            - name: WORKERS
+              value: "1"
+            - name: DASHBOARD_URL
+              value: https://mem0.icefish-pickerel.ts.net   # CORS allow origin, exact
+            - name: HISTORY_DB_PATH
+              value: /app/history/history.db
+            # CNPG-generated credentials (Secret created by the operator, not by git)
+            - name: POSTGRES_HOST
+              valueFrom: { secretKeyRef: { name: mem0-cnpg-cluster-app, key: host } }
+            - name: POSTGRES_PORT
+              valueFrom: { secretKeyRef: { name: mem0-cnpg-cluster-app, key: port } }
+            - name: POSTGRES_DB
+              valueFrom: { secretKeyRef: { name: mem0-cnpg-cluster-app, key: dbname } }
+            - name: POSTGRES_USER
+              valueFrom: { secretKeyRef: { name: mem0-cnpg-cluster-app, key: username } }
+            - name: POSTGRES_PASSWORD
+              valueFrom: { secretKeyRef: { name: mem0-cnpg-cluster-app, key: password } }
+            # sealed secret, see header
+            - name: OPENAI_API_KEY
+              valueFrom: { secretKeyRef: { name: mem0-secrets, key: OPENAI_API_KEY } }
+            - name: JWT_SECRET
+              valueFrom: { secretKeyRef: { name: mem0-secrets, key: JWT_SECRET } }
+            - name: ADMIN_API_KEY
+              valueFrom: { secretKeyRef: { name: mem0-secrets, key: ADMIN_API_KEY } }
+          resources:
+            requests: { memory: 256Mi }
+            limits:   { memory: 1Gi }
+          readinessProbe:
+            httpGet: { path: /auth/setup-status, port: 8000 }
+          livenessProbe:
+            httpGet: { path: /auth/setup-status, port: 8000 }
+          volumeMounts:
+            - { name: mem0-history, mountPath: /app/history }
+      volumes:
+        - name: mem0-history
+          persistentVolumeClaim: { claimName: mem0-history }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: mem0-server, namespace: mem0 }
+spec:
+  selector: { app: mem0-server }
+  ports: [ { port: 8000, targetPort: 8000 } ]
+  type: ClusterIP

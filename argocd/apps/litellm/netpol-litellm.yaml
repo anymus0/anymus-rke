@@ -1,7 +1,8 @@
 # NetworkPolicy for the stateless LiteLLM proxy (Mem0 router).
 #
 # Ingress: only the hermes pod (release `hermes` in namespace `hermes`, the
-# Mem0 client) and the tailscale ingress proxies (tailnet traffic for
+# Mem0 client), the mem0-server pod (namespace `mem0`, the self-hosted Mem0
+# API) and the tailscale ingress proxies (tailnet traffic for
 # litellm.<cluster>.ts.net arrives via pods in namespace `tailscale`) may
 # call the proxy. Without the tailscale rule, ts.net traffic is dropped.
 #
@@ -9,6 +10,7 @@
 #   - DNS
 #   - tailscale ns tcp:8081: egress proxy behind hermes/llama-aux (ExternalName),
 #     forwards to the aux llama-server on the PC
+#   - mem0 ns tcp:8080: TEI embeddings for the mem0-embed route
 #   - outbound 443 for the cloud fallback (api.deepseek.com)
 # No local Postgres/Redis egress, the proxy runs without a database.
 apiVersion: networking.k8s.io/v1
@@ -43,6 +45,17 @@ spec:
       ports:
         - protocol: TCP
           port: 4000
+    # Self-hosted Mem0 server -> proxy :4000 (mem0 chat + mem0-embed routes)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: mem0
+          podSelector:
+            matchLabels:
+              app: mem0-server
+      ports:
+        - protocol: TCP
+          port: 4000
   egress:
     # DNS
     - to:
@@ -60,6 +73,17 @@ spec:
       ports:
         - protocol: TCP
           port: 8081
+    # TEI embeddings for the mem0-embed route (ns mem0)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: mem0
+          podSelector:
+            matchLabels:
+              app: tei
+      ports:
+        - protocol: TCP
+          port: 8080
     # Outbound HTTPS to the cloud fallback provider
     - to:
         - ipBlock:
