@@ -106,9 +106,10 @@ spec:
                 api_base: http://tei.mem0.svc.cluster.local:8080/v1
                 api_key: "none"                            # TEI runs without auth, placeholder, not a secret
                 timeout: 30
-              model_info:
-                mode: embedding
-                input_cost_per_token: 0
+                # mem0 sends dimensions=384 (embedder.embedding_dims). litellm rejects `dimensions`
+                # for openai/ models other than text-embedding-3 (UnsupportedParamsError).
+                # TEI returns native 384 anyway, so drop it. Scoped to this deployment only.
+                drop_params: true
 
           router_settings:
             fallbacks:
